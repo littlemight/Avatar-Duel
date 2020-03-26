@@ -5,7 +5,10 @@ Try running these commands:
 
 `./gradlew run`
 
-You will notice that it outputs `Hello World`.
-Just as what we specified in `Main.java`.
+You will notice that it will open a window that display 'Avatar Duel'.
+In the command line you can see the data that is being read by `CSVReader.java`
+
+What happen is when you use `./gradlew run`, it will start the main function in your app.
+For this app, the main function lives in `AvatarDuel.java`.
 
 You can explore more about gradle [here](https://guides.gradle.org/creating-new-gradle-builds/)
