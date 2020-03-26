@@ -2,6 +2,7 @@ package com.avatarduel;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import javafx.application.Application;
@@ -15,10 +16,10 @@ import com.avatarduel.model.Land;
 import com.avatarduel.util.CSVReader;
 
 public class AvatarDuel extends Application {
-  private static final String LAND_CSV_FILE_PATH = "src/res/card/data/land.csv";
+  private static final String LAND_CSV_FILE_PATH = "card/data/land.csv";
 
-  public void loadCards() throws IOException {
-    File landCSVFile = new File(LAND_CSV_FILE_PATH);
+  public void loadCards() throws IOException, URISyntaxException {
+    File landCSVFile = new File(getClass().getResource(LAND_CSV_FILE_PATH).toURI());
     CSVReader landReader = new CSVReader(landCSVFile, ",");
     landReader.setSkipHeader(true);
     List<String[]> landRows = landReader.read();
@@ -47,7 +48,7 @@ public class AvatarDuel extends Application {
     try {
       this.loadCards();
       text.setText("Avatar Duel!");
-    } catch (IOException e) {
+    } catch (Exception e) {
       text.setText("Failed to load cards: " + e);
     }
   }
