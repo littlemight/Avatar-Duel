@@ -12,3 +12,7 @@ What happen is when you use `./gradlew run`, it will start the main function in 
 For this app, the main function lives in `AvatarDuel.java`.
 
 You can explore more about gradle [here](https://guides.gradle.org/creating-new-gradle-builds/)
+
+## Credit
+
+All images and description are taken from [Avatar Wikia](https://avatar.fandom.com/wiki/Avatar_Wiki)
