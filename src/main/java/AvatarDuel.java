@@ -19,12 +19,11 @@ public class AvatarDuel extends Application {
 
   public void loadCards() throws IOException {
     File landCSVFile = new File(LAND_CSV_FILE_PATH);
-    CSVReader landReader = new CSVReader(landCSVFile, ",");
+    CSVReader landReader = new CSVReader(landCSVFile, "\t");
     landReader.setSkipHeader(true);
     List<String[]> landRows = landReader.read();
     for (String[] row : landRows) {
-      System.out.println(row[1]);
-      Land l = new Land(row[0], row[2], Element.valueOf(row[1]));
+      Land l = new Land(row[1], row[3], Element.valueOf(row[2]));
     }
   }
 
