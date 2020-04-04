@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="700.0" prefWidth="500.0" style="-fx-border-color: blue; -fx-border-width: 10;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label fx:id="card_name" layoutX="20.0" layoutY="26.0" prefHeight="37.0" prefWidth="350.0" style="-fx-border-color: green;" text="Name" wrapText="true">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="card_type" alignment="CENTER_RIGHT" layoutX="381.0" layoutY="76.0" prefHeight="37.0" prefWidth="86.0" style="-fx-border-color: green;" text="Type" wrapText="true">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="card_element" alignment="CENTER_RIGHT" layoutX="370.0" layoutY="26.0" prefHeight="37.0" prefWidth="97.0" style="-fx-border-color: green;" text="Element" wrapText="true">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="card_image" fitHeight="350.0" fitWidth="350.0" layoutX="83.0" layoutY="133.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../image/placeholder.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="card_description" alignment="TOP_CENTER" layoutX="20.0" layoutY="499.0" prefHeight="128.0" prefWidth="460.0" style="-fx-border-color: red; -fx-border-width: 3;" text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." wrapText="true">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <AnchorPane fx:id="card_atr" layoutX="20.0" layoutY="635.0" prefHeight="37.0" prefWidth="460.0" />
+   </children>
+</AnchorPane>
