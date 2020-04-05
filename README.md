@@ -1,7 +1,7 @@
 # IF2210 Project Template
 
 ## NOTES
-* Views (file fxml) ada di resources/card/views
+* Views (file fxml) ada di resources/com/avatarduel/view
 
 SOLVED
 * Path img di csv beda sama di directory
