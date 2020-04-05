@@ -16,7 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-
 public class CardController {
     @FXML
     private Label card_name, card_description, card_element, card_type;

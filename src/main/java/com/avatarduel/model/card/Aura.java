@@ -17,4 +17,12 @@ public class Aura extends Skill {
         this.delta_atk = delta_atk;
         this.delta_def = delta_def;
     }
+
+    public int getDeltaAtk() {
+        return this.delta_atk;
+    }
+
+    public int getDeltaDef() {
+        return this.delta_def;
+    }
 }
