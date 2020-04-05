@@ -9,6 +9,7 @@ public abstract class Card {
     private Element element;
     private String IMG_PATH;
 
+    // Will make builder class
     public Card() {
         this.name = "";
         this.description = "";

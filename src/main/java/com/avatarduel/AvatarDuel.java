@@ -6,6 +6,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.avatarduel.controller.BoardController;
 import com.avatarduel.controller.CardController;
 import com.avatarduel.model.card.Aura;
 import com.avatarduel.model.card.Card;
@@ -14,10 +15,14 @@ import com.avatarduel.model.card.Land;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.geometry.VPos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -76,36 +81,37 @@ public class AvatarDuel extends Application {
 
   @Override
   public void start(Stage stage) {
-    Text text = new Text();
-    text.setText("Loading...");
-    text.setX(50);
-    text.setY(50);
-
-
-    FlowPane root = new FlowPane();
-    root.setColumnHalignment(HPos.CENTER);
-    root.setRowValignment(VPos.CENTER);
-    root.setVgap(20);
-
-    ScrollPane scroll = new ScrollPane(root);
-    root.getChildren().add(text);
+//    FlowPane root = new FlowPane();
+//    ScrollPane scroll = new ScrollPane(root);
+//    root.setMinHeight(720);
+//    root.setMinWidth(1280);
+//    root.setAlignment(Pos.CENTER);
+//
+//    root.setHgap(10);
+//    root.setVgap(10);
 
     ArrayList<CardController> cardControllers = new ArrayList<CardController>();
 
     try {
       this.loadCards();
-      Scene scene = new Scene(scroll, 1280, 720);
+      FXMLLoader board_loader = new FXMLLoader(getClass().getResource("view/Board.fxml"));
+      Parent root = board_loader.load();
+      BoardController board_controller = board_loader.getController();
+
+      Scene scene = new Scene(root, 1280, 720);
       stage.setTitle("Avatar Duel");
       stage.setScene(scene);
       stage.show();
+
       for (Card card: cards) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("card/view/Card.fxml"));
-        loader.setController(new CardController(card));
-        root.getChildren().add(loader.load());
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("view/Card.fxml"));
+        loader.setControllerFactory(c -> new CardController(card));
+        VBox card_view = loader.load();
+        board_controller.addCard(card_view);
         cardControllers.add(loader.getController());
       }
     } catch (Exception e) {
-      text.setText("Failed to load cards: " + e);
+        System.out.println(e);
     }
   }
 

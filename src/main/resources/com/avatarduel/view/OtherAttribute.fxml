@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Font?>
+
+
+<Label fx:id="card_message" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0" prefWidth="500.0" text="Message kalo Card bukan Aura/Char" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.avatarduel.controller.attributecontroller">
+   <font>
+      <Font size="20.0" />
+   </font>
+</Label>
