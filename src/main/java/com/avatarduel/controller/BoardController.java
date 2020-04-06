@@ -4,11 +4,15 @@ import com.avatarduel.event.EventChannel;
 import com.avatarduel.model.card.Character;
 import com.avatarduel.model.card.Card;
 import com.avatarduel.model.card.EmptyCard;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.IntegerProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -30,10 +34,22 @@ public class BoardController implements Initializable  {
 
     private EventChannel channel;
 
+    GridPane card_field;
+    
+    @FXML
+    Pane card_pane;
+    
+    @FXML
+    Label neff_deck, size_deck;
+    Pane deck;
+    
+    private int col=0;
+    private int row=0;
+    
     public BoardController(EventChannel channel) {
         this.channel = channel;
     }
-
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
@@ -53,11 +69,26 @@ public class BoardController implements Initializable  {
     }
 
     public void addCard(CardController card_controller) {
-        System.out.println(hover_card_controller);
         channel.addSubscriber(card_controller, hover_card_controller);
         StackPane card_box = card_controller.getContent();
         card_box.prefWidthProperty().bind(temp_card_book.prefWidthProperty().divide(5));
         card_box.prefHeightProperty().bind(card_box.prefWidthProperty().multiply(1.4));
         temp_card_book.getChildren().add(card_box);
+    }
+
+    public void addCardField(CardController card_controller) {
+        StackPane card_box = card_controller.getContent();
+
+        card_box.prefWidthProperty().bind(card_field.prefWidthProperty().divide(8));
+        card_box.prefHeightProperty().bind(card_box.prefWidthProperty().multiply(1.4));
+        card_field.add(card_box,col,row);
+        col++;
+        if (col==8){col=0;row++;}
+    }
+
+    public void updateDeck(IntegerProperty neff, int size){
+        // deck.getChildren().add(card_box);
+        neff_deck.textProperty().bind(Bindings.convert(neff));
+        size_deck.textProperty().setValue(Integer.toString(size));
     }
 }

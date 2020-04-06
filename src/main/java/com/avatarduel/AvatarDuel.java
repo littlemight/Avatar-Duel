@@ -51,6 +51,7 @@ public class AvatarDuel extends Application {
 
       Parent root = board_loader.load();
       BoardController board_controller = board_loader.getController();
+      board_controller.updateDeck(deck.getNeff(), deck.getSize());
 
       Scene scene = new Scene(root, 1280, 720);
       stage.setTitle("Avatar Duel");
@@ -62,11 +63,14 @@ public class AvatarDuel extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("view/Card.fxml"));
         loader.setControllerFactory(c -> new CardController(channel));
         StackPane card_view = loader.load();
+
         CardController controller = loader.getController();
         controller.setCard(card);
-
         cardControllers.add(controller);
-        board_controller.addCard(controller);
+
+
+        if (deck.getSize()-deck.getNeffValue()<=16) board_controller.addCardField(controller);
+        else board_controller.addCard(controller);
       }
     } catch (Exception e) {
         System.out.println("WTF: " + e);
