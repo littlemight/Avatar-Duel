@@ -71,27 +71,28 @@ public class Dealer {
       }
   
     public Deck getDeck(int n){
-      // Proporsi yang disarankan perbandingan land : karakter : skill adalah 2 : 2 : 1
-      Deck deck = new Deck(n);
-      Collections.shuffle(cards);
-      
-      int portion = n/5;
-      int nk=0;int nl=0;int ns=0;
-      for (Card card : cards){
-        if (nk+nl+ns==n) break;
-        if ((card instanceof Character) && nk<portion*2){
-          deck.addCard(card);
-          nk++;
-        }
+
+        // Proporsi yang disarankan perbandingan land : karakter : skill adalah 2 : 2 : 1
+        Deck deck = new Deck(n);
+        Collections.shuffle(cards);
+
+        int portion = n/5;
+        int nk=0;int nl=0;int ns=0;
+        for (Card card : cards){
+            if (nk+nl+ns==n) break;
+            if ((card instanceof Character) && nk<portion*2){
+                deck.addCard(card);
+                nk++;
+            }
         else if ((card instanceof Land) && nl<portion*2){
-          deck.addCard(card);
-          nl++;
-        }
+                deck.addCard(card);
+                nl++;
+            }
         else if ((card instanceof Skill) && ns<portion){
-          deck.addCard(card);
-          ns++;
+                deck.addCard(card);
+                ns++;
+            }
         }
-      }
-      return deck;
+        return deck;
     }
 }

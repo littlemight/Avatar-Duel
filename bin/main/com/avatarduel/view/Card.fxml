@@ -40,7 +40,7 @@
             </Label>
             <ImageView fx:id="card_image" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../card/image/placeholder.png" />
+                  <Image url="@../card/image/placeholder_1.png" />
                </image>
             </ImageView>
             <VBox fx:id="card_bottom" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="480.0">

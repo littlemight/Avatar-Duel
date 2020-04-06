@@ -52,10 +52,6 @@ public class CardController implements Initializable, Subscriber, Publisher {
     private Card card;
     private StringProperty type;
 
-//    public CardController(Card card) {
-//        this.card = card;
-//        this.type = new SimpleStringProperty("AIR");
-//    }
 
     public CardController(EventChannel channel) {
         this.channel = channel;
@@ -90,6 +86,9 @@ public class CardController implements Initializable, Subscriber, Publisher {
 //            this.card_type.setText("Land");
 //        }
 
+        // Maintains aspect ratio
+        this.card_box.prefWidthProperty().bind(this.card_box.prefHeightProperty().multiply((double) 5 / 7));
+
         File file = null;
         try {
             file = new File(getClass().getResource("../" + this.card.getIMGPath()).toURI());
@@ -106,7 +105,8 @@ public class CardController implements Initializable, Subscriber, Publisher {
             card_description.setFont(new Font(0.05 * card_box.getWidth()));
         });
 
-        card_image.fitWidthProperty().bind(card_box.widthProperty().multiply(0.6));
+        card_image.
+                fitWidthProperty().bind(card_box.widthProperty().multiply(0.6));
         card_image.fitHeightProperty().bind(card_image.fitWidthProperty());
         card_bottom.prefHeightProperty().bind(card_box.heightProperty().multiply((double) 240 / 700));
         card_bottom.prefWidthProperty().bind(card_bottom.prefHeightProperty().multiply((double) 480 / 240));
@@ -129,14 +129,12 @@ public class CardController implements Initializable, Subscriber, Publisher {
                 prefWidthProperty().
                 bind(card_box.widthProperty());
 
-//        card_front.visibleProperty().bind(new SimpleBooleanProperty(this.card instanceof EmptyCard));
 
         Circle back_logo = (Circle) card_back.getChildren().get(0);
         back_logo.radiusProperty().bind(card_box.widthProperty().multiply((double) 150 / 500));
         back_logo.layoutXProperty().bind(card_box.widthProperty().multiply(0.5));
         back_logo.layoutYProperty().bind(card_box.heightProperty().multiply(0.5));
 
-//        setClosed();
         setOpened();
     }
 
@@ -169,7 +167,6 @@ public class CardController implements Initializable, Subscriber, Publisher {
         try {
             file = new File(getClass().getResource("../" + this.card.getIMGPath()).toURI());
         } catch (Exception e) {
-//            e.printStackTrace();
             System.out.println("Error: " + e);
         }
         Image image = new Image(file.toURI().toString());
@@ -179,12 +176,12 @@ public class CardController implements Initializable, Subscriber, Publisher {
     public void onMouseEnter(MouseEvent mouseEvent) {
         card_box.setStyle("-fx-border-color: red");
         System.out.println("HOVERED: " + this.card.getName());
-        publish(this, new HoverCardEvent(this.card));
+        publish(new HoverCardEvent(this.card));
     }
 
     public void onMouseExit(MouseEvent mouseEvent) {
         card_box.setStyle("-fx-border-color: black");
-        publish(this, new HoverCardEvent(EmptyCard.getInstance()));
+        publish(new HoverCardEvent(EmptyCard.getInstance()));
     }
 
     public StackPane getContent() {
@@ -197,7 +194,7 @@ public class CardController implements Initializable, Subscriber, Publisher {
     }
 
     @Override
-    public void publish(Publisher publisher, Event event) {
-        this.channel.sendEvent(publisher, event);
+    public void publish(Event event) {
+        this.channel.sendEvent(this, event);
     }
 }

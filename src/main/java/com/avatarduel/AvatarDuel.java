@@ -8,6 +8,7 @@ import com.avatarduel.event.BoardChannel;
 import com.avatarduel.model.Dealer;
 import com.avatarduel.model.Deck;
 import com.avatarduel.model.Element;
+import com.avatarduel.model.Player;
 import com.avatarduel.model.card.Card;
 
 import javafx.application.Application;
@@ -30,48 +31,48 @@ public class AvatarDuel extends Application {
 
   @Override
   public void start(Stage stage) {
-//    FlowPane root = new FlowPane();
-//    ScrollPane scroll = new ScrollPane(root);
-//    root.setMinHeight(720);
-//    root.setMinWidth(1280);
-//    root.setAlignment(Pos.CENTER);
-//
-//    root.setHgap(10);
-//    root.setVgap(10);
 
-    ArrayList<CardController> cardControllers = new ArrayList<CardController>();
+//    ArrayList<CardController> cardControllers = new ArrayList<CardController>();
     try {
-      Dealer dealer = new Dealer();
-//      Deck deck = dealer.getDeck(40);
-      Deck deck = dealer.getDeck(92); // coba load semua
+//      Dealer dealer = new Dealer();
+////      Deck deck = dealer.getDeck(40);
+//      Deck deck = dealer.getDeck(92); // coba load semua
+
+      // Player[2] Player = new Player();
+      Player player1 = new Player("Aang");
+      Player player2 = new Player("orAang Ganteng");
 
       BoardChannel channel = new BoardChannel();
       FXMLLoader board_loader = new FXMLLoader(getClass().getResource("view/Board.fxml"));
       board_loader.setControllerFactory(c -> new BoardController(channel));
-
       Parent root = board_loader.load();
-      BoardController board_controller = board_loader.getController();
-      board_controller.updateDeck(deck.getNeff(), deck.getSize());
 
+      BoardController board_controller = board_loader.getController();
+      board_controller.setPlayer1(player1);
+//      board_controller.setPlayer2(player2);
+//
+//////      board_controller.updateDeck(deck.getNeff(), deck.getSize());
+////
       Scene scene = new Scene(root, 1280, 720);
       stage.setTitle("Avatar Duel");
       stage.setScene(scene);
       stage.show();
 
-      while (deck.getNeffValue()>0) {
-        Card card = deck.drawCard();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("view/Card.fxml"));
-        loader.setControllerFactory(c -> new CardController(channel));
-        StackPane card_view = loader.load();
 
-        CardController controller = loader.getController();
-        controller.setCard(card);
-        cardControllers.add(controller);
+//      while (deck.getNeffValue()>0) {
+//        Card card = deck.drawCard();
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("view/Card.fxml"));
+//        loader.setControllerFactory(c -> new CardController(channel));
+//        StackPane card_view = loader.load();
 
+//        CardController controller = loader.getController();
+//        controller.setCard(card);
+//        cardControllers.add(controller);
 
-        if (deck.getSize()-deck.getNeffValue()<=16) board_controller.addCardField(controller);
-        else board_controller.addCard(controller);
-      }
+//        board_controller.addCardField(controller);
+//        if (deck.getSize()-deck.getNeffValue()<=16)
+////        else board_controller.addCard(controller);
+//      }
     } catch (Exception e) {
         System.out.println("WTF: " + e);
     }

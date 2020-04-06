@@ -7,7 +7,7 @@ public final class EmptyCard extends Card{
     private static EmptyCard emptyCard;
 
     private EmptyCard() {
-        super("Depressed Aang", "In dire need of help", Element.AIR, "card/image/placeholder.png");
+        super("Aangst", "The Last Euybender", Element.AIR, "card/image/placeholder_1.png");
     }
 
     public static EmptyCard getInstance(){
