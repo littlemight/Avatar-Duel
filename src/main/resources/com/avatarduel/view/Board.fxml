@@ -195,6 +195,17 @@
                         </ProgressBar>
                      </children>
                   </VBox>
+                  <Pane fx:id="deck" layoutX="905.0" layoutY="123.0" prefHeight="154.0" prefWidth="110.0">
+                     <children>
+                        <HBox alignment="CENTER" layoutX="27.0" layoutY="68.0">
+                           <children>
+                              <Label fx:id="neff_deck" alignment="CENTER" text="Label" />
+                              <Label text="/" />
+                              <Label fx:id="size_deck" alignment="CENTER" text="Label" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </Pane>
                </children></Pane>
             </children>
         </VBox>
