@@ -56,7 +56,8 @@ public class AvatarDuel extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("view/Card.fxml"));
         loader.setControllerFactory(c -> new CardController(card));
         StackPane card_view = loader.load();
-        board_controller.addCard(card_view);
+        if (deck.getSize()-deck.getNeffValue()<=16) board_controller.addCardField(card_view);
+        else board_controller.addCard(card_view);
         cardControllers.add(loader.getController());
       }
     } catch (Exception e) {
