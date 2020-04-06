@@ -4,27 +4,35 @@ import com.avatarduel.AvatarDuel;
 import com.avatarduel.model.card.*;
 import com.avatarduel.model.card.Character;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class CardController {
+public class CardController implements Initializable {
     @FXML
-    private Label card_name, card_description, card_element, card_type;
+    Label card_name, card_type, card_element, card_description;
 
     @FXML
-    private ImageView card_image;
+    ImageView card_image;
 
     @FXML
-    private AnchorPane card_atr;
+    VBox card_box;
+
+    @FXML
+    VBox card_bottom;
+
+    @FXML
+    HBox card_attribute;
 
     private final Card card;
 
@@ -32,7 +40,8 @@ public class CardController {
         this.card = card;
     }
 
-    public void initialize() throws URISyntaxException, IOException {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
         this.card_name.setText(this.card.getName());
         this.card_description.setText(this.card.getDescription());
         this.card_element.setText(this.card.getElement().toString());
@@ -43,25 +52,38 @@ public class CardController {
         } else if (card instanceof Land) {
             this.card_type.setText("Land");
         }
-
-        FXMLLoader loader;
-        if (card instanceof Character) { // masih coba-coba
-            loader = new FXMLLoader(AvatarDuel.class.getResource("card/view/CharacterAttribute.fxml"));
-            GridPane gp = loader.load();
-            gp.prefWidthProperty().bind(this.card_atr.widthProperty());
-            gp.prefHeightProperty().bind(this.card_atr.heightProperty());
-
-            this.card_atr.getChildren().add(gp);
-            AttributeController c = loader.getController();
-            if (c == null) {
-                System.out.println("bad");
-            }
-            c.initialize(((Character) this.card).getAtk(), ((Character) this.card).getDef(), ((Character) this.card).getPower());
+        File file = null;
+        try {
+            file = new File(AvatarDuel.class.getResource(this.card.getIMGPath()).toURI());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
         }
-        File file = new File(AvatarDuel.class.getResource(this.card.getIMGPath()).toURI());
         Image image = new Image(file.toURI().toString());
         this.card_image.setImage(image);
+            card_box.widthProperty().addListener(e -> {
+            card_name.setFont(new Font(0.05 * card_box.getWidth()));
+            card_type.setFont(new Font(0.05 * card_box.getWidth()));
+            card_element.setFont(new Font(0.05 * card_box.getWidth()));
+            card_description.setFont(new Font(0.05 * card_box.getWidth()));
+        });
+
+        card_image.fitWidthProperty().bind(card_box.widthProperty().multiply(0.6));
+        card_image.fitHeightProperty().bind(card_image.fitWidthProperty());
+        card_bottom.prefHeightProperty().bind(card_box.heightProperty().multiply((double) 240 / 700));
+        card_bottom.prefWidthProperty().bind(card_bottom.prefHeightProperty().multiply((double) 480 / 240));
+        card_description.prefHeightProperty().bind(card_bottom.prefHeightProperty().multiply(0.8));
+        card_description.prefWidthProperty().bind(card_bottom.prefWidthProperty());
+        card_attribute.prefHeightProperty().bind(card_bottom.prefHeightProperty().multiply(0.2));
+        card_attribute.prefWidthProperty().bind(card_bottom.prefWidthProperty());
     }
 
+    public void onMouseEnter(MouseEvent mouseEvent) {
+        // how to communicate with BoardController
+        card_box.setStyle("-fx-border-color: red");
+        System.out.println("HOVERED: " + this.card.getName());
+    }
 
+    public void onMouseExit(MouseEvent mouseEvent) {
+        card_box.setStyle("-fx-border-color: black");
+    }
 }

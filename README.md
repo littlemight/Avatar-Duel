@@ -1,7 +1,7 @@
 # IF2210 Project Template
 
 ## NOTES
-* Views (file fxml) ada di resources/card/views
+* Views (file fxml) ada di resources/com/avatarduel/view
 
 SOLVED
 * Path img di csv beda sama di directory
@@ -13,6 +13,8 @@ ONGOING
 * Card.fxml masih sangat poop, sementara masih buat testing aja
 * Sekarang lagi nyobain Card.fxml bisa import Attribute.fxml yang beda-beda (jd layoutnya tergantung jenis kartu)
 * yg jago front end help bikinin yg bagus dan bisa resize dong :(, thenks
+* Gimana cara communicate between controller? kalo punya instance controller di dalam controller sepertinya strong coupling...
+* Bikin Builder Class buat Card
 
 Good read: http://griffon-framework.org/tutorials/5_mvc_patterns.html
 
