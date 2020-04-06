@@ -96,11 +96,11 @@ public class BoardController implements Initializable  {
             this.player1_controller = player1_loader.getController();
             this.player1_pane.getChildren().add(player1_field);
 
-//            FXMLLoader player2_loader = new FXMLLoader(getClass().getResource("../view/Player2Field.fxml"));
-//            player2_loader.setControllerFactory(c -> new PlayerFieldController(this.channel));
-//            player2_field = player2_loader.load();
-//            this.player2_controller = player2_loader.getController();
-//            this.player2_pane.getChildren().add(player2_field);
+            FXMLLoader player2_loader = new FXMLLoader(getClass().getResource("../view/Player2Field.fxml"));
+            player2_loader.setControllerFactory(c -> new PlayerFieldController(this.channel));
+            player2_field = player2_loader.load();
+            this.player2_controller = player2_loader.getController();
+            this.player2_pane.getChildren().add(player2_field);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println(e);

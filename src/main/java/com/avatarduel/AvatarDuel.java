@@ -49,7 +49,7 @@ public class AvatarDuel extends Application {
 
       BoardController board_controller = board_loader.getController();
       board_controller.setPlayer1(player1);
-//      board_controller.setPlayer2(player2);
+      board_controller.setPlayer2(player2);
 //
 //////      board_controller.updateDeck(deck.getNeff(), deck.getSize());
 ////
