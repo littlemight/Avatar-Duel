@@ -1,21 +1,6 @@
 # IF2210 Project Template
 
 ## NOTES
-* Views (file fxml) ada di resources/com/avatarduel/view
-
-SOLVED
-* Path img di csv beda sama di directory
-* Ada conflict air/water temple
-* Ada beberapa tab di string deskripsi kartu, jadi data yang ke parse sempet kaco (aku ga tau ini salah dari sana atau pas aku convert indentation)
-* Foto Iroh.png gak ada, sempet kaco juga :(
-
-ONGOING
-* Card.fxml masih sangat poop, sementara masih buat testing aja
-* Sekarang lagi nyobain Card.fxml bisa import Attribute.fxml yang beda-beda (jd layoutnya tergantung jenis kartu)
-* yg jago front end help bikinin yg bagus dan bisa resize dong :(, thenks
-* Gimana cara communicate between controller? kalo punya instance controller di dalam controller sepertinya strong coupling...
-* Bikin Builder Class buat Card
-
 Good read: http://griffon-framework.org/tutorials/5_mvc_patterns.html
 
 ## Running
