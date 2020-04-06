@@ -16,13 +16,13 @@
 
 <BorderPane focusTraversable="true" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.avatarduel.controller.BoardController">
     <left>
-        <VBox fx:id="card_view" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="256.0" spacing="5.0" BorderPane.alignment="CENTER">
+        <VBox fx:id="hover_card_view" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="256.0" spacing="5.0" BorderPane.alignment="CENTER">
             <children>
-                <Pane fx:id="card_pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="343.0" prefWidth="245.0" style="-fx-border-color: black; -fx-border-width: 3;" />
-                <VBox fx:id="card_info" alignment="CENTER_LEFT" minHeight="250.0" minWidth="200.0" spacing="10.0">
+                <Pane fx:id="hover_card_pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="343.0" prefWidth="245.0" style="-fx-border-color: black; -fx-border-width: 3;" />
+                <VBox fx:id="hover_card_detailed_box" alignment="CENTER_LEFT" minHeight="250.0" minWidth="200.0" prefWidth="246.0" spacing="10.0">
                     <children>
                         <Label text="Description" />
-                        <Label fx:id="info_desc" prefHeight="157.0" prefWidth="500.0" text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." wrapText="true" />
+                        <Label fx:id="detailed_box_desc" prefHeight="157.0" prefWidth="500.0" text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." wrapText="true" />
                     </children>
                     <padding>
                         <Insets left="5.0" right="5.0" top="5.0" />

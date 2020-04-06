@@ -46,7 +46,7 @@ public class Dealer {
         List<String[]> skillAuraRows = skillAuraReader.read();
     
         this.cards = new ArrayList<Card>();
-    
+
         for (String[] row: landRows) {
           this.cards.add(new Land(row[1], row[3], Element.valueOf(row[2]), row[4]));
         }

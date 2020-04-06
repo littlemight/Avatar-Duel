@@ -7,6 +7,10 @@ public class Character extends Card implements Summonable {
     private int def;
     private int power;
 
+    public Character() {
+        super();
+    }
+
     public Character(String name, String description, Element element, String IMG_PATH, int power, int atk, int def) {
         super(name, description, element, IMG_PATH);
         this.atk = atk;

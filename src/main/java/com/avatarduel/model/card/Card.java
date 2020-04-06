@@ -1,43 +1,53 @@
 package com.avatarduel.model.card;
 
 import com.avatarduel.model.Element;
-
-import java.net.URISyntaxException;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 public abstract class Card {
-    private int id; // ???? keknya ga perlu
-    private String name;
-    private String description;
-    private Element element;
-    private String IMG_PATH;
+    private StringProperty name;
+    private StringProperty description;
+    private ObjectProperty<Element> element;
+    private StringProperty IMG_PATH;
 
-    // Will make builder class
     public Card() {
-        this.name = "";
-        this.description = "";
-        this.element = Element.AIR;
+        this.name = new SimpleStringProperty("");
+        this.description = new SimpleStringProperty("");
+        this.element = new SimpleObjectProperty<>(Element.AIR);
+        this.IMG_PATH = new SimpleStringProperty("card/image/placeholder.png");
     }
 
     public Card(String name, String description, Element element, String IMG_PATH) {
-        this.name = name;
-        this.description = description;
-        this.element = element;
-        this.IMG_PATH = IMG_PATH;
+        this.name = new SimpleStringProperty(name);
+        this.description = new SimpleStringProperty(description);
+        this.element = new SimpleObjectProperty<Element>(element);
+        this.IMG_PATH = new SimpleStringProperty(IMG_PATH);
     }
+
+    public StringProperty getNameProperty() {return this.name;};
 
     public String getName() {
-        return this.name;
+        return this.name.getValue();
     }
 
-    public String getDescription() {
+    public StringProperty getDescriptionProperty() {
         return this.description;
     }
-
-    public Element getElement() {
-        return this.element;
+    public String getDescription() {
+        return this.description.getValue();
     }
 
-    public String getIMGPath() {
+    public ObjectProperty<Element> getElementProperty() {
+        return this.element;
+    }
+    public Element getElement() { return this.element.getValue(); }
+
+    public StringProperty getIMGPathProperty() {
         return this.IMG_PATH;
+    }
+    public String getIMGPath() {
+        return this.IMG_PATH.getValue();
     }
 }

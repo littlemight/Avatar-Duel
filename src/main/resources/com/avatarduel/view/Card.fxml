@@ -14,7 +14,7 @@
 
 <StackPane fx:id="card_box" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseEntered="#onMouseEnter" onMouseExited="#onMouseExit" prefHeight="700.0" prefWidth="500.0" style="-fx-border-color: black; -fx-border-width: 3;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.avatarduel.controller.CardController">
    <children>
-      <VBox fx:id="card_front" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseEntered="#onMouseEnter" onMouseExited="#onMouseExit" prefHeight="700.0" prefWidth="500.0" spacing="10.0" style="-fx-border-color: black; -fx-border-width: 3;">
+      <VBox fx:id="card_front" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="500.0" spacing="10.0" style="-fx-border-color: black; -fx-border-width: 3;">
          <children>
             <HBox prefHeight="38.0" prefWidth="480.0">
                <children>
