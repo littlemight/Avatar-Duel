@@ -22,6 +22,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -106,7 +107,7 @@ public class AvatarDuel extends Application {
       for (Card card: cards) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("view/Card.fxml"));
         loader.setControllerFactory(c -> new CardController(card));
-        VBox card_view = loader.load();
+        StackPane card_view = loader.load();
         board_controller.addCard(card_view);
         cardControllers.add(loader.getController());
       }

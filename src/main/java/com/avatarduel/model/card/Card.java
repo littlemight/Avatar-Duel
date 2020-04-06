@@ -2,6 +2,8 @@ package com.avatarduel.model.card;
 
 import com.avatarduel.model.Element;
 
+import java.net.URISyntaxException;
+
 public abstract class Card {
     private int id; // ???? keknya ga perlu
     private String name;

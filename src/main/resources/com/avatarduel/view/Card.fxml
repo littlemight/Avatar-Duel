@@ -5,49 +5,63 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="card_box" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseEntered="#onMouseEnter" onMouseExited="#onMouseExit" prefHeight="700.0" prefWidth="500.0" spacing="10.0" style="-fx-border-color: black; -fx-border-width: 3;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.avatarduel.controller.CardController">
+
+<StackPane fx:id="card_box" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseEntered="#onMouseEnter" onMouseExited="#onMouseExit" prefHeight="700.0" prefWidth="500.0" style="-fx-border-color: black; -fx-border-width: 3;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.avatarduel.controller.CardController">
    <children>
-      <HBox prefHeight="38.0" prefWidth="480.0">
+      <VBox fx:id="card_front" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseEntered="#onMouseEnter" onMouseExited="#onMouseExit" prefHeight="700.0" prefWidth="500.0" spacing="10.0" style="-fx-border-color: black; -fx-border-width: 3;">
          <children>
-            <Label fx:id="card_name" prefHeight="47.0" prefWidth="251.0" style="-fx-border-color: green;" text="Name" wrapText="true">
+            <HBox prefHeight="38.0" prefWidth="480.0">
+               <children>
+                  <Label fx:id="card_name" prefHeight="47.0" prefWidth="251.0" style="-fx-border-color: green;" text="Name" wrapText="true">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="card_element" alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="236.0" style="-fx-border-color: green;" text="Element" wrapText="true">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets left="5.0" right="5.0" />
+               </padding>
+            </HBox>
+            <Label fx:id="card_type" alignment="CENTER_RIGHT" style="-fx-border-color: green;" text="Type" wrapText="true">
                <font>
                   <Font size="30.0" />
                </font>
             </Label>
-            <Label fx:id="card_element" alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="236.0" style="-fx-border-color: green;" text="Element" wrapText="true">
-               <font>
-                  <Font size="30.0" />
-               </font>
-            </Label>
+            <ImageView fx:id="card_image" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../card/image/placeholder.png" />
+               </image>
+            </ImageView>
+            <VBox fx:id="card_bottom" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="480.0">
+               <children>
+                  <Label fx:id="card_description" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="180.0" prefWidth="480.0" style="-fx-border-color: black;" text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s." wrapText="true">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <HBox fx:id="card_attribute" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="480.0" style="-fx-border-color: black;" />
+               </children>
+            </VBox>
          </children>
          <padding>
-            <Insets left="5.0" right="5.0" />
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
-      </HBox>
-      <Label fx:id="card_type" alignment="CENTER_RIGHT" style="-fx-border-color: green;" text="Type" wrapText="true">
-         <font>
-            <Font size="30.0" />
-         </font></Label>
-      <ImageView fx:id="card_image" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../card/image/placeholder.png" />
-         </image>
-      </ImageView>
-      <VBox fx:id="card_bottom" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="480.0">
-         <children>
-            <Label fx:id="card_description" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="180.0" prefWidth="480.0" style="-fx-border-color: black;" text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s." wrapText="true">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <HBox fx:id="card_attribute" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="480.0" style="-fx-border-color: black;" />
-         </children>
       </VBox>
+      <Pane fx:id="card_back" prefHeight="200.0" prefWidth="200.0" visible="false">
+         <children>
+            <Circle fill="#a6b5c3" layoutX="250.0" layoutY="350.0" radius="150.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+         </children>
+      </Pane>
    </children>
-   <padding>
-      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-   </padding>
-</VBox>
+</StackPane>
