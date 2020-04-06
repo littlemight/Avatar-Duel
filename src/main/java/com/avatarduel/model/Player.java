@@ -38,7 +38,7 @@ public class Player {
             power.put(e, new SimpleIntegerProperty(0));
         }
         hand = new ArrayList<Card>();
-        Dealer dealer = new Dealer();
+        Dealer dealer = Dealer.getDealer();
         deck = dealer.getDeck(0);
     }
 
@@ -53,7 +53,7 @@ public class Player {
             power.put(e, new SimpleIntegerProperty(0));
         }
         hand = new ArrayList<Card>();
-        Dealer dealer = new Dealer();
+        Dealer dealer = Dealer.getDealer();
         deck = dealer.getDeck(ThreadLocalRandom.current().nextInt(40, 60 + 1));
     }
 

@@ -1,6 +1,7 @@
 package com.avatarduel.model;
 import java.io.File;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.io.IOException;
@@ -14,12 +15,13 @@ import com.avatarduel.model.card.Skill;
 import com.avatarduel.util.CSVReader;
 
 public class Dealer {
+    private static Dealer dealer;
     private List<Card> cards;
     private static final String LAND_CSV_FILE_PATH = "../card/data/land.csv";
     private static final String CHARACTER_CSV_FILE_PATH = "../card/data/character.csv";
     private static final String SKILL_AURA_CSV_FILE_PATH = "../card/data/skill_aura.csv";
 
-    public Dealer(){
+    private Dealer(){
       try{
         this.loadCards();
       }
@@ -28,7 +30,7 @@ public class Dealer {
       }
     }
     
-    public void loadCards() throws IOException, URISyntaxException {
+    private void loadCards() throws IOException, URISyntaxException {
         File landCSVFile = new File(getClass().getResource(LAND_CSV_FILE_PATH).toURI());
         File characterCSVFile = new File(getClass().getResource(CHARACTER_CSV_FILE_PATH).toURI());
         File skillAuraCSVFile = new File(getClass().getResource(SKILL_AURA_CSV_FILE_PATH).toURI());
@@ -70,25 +72,34 @@ public class Dealer {
         }
       }
   
+    public static Dealer getDealer(){
+      if (Dealer.dealer==null){
+        Dealer.dealer = new Dealer();
+      }
+      return Dealer.dealer;
+    } 
     public Deck getDeck(int n){
 
         // Proporsi yang disarankan perbandingan land : karakter : skill adalah 2 : 2 : 1
         Deck deck = new Deck(n);
         Collections.shuffle(cards);
 
-        int portion = n/5;
+        float portion = n/5;
         int nk=0;int nl=0;int ns=0;
-        for (Card card : cards){
-            if (nk+nl+ns==n) break;
-            if ((card instanceof Character) && nk<portion*2){
+
+        ListIterator<Card> it = cards.listIterator();
+        while(nk+nl+ns<n){
+            if (!it.hasNext()) it = cards.listIterator();
+            Card card = it.next();
+            if ((card instanceof Character) && nk<Math.round(portion*2)){
                 deck.addCard(card);
                 nk++;
             }
-        else if ((card instanceof Land) && nl<portion*2){
+        else if ((card instanceof Land) && nl<Math.round(portion*2)){
                 deck.addCard(card);
                 nl++;
             }
-        else if ((card instanceof Skill) && ns<portion){
+        else if ((card instanceof Skill) && ns<Math.round(portion*2)){
                 deck.addCard(card);
                 ns++;
             }
