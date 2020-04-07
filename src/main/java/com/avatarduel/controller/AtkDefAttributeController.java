@@ -29,6 +29,7 @@ public class AtkDefAttributeController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        card_attribute_box.prefWidthProperty().bind(card_attribute_box.prefHeightProperty().multiply(8));
         card_attribute_box.heightProperty().addListener(e -> {
             atk_value.setFont(new Font(((double) 30 / 60) * card_attribute_box.getHeight()));
             def_value.setFont(new Font(((double) 30 / 60) * card_attribute_box.getHeight()));

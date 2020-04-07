@@ -17,10 +17,16 @@
             <VBox fx:id="hover_card_view" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="256.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <Pane fx:id="hover_card_pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="343.0" prefWidth="245.0" style="-fx-border-color: black; -fx-border-width: 3;" VBox.vgrow="ALWAYS" />
-                  <VBox fx:id="hover_card_detailed_box" minHeight="250.0" minWidth="200.0" prefHeight="370.0" prefWidth="246.0" spacing="10.0">
+                  <VBox fx:id="summoned_box" minHeight="250.0" minWidth="200.0" prefHeight="370.0" prefWidth="246.0" spacing="10.0">
                      <children>
-                        <Label text="Description" />
-                        <Label fx:id="detailed_box_desc" alignment="TOP_LEFT" prefHeight="317.0" prefWidth="236.0" text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." wrapText="true" />
+                        <Label fx:id="summoned_name" prefHeight="140.0" prefWidth="272.0" text="Hovered Summoned Card">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font></Label>
+                        <Label fx:id="summoned_description" alignment="TOP_LEFT" prefHeight="317.0" prefWidth="236.0" text="Hovered Summoned Description" wrapText="true">
+                           <font>
+                              <Font size="16.0" />
+                           </font></Label>
                      </children>
                      <padding>
                         <Insets left="5.0" right="5.0" top="5.0" />

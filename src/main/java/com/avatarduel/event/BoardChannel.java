@@ -1,5 +1,7 @@
 package com.avatarduel.event;
 
+import com.avatarduel.controller.BoardController;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,9 +9,20 @@ import java.util.Map;
 
 public class BoardChannel implements EventChannel {
     private Map<Publisher, List<Subscriber>> subscribers;
+    private BoardController main;
 
     public BoardChannel() {
         subscribers = new HashMap<Publisher, List<Subscriber>>();
+    }
+
+    @Override
+    public Object getMain() {
+        return this.main;
+    }
+
+    @Override
+    public void setMain(Object main) {
+        this.main = (BoardController) main;
     }
 
     @Override

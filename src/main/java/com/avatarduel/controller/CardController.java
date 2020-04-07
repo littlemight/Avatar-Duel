@@ -83,7 +83,6 @@ public class CardController implements Initializable, Subscriber, Publisher {
         try {
             file = new File(getClass().getResource("../" + this.card.getIMGPath()).toURI());
         } catch (Exception e) {
-//            e.printStackTrace();
             System.out.println("Error: " + e);
         }
         Image image = new Image(file.toURI().toString());
@@ -129,6 +128,14 @@ public class CardController implements Initializable, Subscriber, Publisher {
         back_logo.layoutYProperty().bind(card_box.heightProperty().multiply(0.5));
 
         setClosed();
+    }
+
+    /**
+     * Useful when coupled with SummonedCharacter.fxml/SummonedSkill.fxml
+     * @param value
+     */
+    public void setMouseTransparent(boolean value) {
+        this.card_box.setMouseTransparent(value);
     }
 
     public boolean isOpened() {
@@ -241,7 +248,6 @@ public class CardController implements Initializable, Subscriber, Publisher {
     }
 
     public void onMouseExit(MouseEvent mouseEvent) {
-        card_box.setStyle("-fx-border-color: black");
         if (isOpened()) {
             publish(new HoverCardEvent(EmptyCard.getInstance()));
         }

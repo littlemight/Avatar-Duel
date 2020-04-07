@@ -45,6 +45,8 @@ public class AvatarDuel extends Application {
       Parent root = board_loader.load();
 
       BoardController board_controller = board_loader.getController();
+      channel.setMain(board_controller);
+
       board_controller.setPlayer1(player1);
       board_controller.setPlayer2(player2);
 

@@ -2,9 +2,10 @@ package com.avatarduel.model.card;
 
 import com.avatarduel.model.Position;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class SummonedCharacter {
+public class SummonedCharacter implements Summoned {
     private Character card;
     private int d_atk;
     private int d_def;
@@ -14,7 +15,7 @@ public class SummonedCharacter {
     private int powered_up; // bisa aja di powered_up oleh 2 kartu, meskipun efeknya sama aja
     // berguna kalo kita mau discard kartu
 
-    private List<Skill> applied_skills;
+    private List<Skill> attached_skills;
 
     public SummonedCharacter(Character card) {
         this.card = card;
@@ -24,6 +25,11 @@ public class SummonedCharacter {
         this.has_attacked = false;
         this.just_summoned = true;
         this.powered_up = 0;
+        this.attached_skills = new ArrayList<Skill>();
+    }
+
+    public Card getBaseCard() {
+        return this.card;
     }
 
     public int getDAtk() {
@@ -59,7 +65,7 @@ public class SummonedCharacter {
     }
 
     public void addSkill(Skill skill_card) {
-        applied_skills.add(skill_card);
+        attached_skills.add(skill_card);
         if (skill_card instanceof Aura) {
             this.d_atk += ((Aura) skill_card).getDeltaAtk();
             this.d_def += ((Aura) skill_card).getDeltaDef();
@@ -72,12 +78,16 @@ public class SummonedCharacter {
     }
 
     public void removeSkill(Skill skill_card) {
-        applied_skills.remove(skill_card);
+        attached_skills.remove(skill_card);
         if (skill_card instanceof Aura) {
             this.d_atk -= ((Aura) skill_card).getDeltaAtk();
             this.d_def -= ((Aura) skill_card).getDeltaDef();
         } else if (skill_card instanceof PowerUp) {
             this.powered_up--;
         }
+    }
+
+    public List<Skill> getAttachedSkills() {
+        return this.attached_skills;
     }
 }

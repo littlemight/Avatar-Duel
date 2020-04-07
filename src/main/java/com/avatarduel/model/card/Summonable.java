@@ -1,5 +1,5 @@
 package com.avatarduel.model.card;
 
-interface Summonable {
+public interface Summonable {
     int getPower();
 }

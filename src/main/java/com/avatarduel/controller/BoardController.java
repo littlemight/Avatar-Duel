@@ -1,13 +1,9 @@
 package com.avatarduel.controller;
 
-import com.avatarduel.event.Event;
-import com.avatarduel.event.EventChannel;
-import com.avatarduel.event.NewCardDrawnEvent;
-import com.avatarduel.event.Subscriber;
+import com.avatarduel.event.*;
 import com.avatarduel.model.Player;
+import com.avatarduel.model.card.*;
 import com.avatarduel.model.card.Character;
-import com.avatarduel.model.card.Card;
-import com.avatarduel.model.card.EmptyCard;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
 import javafx.fxml.FXML;
@@ -29,10 +25,10 @@ public class BoardController implements Initializable, Subscriber {
     VBox hover_card_view;
 
     @FXML
-    VBox hover_card_detailed_box;
+    VBox summoned_box;
 
     @FXML
-    Label detailed_box_desc;
+    Label summoned_name, summoned_description;
 
     @FXML
     Pane player1_pane;
@@ -53,29 +49,13 @@ public class BoardController implements Initializable, Subscriber {
     StackPane hover_card_box;
     private CardController hover_card_controller;
     private EventChannel channel;
-//
-//    @FXML
-//    Pane card_pane;
-//
-//    @FXML
-//    Label neff_deck, size_deck;
-//
-////    Pane deck;
-//
-//    private int col=0;
-//    private int row=0;
-//
+
     public BoardController(EventChannel channel) {
         this.channel = channel;
         this.player1 = new Player(); // should be a singleton object
         this.player2 = new Player();
     }
 
-    /**
-     * Should be called after setting Player1 and Player2
-     * @param location
-     * @param resources
-     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
@@ -103,12 +83,15 @@ public class BoardController implements Initializable, Subscriber {
 
             this.channel.addSubscriber(player1_controller, this);
             this.channel.addSubscriber(player2_controller, this);
+
+            summoned_name.setText("");
+            summoned_description.setText("");
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println(e);
         }
     }
-//
+
     public void setPlayer1(Player player) {
         try {
             this.player1 = player;
@@ -135,8 +118,32 @@ public class BoardController implements Initializable, Subscriber {
 
     @Override
     public void onEvent(Event event) {
-        if (event instanceof NewCardDrawnEvent) {
-            this.channel.addSubscriber((CardController)event.getInfo(), this.hover_card_controller);
+        if (event instanceof NewCardDrawnEvent || event instanceof NewSummonedCardEvent) {
+            CardController controller = (CardController) event.getInfo();
+            this.channel.addSubscriber(controller, this.hover_card_controller);
+        } else if (event instanceof HoverSummonedCardEvent) {
+            Summoned summoned_card = (Summoned)event.getInfo();
+            if (summoned_card == null) {
+                this.summoned_name.setText("");
+                this.summoned_description.setText("");
+                return;
+            }
+
+            this.summoned_name.setText(summoned_card.getBaseCard().getName());
+            String description = "";
+            if (summoned_card instanceof SummonedCharacter) {
+                description += "Net ATK: " + ((SummonedCharacter)summoned_card).getNetAtk() + "\n";
+                description += "Net DEF: " + ((SummonedCharacter)summoned_card).getNetDef() + "\n";
+                description += "Skills atttached:\n";
+                if (((SummonedCharacter) summoned_card).getAttachedSkills().isEmpty()) {
+                    description += "None\n";
+                } else {
+                    for (Skill skill: ((SummonedCharacter) summoned_card).getAttachedSkills()) {
+                        description += skill.getName() + "\n";
+                    }
+                }
+            }
+            this.summoned_description.setText(description);
         }
     }
 //

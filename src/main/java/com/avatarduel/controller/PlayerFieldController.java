@@ -1,11 +1,13 @@
 package com.avatarduel.controller;
 
+import com.avatarduel.model.card.Character;
 import com.avatarduel.event.Event;
 import com.avatarduel.event.EventChannel;
 import com.avatarduel.event.NewCardDrawnEvent;
 import com.avatarduel.event.Publisher;
 import com.avatarduel.model.Player;
 import com.avatarduel.model.card.Card;
+import com.avatarduel.model.card.SummonedCharacter;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -52,6 +54,7 @@ public class PlayerFieldController implements Initializable, Publisher {
 
     private Player player;
 
+    int col = 0, row = 0;
 
     public PlayerFieldController(EventChannel channel) {
         this.channel = channel;
@@ -93,11 +96,35 @@ public class PlayerFieldController implements Initializable, Publisher {
 
             card_box.prefHeightProperty().bind(this.player_hand.prefHeightProperty().subtract(10)); // kurang 10 gara2 padding
             this.player_hand.getChildren().add(card_box);
+
+            if (drawn_card instanceof Character) {
+                System.out.println("THIS IS A CHARACTER");
+                addSummonedCard(new SummonedCharacter((Character)drawn_card));
+            }
         } catch (Exception e) {
             System.out.println("IN DRAW: " + e);
         }
-
     }
+
+        public void addSummonedCard(SummonedCharacter summoned_character) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/SummonedCharacter.fxml"));
+                loader.setControllerFactory(c -> new SummonedCharacterController(this.channel));
+                StackPane summoned_character_box = loader.load();
+                SummonedCharacterController controller = loader.getController();
+                controller.setSummonedCharacter(summoned_character);
+
+                summoned_character_box.prefWidthProperty().bind(player_zone.prefWidthProperty().divide(8));
+                summoned_character_box.prefHeightProperty().bind(player_zone.prefHeightProperty().divide(2));
+
+                player_zone.add(summoned_character_box, col, row);
+
+                col++;
+                if (col==8){col=0;row++;}
+            } catch (Exception e) {
+                System.out.println("ADDING CARD TO ZONE: " + e);
+            }
+        }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
