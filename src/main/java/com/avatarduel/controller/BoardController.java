@@ -10,12 +10,8 @@ import javafx.beans.property.IntegerProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -41,7 +37,7 @@ public class BoardController implements Initializable  {
     @FXML
     Pane player2_pane;
 
-    VBox player1_field, player2_field;
+    AnchorPane player1_field, player2_field;
 
 
     /**

@@ -8,10 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -45,7 +42,7 @@ public class PlayerFieldController implements Initializable {
     ImageView player_photo;
 
     @FXML
-    VBox player_field;
+    public AnchorPane player_field;
 
     private EventChannel channel;
 
