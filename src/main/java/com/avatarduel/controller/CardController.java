@@ -3,6 +3,7 @@ package com.avatarduel.controller;
 import com.avatarduel.event.*;
 import com.avatarduel.model.card.*;
 import com.avatarduel.model.card.Character;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -21,6 +22,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 
+import javax.print.attribute.standard.MediaSize;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -68,6 +70,14 @@ public class CardController implements Initializable, Subscriber, Publisher {
         // Maintains aspect ratio
         this.card_box.prefWidthProperty().bind(this.card_box.prefHeightProperty().multiply((double) 5 / 7));
         this.card_front.spacingProperty().bind(this.card_box.prefHeightProperty().multiply((double) 10 / 700));
+        this.card_front.
+                paddingProperty().
+                bind(
+                        Bindings.createObjectBinding(() -> new Insets(
+                                        card_front.prefHeightProperty().multiply((double) 5 / 700).getValue()),
+                                card_front.prefHeightProperty()
+                        )
+                );
 
         File file = null;
         try {
@@ -160,21 +170,55 @@ public class CardController implements Initializable, Subscriber, Publisher {
         this.card_element.textProperty().bind(card.getElementProperty().asString());
 
         String type;
-        if (card instanceof Character) {
-            type = "CHARACTER";
-        } else if (card instanceof Land) {
-            type = "LAND";
-        } else {
-            // harusnya type = SKILL aja sih
-            if (card instanceof Aura) {
-                type = "AURA";
-            } else if (card instanceof PowerUp) {
-                type = "POWER UP";
+        this.card_attribute_pane.getChildren().clear();
+        FXMLLoader attribute_loader;
+        try {
+            if (card instanceof Character) {
+                type = "CHARACTER";
+                attribute_loader = new FXMLLoader(getClass().getResource("../view/CharacterAttribute.fxml"));
+                card_attribute_box = attribute_loader.load();
+                AtkDefAttributeController controller = attribute_loader.getController();
+                controller.setAttribute(((Character)this.card).getAtk(), ((Character)this.card).getDef(), ((Character)this.card).getPower());
+            } else if (card instanceof Land) {
+                type = "LAND";
             } else {
-                type = "DESTROY";
+                if (card instanceof Aura) {
+                    type = "AURA";
+                    attribute_loader = new FXMLLoader(getClass().getResource("../view/AuraAttribute.fxml"));
+                    card_attribute_box = attribute_loader.load();
+                    AtkDefAttributeController controller = attribute_loader.getController();
+                    controller.setAttribute(((Aura)this.card).getDeltaAtk(), ((Aura)this.card).getDeltaDef(), ((Aura)this.card).getPower());
+                } else if (card instanceof PowerUp) {
+                    type = "POWER UP";
+                    attribute_loader = new FXMLLoader(getClass().getResource("../view/OtherAttribute.fxml"));
+                    card_attribute_box = attribute_loader.load();
+                    OtherAttributeController controller = attribute_loader.getController();
+                    controller.setAttribute("Powers up a character when attacking a defense character card", ((Skill)this.card).getPower());
+                } else {
+                    type = "DESTROY";
+                    attribute_loader = new FXMLLoader(getClass().getResource("../view/OtherAttribute.fxml"));
+                    card_attribute_box = attribute_loader.load();
+                    OtherAttributeController controller = attribute_loader.getController();
+                    controller.setAttribute("Destroys a character card", ((Skill)this.card).getPower());
+                }
             }
+            if (!(card instanceof Land)) {
+                card_description.prefHeightProperty().bind(card_bottom.prefHeightProperty().multiply(0.8));
+                card_attribute_pane.prefHeightProperty().bind(card_bottom.prefHeightProperty().multiply(0.2));
+
+                this.card_attribute_box.prefHeightProperty().bind(this.card_attribute_pane.prefHeightProperty());
+                this.card_attribute_box.prefWidthProperty().bind(this.card_attribute_pane.prefWidthProperty());
+                this.card_attribute_pane.getChildren().add(card_attribute_box);
+            } else {
+                card_description.prefHeightProperty().bind(card_bottom.prefHeightProperty());
+                card_attribute_pane.prefHeightProperty().bind(card_bottom.prefHeightProperty().multiply(0));
+            }
+            this.card_type.setText(type);
+        } catch (Exception e) {
+            System.out.println("LOADING ATTRIBUTE: " + e);
         }
-        this.card_type.setText(type);
+
+
 
         File file = null;
         try {
