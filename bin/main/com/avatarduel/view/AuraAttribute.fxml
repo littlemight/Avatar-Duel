@@ -1,26 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
 
-<GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
-  <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-  </columnConstraints>
-  <rowConstraints>
-    <RowConstraints minHeight="10.0" percentHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-  </rowConstraints>
+<HBox alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="480.0" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.avatarduel.controller.AtkDefAttributeController">
    <children>
-      <Label alignment="CENTER" prefHeight="34.0" prefWidth="202.0" text="ATK" />
-      <Label alignment="CENTER" prefHeight="33.0" prefWidth="211.0" text="DEF" GridPane.columnIndex="1" />
-      <Label alignment="CENTER" prefHeight="61.0" prefWidth="261.0" text="POWER" GridPane.columnIndex="2" />
-      <Label fx:id="card_atk" alignment="CENTER" prefHeight="93.0" prefWidth="319.0" text="Val ATK" GridPane.rowIndex="1" />
-      <Label fx:id="card_def" alignment="CENTER" prefHeight="97.0" prefWidth="296.0" text="Val DEF" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-      <Label fx:id="card_power" alignment="CENTER" prefHeight="83.0" prefWidth="282.0" text="Val POWER" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+      <Label text="+ATK">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Separator orientation="VERTICAL" prefHeight="200.0" rotate="10.0" style="-fx-background-color: orange;" />
+      <Label fx:id="atk" text="12">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Label>
+      <Separator orientation="VERTICAL" prefHeight="200.0" style="-fx-background-color: black;" />
+      <Label text="+DEF">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Separator orientation="VERTICAL" prefHeight="200.0" rotate="10.0" style="-fx-background-color: #61e885;" />
+      <Label fx:id="def" text="34">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Label>
+      <Separator orientation="VERTICAL" prefHeight="200.0" style="-fx-background-color: black;" />
+      <Label text="POW">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Separator orientation="VERTICAL" prefHeight="200.0" rotate="10.0" style="-fx-background-color: #4287f5;" />
+      <Label fx:id="pow" text="5">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Label>
    </children>
-</GridPane>
+   <padding>
+      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+   </padding>
+</HBox>

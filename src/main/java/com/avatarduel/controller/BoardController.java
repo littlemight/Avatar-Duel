@@ -1,6 +1,9 @@
 package com.avatarduel.controller;
 
+import com.avatarduel.event.Event;
 import com.avatarduel.event.EventChannel;
+import com.avatarduel.event.NewCardDrawnEvent;
+import com.avatarduel.event.Subscriber;
 import com.avatarduel.model.Player;
 import com.avatarduel.model.card.Character;
 import com.avatarduel.model.card.Card;
@@ -22,7 +25,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class BoardController implements Initializable  {
+public class BoardController implements Initializable, Subscriber {
     @FXML
     Pane hover_card_pane;
 
@@ -101,6 +104,9 @@ public class BoardController implements Initializable  {
             player2_field = player2_loader.load();
             this.player2_controller = player2_loader.getController();
             this.player2_pane.getChildren().add(player2_field);
+
+            this.channel.addSubscriber(player1_controller, this);
+            this.channel.addSubscriber(player2_controller, this);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println(e);
@@ -119,6 +125,23 @@ public class BoardController implements Initializable  {
     public void setPlayer2(Player player) {
         this.player2 = player;
         player2_controller.setPlayer(this.player2);
+    }
+
+    /**
+     * For testing purposes.
+     */
+    public void drawBoth() {
+        for (int i = 0; i < 7; i++) {
+            player1_controller.draw();
+            player2_controller.draw();
+        }
+    }
+
+    @Override
+    public void onEvent(Event event) {
+        if (event instanceof NewCardDrawnEvent) {
+            this.channel.addSubscriber((CardController)event.getInfo(), this.hover_card_controller);
+        }
     }
 //
 //    public void addCard(CardController card_controller) {

@@ -1,7 +1,11 @@
 package com.avatarduel.controller;
 
+import com.avatarduel.event.Event;
 import com.avatarduel.event.EventChannel;
+import com.avatarduel.event.NewCardDrawnEvent;
+import com.avatarduel.event.Publisher;
 import com.avatarduel.model.Player;
+import com.avatarduel.model.card.Card;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -16,7 +20,7 @@ import javafx.scene.layout.VBox;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class PlayerFieldController implements Initializable {
+public class PlayerFieldController implements Initializable, Publisher {
     @FXML
     public GridPane player_zone;
 
@@ -74,17 +78,23 @@ public class PlayerFieldController implements Initializable {
      * Draws from a card and puts it into the hand field
      */
     public void draw() {
-//        this.player_hand.getChildren().add()
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/Card.fxml"));
-        CardController controller = new CardController(this.channel);
-        controller.setCard(this.player.drawCard());
-        loader.setControllerFactory(c -> controller);
+        loader.setControllerFactory(c -> new CardController(this.channel));
 
         try{
-            StackPane card_box = loader.load();
             // publish new AddedHoverableCard event
+            loader.load();
+            CardController controller = loader.getController();
+            Card drawn_card = this.player.drawCard();
+            // if draw_card instanceof emptycard, then dont do anything, maybe send FailedDrawEvent
 
+            channel.addPublisher(controller);
+            this.publish(new NewCardDrawnEvent(controller));
+
+            controller.setCard(drawn_card);
+            StackPane card_box = controller.getContent();
+
+            card_box.prefHeightProperty().bind(this.player_hand.prefHeightProperty().subtract(10)); // kurang 10 gara2 padding
             this.player_hand.getChildren().add(card_box);
         } catch (Exception e) {
             System.out.println("IN DRAW: " + e);
@@ -94,5 +104,10 @@ public class PlayerFieldController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+    }
+
+    @Override
+    public void publish(Event event) {
+        this.channel.sendEvent(this, event);
     }
 }

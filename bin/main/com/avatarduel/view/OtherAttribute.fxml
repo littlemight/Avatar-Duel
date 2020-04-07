@@ -1,11 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-
-<Label fx:id="card_message" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0" prefWidth="500.0" text="Message kalo Card bukan Aura/Char" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.avatarduel.controller.attributecontroller">
-   <font>
-      <Font size="20.0" />
-   </font>
-</Label>
+<HBox alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="480.0" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.avatarduel.AtkDefAttributeController">
+   <children>
+      <Label fx:id="desc" text="Not Atk Def Description">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Label>
+      <Separator orientation="VERTICAL" prefHeight="200.0" style="-fx-background-color: black;" />
+      <Label text="POW">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Separator orientation="VERTICAL" prefHeight="200.0" rotate="10.0" style="-fx-background-color: #4287f5;" />
+      <Label fx:id="pow" text="5">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Label>
+   </children>
+   <padding>
+      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+   </padding>
+</HBox>
