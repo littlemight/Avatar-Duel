@@ -15,13 +15,12 @@ import com.avatarduel.model.card.Skill;
 import com.avatarduel.util.CSVReader;
 
 public class Dealer {
-    private static Dealer dealer;
     private List<Card> cards;
     private static final String LAND_CSV_FILE_PATH = "../card/data/land.csv";
     private static final String CHARACTER_CSV_FILE_PATH = "../card/data/character.csv";
     private static final String SKILL_AURA_CSV_FILE_PATH = "../card/data/skill_aura.csv";
 
-    private Dealer(){
+    public Dealer(){
       try{
         this.loadCards();
       }
@@ -72,12 +71,6 @@ public class Dealer {
         }
       }
   
-    public static Dealer getDealer(){
-      if (Dealer.dealer==null){
-        Dealer.dealer = new Dealer();
-      }
-      return Dealer.dealer;
-    } 
     public Deck getDeck(int n){
 
         // Proporsi yang disarankan perbandingan land : karakter : skill adalah 2 : 2 : 1

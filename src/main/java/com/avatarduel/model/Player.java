@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Player {
     public static final int MAX_HEALTH = 80;
@@ -38,11 +37,10 @@ public class Player {
             power.put(e, new SimpleIntegerProperty(0));
         }
         hand = new ArrayList<Card>();
-        Dealer dealer = Dealer.getDealer();
-        deck = dealer.getDeck(0);
+        deck = new Deck();
     }
 
-    public Player(String name) {
+    public Player(String name, Deck deck) {
         this.name = name;
         this.health = new SimpleIntegerProperty(MAX_HEALTH);
         this.max_power = new HashMap<Element, IntegerProperty>();
@@ -53,8 +51,7 @@ public class Player {
             power.put(e, new SimpleIntegerProperty(0));
         }
         hand = new ArrayList<Card>();
-        Dealer dealer = Dealer.getDealer();
-        deck = dealer.getDeck(ThreadLocalRandom.current().nextInt(40, 60 + 1));
+        this.deck = deck;
     }
 
     public IntegerProperty getMaxPowerProperty(Element e) {

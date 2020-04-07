@@ -1,6 +1,7 @@
 package com.avatarduel;
 
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 import com.avatarduel.controller.BoardController;
 import com.avatarduel.controller.CardController;
@@ -37,10 +38,10 @@ public class AvatarDuel extends Application {
 //      Dealer dealer = new Dealer();
 ////      Deck deck = dealer.getDeck(40);
 //      Deck deck = dealer.getDeck(92); // coba load semua
-
+      Dealer dealer = new Dealer();
       // Player[2] Player = new Player();
-      Player player1 = new Player("Aang");
-      Player player2 = new Player("orAang Ganteng");
+      Player player1 = new Player("Aang", dealer.getDeck(ThreadLocalRandom.current().nextInt(40, 60 + 1)));
+      Player player2 = new Player("orAang Ganteng", dealer.getDeck(ThreadLocalRandom.current().nextInt(40, 60 + 1)));
 
       BoardChannel channel = new BoardChannel();
       FXMLLoader board_loader = new FXMLLoader(getClass().getResource("view/Board.fxml"));
