@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.image.Image?>
@@ -53,20 +52,14 @@
             </HBox>
             <HBox prefHeight="31.0" prefWidth="1023.0" spacing="15.0">
                <children>
-                  <HBox fx:id="player_hand" alignment="CENTER" prefHeight="122.0" prefWidth="776.0" spacing="25.0">
-                     <children>
-                        <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="112.0" prefWidth="80.0" text="Button" />
-                        <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="112.0" prefWidth="80.0" text="Button" />
-                        <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="112.0" prefWidth="80.0" text="Button" />
-                        <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="112.0" prefWidth="80.0" text="Button" />
-                        <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="112.0" prefWidth="80.0" text="Button" />
-                        <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="112.0" prefWidth="80.0" text="Button" />
-                        <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="112.0" prefWidth="80.0" text="Button" />
-                     </children>
-                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                  </HBox>
+                  <ImageView fx:id="player_photo" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@../card/image/placeholder_2.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets bottom="10.0" top="10.0" />
+                     </HBox.margin>
+                  </ImageView>
                   <StackPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="122.0" prefWidth="87.0" style="-fx-border-color: black;">
                      <children>
                         <Circle fill="#a6b5c3" radius="26.0" stroke="TRANSPARENT" strokeType="INSIDE" />
@@ -94,14 +87,11 @@
                         <Insets right="15.0" />
                      </HBox.margin>
                   </StackPane>
-                  <ImageView fx:id="player_photo" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true">
-                     <image>
-                        <Image url="@../card/image/placeholder_2.png" />
-                     </image>
-                     <HBox.margin>
-                        <Insets bottom="10.0" top="10.0" />
-                     </HBox.margin>
-                  </ImageView>
+                  <HBox fx:id="player_hand" alignment="CENTER" prefHeight="122.0" prefWidth="776.0" spacing="25.0" style="-fx-border-color: black;">
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </HBox>
                </children>
                <VBox.margin>
                   <Insets />
@@ -208,7 +198,7 @@
                   </HBox>
                </children>
             </GridPane>
-            <GridPane fx:id="player_zone" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="169.0" prefWidth="907.0" style="-fx-border-color: black;">
+            <GridPane fx:id="player_zone" alignment="CENTER" gridLinesVisible="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="169.0" prefWidth="907.0">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="114.0" />
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="114.0" />
