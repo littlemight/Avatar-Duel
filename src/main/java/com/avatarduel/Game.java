@@ -5,13 +5,17 @@ import com.avatarduel.model.*;
 import com.avatarduel.model.card.*;
 
 public class Game {
-    // initialize player components
+    // components
     private Player player1, player2;
-    private Dealer dealer;
-    private BoardChannel boardChannel;
     // defined game phases
     Phase[] phases = new Phase[]{Phase.DRAW, Phase.MAIN1, Phase.BATTLE, Phase.MAIN2, Phase.END};
     int phase_id = 0;
+
+    // initialize
+    public Game(Player p1, Player p2) {
+        this.player1 = p1;
+        this.player2 = p2;
+    }
 
     /**
      * Draw function
