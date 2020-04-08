@@ -53,27 +53,27 @@
                            <children>
                               <Label fx:id="dp_label" alignment="CENTER" prefHeight="40.0" prefWidth="170.0" style="-fx-background-color: #AEDBF6;" text="DP">
                                  <font>
-                                    <Font size="25.0" />
+                                    <Font size="20.0" />
                                  </font></Label>
                               <Label fx:id="mp1_label" alignment="CENTER" prefHeight="40.0" prefWidth="170.0" style="-fx-background-color: darkgrey;" text="MP1" textFill="DIMGRAY">
                                  <font>
-                                    <Font size="25.0" />
+                                    <Font size="20.0" />
                                  </font></Label>
                               <Label fx:id="bp_label" alignment="CENTER" prefHeight="40.0" prefWidth="170.0" style="-fx-background-color: darkgrey;" text="BP" textFill="DIMGRAY">
                                  <font>
-                                    <Font size="25.0" />
+                                    <Font size="20.0" />
                                  </font></Label>
                               <Label fx:id="mp2_label" alignment="CENTER" prefHeight="40.0" prefWidth="170.0" style="-fx-background-color: darkgrey;" text="MP2" textFill="DIMGRAY">
                                  <font>
-                                    <Font size="25.0" />
+                                    <Font size="20.0" />
                                  </font></Label>
                               <Label fx:id="ep_label" alignment="CENTER" prefHeight="40.0" prefWidth="170.0" style="-fx-background-color: darkgrey;" text="EP" textFill="DIMGRAY">
                                  <font>
-                                    <Font size="25.0" />
+                                    <Font size="20.0" />
                                  </font></Label>
                               <Button fx:id="next_phase_btn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#proceedPhase" prefHeight="40.0" prefWidth="170.0" text="NP">
                                  <font>
-                                    <Font size="18.0" />
+                                    <Font size="15.0" />
                                  </font>
                               </Button>
                            </children>

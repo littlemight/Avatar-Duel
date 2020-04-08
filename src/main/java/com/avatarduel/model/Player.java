@@ -90,6 +90,10 @@ public class Player {
         return this.deck;
     }
 
+    public List<Card> getHand() {
+        return hand;
+    }
+
     /**
      * Asumsi: amount <= power(e)
      * @param e Element yang mana

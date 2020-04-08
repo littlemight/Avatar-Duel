@@ -6,6 +6,7 @@ public class SummonedSkill implements Summoned{
 
     public SummonedSkill(Skill card) {
         this.card = card;
+        applied_to = null;
     }
 
     public void setAppliedTo(SummonedCharacter applied_to) {
@@ -15,5 +16,9 @@ public class SummonedSkill implements Summoned{
 
     public Card getBaseCard() {
         return this.card;
+    }
+
+    public SummonedCharacter getAppliedTo() {
+        return this.applied_to;
     }
 }

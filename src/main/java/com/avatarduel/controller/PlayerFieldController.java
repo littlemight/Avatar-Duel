@@ -33,6 +33,9 @@ public class PlayerFieldController implements Initializable, Publisher {
     private Pane[][] zone_panes;
 
     @FXML
+    public GridPane power_pane;
+
+    @FXML
     public Label earth_power, fire_power, water_power, air_power;
 
     @FXML
@@ -68,8 +71,6 @@ public class PlayerFieldController implements Initializable, Publisher {
     private Player player;
 
     private int character_row, skill_row;
-
-    int col = 0, row = 0;
 
     public PlayerFieldController(EventChannel channel) {
         this.channel = channel;
@@ -151,19 +152,19 @@ public class PlayerFieldController implements Initializable, Publisher {
             this.player_hand.getChildren().add(card_box);
 
 
-            if (drawn_card instanceof Summonable) {
-                VBox card_front = controller.getCardFront();
-                card_front.setCursor(Cursor.HAND);
-                card_front.setOnDragDetected(e -> {
-                    Dragboard db = card_front.startDragAndDrop(TransferMode.MOVE);
-                    db.setDragView(card_front.snapshot(null, null));
-                    ClipboardContent cc = new ClipboardContent();
-                    cc.put(vbox_format, "Card Front");
-                    db.setContent(cc);
-                    System.out.println("YA");
-                    dragged_card_controller = controller;
-                });
-            }
+            /**
+             * Sets the card front to be draggable (jadi kalo di flip, card_backnya ga bisa di drag)
+             */
+            VBox card_front = controller.getCardFront();
+            card_front.setCursor(Cursor.HAND);
+            card_front.setOnDragDetected(e -> {
+                Dragboard db = card_front.startDragAndDrop(TransferMode.MOVE);
+                db.setDragView(card_front.snapshot(null, null));
+                ClipboardContent cc = new ClipboardContent();
+                cc.put(vbox_format, "Card Front");
+                db.setContent(cc);
+                dragged_card_controller = controller;
+            });
         } catch (Exception e) {
             System.out.println("IN DRAW: " + e);
         }
@@ -218,6 +219,37 @@ public class PlayerFieldController implements Initializable, Publisher {
                 addPane(j, i);
             }
         }
+
+        power_pane.setOnDragOver(e -> {
+            Dragboard db = e.getDragboard();
+            if (db.hasContent(vbox_format)
+                    && dragged_card_controller != null
+            ) {
+                if (!(dragged_card_controller.getCard() instanceof Summonable)) {
+                    e.acceptTransferModes(TransferMode.MOVE);
+                }
+            }
+        });
+
+        power_pane.setOnDragDropped (e -> {
+            Dragboard db = e.getDragboard();
+            if (db.hasContent(vbox_format)
+                // && player.hasUsedLand == false
+            ) {
+                Card dragged_card = dragged_card_controller.getCard();
+
+                /**
+                 * Only receive summonable card
+                 */
+                if (dragged_card instanceof Land) {
+                    Node dragged_card_box = dragged_card_controller.getContent();
+                    ((Pane)dragged_card_box.getParent()).getChildren().remove(dragged_card_box);
+
+                    this.player.addPower(dragged_card.getElement());
+                }
+                dragged_card = null;
+            }
+        });
     }
 
     private void addPane(int col, int row) {
@@ -229,7 +261,9 @@ public class PlayerFieldController implements Initializable, Publisher {
             if (db.hasContent(vbox_format)
                     && dragged_card_controller != null
             ) {
-                e.acceptTransferModes(TransferMode.MOVE);
+                if (dragged_card_controller.getCard() instanceof Summonable) {
+                    e.acceptTransferModes(TransferMode.MOVE);
+                }
             }
         });
 
@@ -238,6 +272,9 @@ public class PlayerFieldController implements Initializable, Publisher {
             if (db.hasContent(vbox_format) && zone_panes[row][col].getChildren().isEmpty()) {
                 Card dragged_card = dragged_card_controller.getCard();
 
+                /**
+                 * Only receive summonable card
+                 */
                 if ((dragged_card instanceof Character && row == character_row) ||
                     (dragged_card instanceof Skill && row == skill_row)
                 ) {
