@@ -6,7 +6,7 @@ public enum Element {
   AIR("AIR"),
   EARTH("EARTH");
 
-  String name; // and maybe asset file path, buat logo
+  String name; // or maybe asset file path, buat logo
   private Element(String name) {
     this.name = name;
   }

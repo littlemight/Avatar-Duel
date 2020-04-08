@@ -1,12 +1,10 @@
 package com.avatarduel.controller;
 
 import com.avatarduel.event.*;
+import com.avatarduel.model.Element;
 import com.avatarduel.model.card.*;
 import com.avatarduel.model.card.Character;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -22,10 +20,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 
-import javax.print.attribute.standard.MediaSize;
 import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -172,9 +167,9 @@ public class CardController implements Initializable, Subscriber, Publisher {
 
         setOpened();
         this.card = card;
-        this.card_name.textProperty().bind(card.getNameProperty());
-        this.card_description.textProperty().bind(card.getDescriptionProperty());
-        this.card_element.textProperty().bind(card.getElementProperty().asString());
+        this.card_name.setText(card.getName());
+        this.card_description.setText(card.getDescription());
+        this.card_element.setText(card.getElement().toString());
 
         String type;
         this.card_attribute_pane.getChildren().clear();

@@ -72,7 +72,6 @@ public class SummonedCharacter implements Summoned {
         } else if (skill_card instanceof PowerUp) {
             this.powered_up++;
         } else { // destroy
-            // masih ragu
             this.position = Position.DESTROYED;
         }
     }

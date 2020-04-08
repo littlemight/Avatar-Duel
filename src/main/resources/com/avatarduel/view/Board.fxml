@@ -51,14 +51,29 @@
                      <children>
                         <HBox maxWidth="-Infinity" minHeight="20.0" minWidth="-Infinity" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                            <children>
-                              <Label alignment="CENTER" prefHeight="40.0" prefWidth="170.0" text="DP" textFill="#e3ad65" />
-                              <Label alignment="CENTER" prefHeight="40.0" prefWidth="170.0" text="MP1" textFill="#e3ad65" />
-                              <Label alignment="CENTER" prefHeight="40.0" prefWidth="170.0" text="BP" textFill="#e3ad65" />
-                              <Label alignment="CENTER" prefHeight="40.0" prefWidth="170.0" text="MP2" textFill="#e3ad65" />
-                              <Label alignment="CENTER" prefHeight="40.0" prefWidth="170.0" text="EP" textFill="#e3ad65" />
-                              <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="170.0" text="NP">
+                              <Label fx:id="dp_label" alignment="CENTER" prefHeight="40.0" prefWidth="170.0" style="-fx-background-color: aquamarine;" text="DP">
                                  <font>
-                                    <Font size="9.0" />
+                                    <Font size="25.0" />
+                                 </font></Label>
+                              <Label fx:id="mp1_label" alignment="CENTER" prefHeight="40.0" prefWidth="170.0" style="-fx-background-color: darkgrey;" text="MP1" textFill="DIMGRAY">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font></Label>
+                              <Label fx:id="bp_label" alignment="CENTER" prefHeight="40.0" prefWidth="170.0" style="-fx-background-color: darkgrey;" text="BP" textFill="DIMGRAY">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font></Label>
+                              <Label fx:id="mp2_label" alignment="CENTER" prefHeight="40.0" prefWidth="170.0" style="-fx-background-color: darkgrey;" text="MP2" textFill="DIMGRAY">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font></Label>
+                              <Label fx:id="ep_label" alignment="CENTER" prefHeight="40.0" prefWidth="170.0" style="-fx-background-color: darkgrey;" text="EP" textFill="DIMGRAY">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font></Label>
+                              <Button fx:id="next_phase_btn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#proceedPhase" prefHeight="40.0" prefWidth="170.0" text="NP">
+                                 <font>
+                                    <Font size="18.0" />
                                  </font>
                               </Button>
                            </children>

@@ -1,5 +1,6 @@
 package com.avatarduel.controller;
 
+import com.avatarduel.model.Element;
 import com.avatarduel.model.card.*;
 import com.avatarduel.event.Event;
 import com.avatarduel.event.EventChannel;
@@ -78,11 +79,44 @@ public class PlayerFieldController implements Initializable, Publisher {
     public void setPlayer(Player player) {
         this.player = player;
 
-        this.player_hp_value.textProperty().bind(this.player.getHealthProperty().asString());
-        this.player_hp_bar.progressProperty().bind(this.player.getHealthProperty().divide(80));
-        this.deck_neff.textProperty().bind(this.player.getDeck().getNeff().asString());
-        this.deck_size.setText(Integer.toString(this.player.getDeck().getSize()));
-        this.player_name.setText(this.player.getName());
+        this.player_hp_value.
+                textProperty().
+                bind(this.player.getHealthProperty().asString());
+        this.player_hp_bar.
+                progressProperty().
+                bind(this.player.getHealthProperty().divide(80));
+        this.deck_neff.
+                textProperty().
+                bind(this.player.getDeck().getNeff().asString());
+        this.deck_size.
+                setText(Integer.toString(this.player.getDeck().getSize()));
+        this.player_name.
+                setText(this.player.getName());
+
+        this.earth_power.
+                textProperty().
+                bind(this.player.getPowerProperty(Element.EARTH).asString());
+        this.earth_max.
+                textProperty().
+                bind(this.player.getMaxPowerProperty(Element.EARTH).asString());
+        this.fire_power.
+                textProperty().
+                bind(this.player.getPowerProperty(Element.FIRE).asString());
+        this.fire_max.
+                textProperty().
+                bind(this.player.getMaxPowerProperty(Element.FIRE).asString());
+        this.water_power.
+                textProperty().
+                bind(this.player.getPowerProperty(Element.WATER).asString());
+        this.water_max.
+                textProperty().
+                bind(this.player.getMaxPowerProperty(Element.WATER).asString());
+        this.air_power.
+                textProperty().
+                bind(this.player.getPowerProperty(Element.AIR).asString());
+        this.air_max.
+                textProperty().
+                bind(this.player.getMaxPowerProperty(Element.AIR).asString());
     }
 
     /**
@@ -117,11 +151,11 @@ public class PlayerFieldController implements Initializable, Publisher {
             this.player_hand.getChildren().add(card_box);
 
 
-            if (drawn_card instanceof Character) {
+            if (drawn_card instanceof Summonable) {
                 VBox card_front = controller.getCardFront();
                 card_front.setCursor(Cursor.HAND);
                 card_front.setOnDragDetected(e -> {
-                    Dragboard db = card_front.startDragAndDrop(TransferMode.ANY);
+                    Dragboard db = card_front.startDragAndDrop(TransferMode.MOVE);
                     db.setDragView(card_front.snapshot(null, null));
                     ClipboardContent cc = new ClipboardContent();
                     cc.put(vbox_format, "Card Front");
@@ -151,6 +185,24 @@ public class PlayerFieldController implements Initializable, Publisher {
             System.out.println("ADDING CARD TO ZONE: " + e);
         }
         return summoned_character_box;
+    }
+
+    public StackPane addSummonedSkillBox(SummonedSkill summoned_skill) {
+        StackPane summoned_skill_box = null;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/SummonedSkill.fxml"));
+            loader.setControllerFactory(c -> new SummonedSkillController(this.channel));
+            summoned_skill_box = loader.load();
+
+            SummonedSkillController controller = loader.getController();
+            controller.setSummonedCharacter(summoned_skill);
+
+            summoned_skill_box.prefWidthProperty().bind(player_zone.prefWidthProperty().divide(8));
+            summoned_skill_box.prefHeightProperty().bind(player_zone.prefHeightProperty().divide(2));
+        } catch (Exception e) {
+            System.out.println("ADDING CARD TO ZONE: " + e);
+        }
+        return summoned_skill_box;
     }
 
     @Override
@@ -193,11 +245,15 @@ public class PlayerFieldController implements Initializable, Publisher {
                         Node dragged_card_box = dragged_card_controller.getContent();
                         ((Pane)dragged_card_box.getParent()).getChildren().remove(dragged_card_box);
 
-                        // coba character dulu
-                        SummonedCharacter card = player.summonCharacter((Character)dragged_card_controller.getCard());
-                        zone_panes[row][col].getChildren().add(this.addSummonedCharacterBox(card));
+                        Summoned card = player.summonCard((Summonable) dragged_card_controller.getCard());
+                        if (card instanceof SummonedCharacter) {
+                            zone_panes[row][col].getChildren().add(this.addSummonedCharacterBox((SummonedCharacter) card));
+                        } else { // its a SummonedSkill
+                            zone_panes[row][col].getChildren().add(this.addSummonedSkillBox((SummonedSkill) card));
+                        }
                     }
                 }
+                dragged_card = null;
             }
         });
     }
