@@ -161,8 +161,8 @@ public class BoardController implements Initializable, Subscriber {
             this.summoned_name.setText(summoned_card.getBaseCard().getName());
             String description = "";
             if (summoned_card instanceof SummonedCharacter) {
-                description += "Net ATK: " + ((SummonedCharacter)summoned_card).getNetAtk() + "\n";
-                description += "Net DEF: " + ((SummonedCharacter)summoned_card).getNetDef() + "\n";
+                description += "ATK: " + ((SummonedCharacter)summoned_card).getNetAtk() + "\n";
+                description += "DEF: " + ((SummonedCharacter)summoned_card).getNetDef() + "\n";
                 description += "Skills atttached:\n";
                 if (((SummonedCharacter) summoned_card).getAttachedSkills().isEmpty()) {
                     description += "None\n";
@@ -170,6 +170,25 @@ public class BoardController implements Initializable, Subscriber {
                     for (Skill skill: ((SummonedCharacter) summoned_card).getAttachedSkills()) {
                         description += skill.getName() + "\n";
                     }
+                }
+            } else if (summoned_card instanceof SummonedSkill) {
+                Skill base_card = (Skill) summoned_card.getBaseCard();
+                if (base_card instanceof Aura) {
+                    description += "+ATK: " + ((Aura) base_card).getDeltaAtk() + "\n";
+                    description += "+DEF: " + ((Aura) base_card).getDeltaAtk() + "\n";
+                } else if (base_card instanceof PowerUp) {
+                    description += "Powers up a character when attacking a defense character\n";
+                } else if (base_card instanceof Destroy) {
+                    description += "Destroys a chosen character card\n";
+                }
+                description += "Attached to:\n";
+                if (((SummonedSkill) summoned_card).getAppliedTo() == null) {
+                    description += "NONE";
+                } else {
+                    description += ((SummonedSkill) summoned_card).
+                            getAppliedTo().
+                            getBaseCard().
+                            getName();
                 }
             }
             this.summoned_description.setText(description);
@@ -179,12 +198,14 @@ public class BoardController implements Initializable, Subscriber {
     public void proceedPhase(ActionEvent actionEvent) {
         phase_bar[phase_id].setStyle(
                 "-fx-background-color: darkgray;" +
-                "-fx-color: dimgray");
+                "-fx-color: dimgray"
+        );
         phase_id++;
         phase_id %= 5;
         phase_bar[phase_id].setStyle(
                 "-fx-background-color: aquamarine;" +
-                "-fx-color: black");
-        System.out.println(phases[phase_id]);
+                "-fx-color: black"
+        );
+        System.out.println("CURRENT PHASE: " + phases[phase_id]);
     }
 }
