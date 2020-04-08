@@ -17,11 +17,15 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class PlayerFieldController implements Initializable, Publisher {
     @FXML
     public GridPane player_zone;
+
+    private Pane[][] zone_panes;
 
     @FXML
     public Label earth_power, fire_power, water_power, air_power;
@@ -50,9 +54,13 @@ public class PlayerFieldController implements Initializable, Publisher {
     @FXML
     public AnchorPane player_field;
 
+    private List<CardController> cardcontrollers_on_hand;
+
     private EventChannel channel;
 
     private Player player;
+
+    private int character_row, skill_row;
 
     int col = 0, row = 0;
 
@@ -85,6 +93,7 @@ public class PlayerFieldController implements Initializable, Publisher {
             // publish new AddedHoverableCard event
             loader.load();
             CardController controller = loader.getController();
+            cardcontrollers_on_hand.add(controller);
             Card drawn_card = this.player.drawCard();
             // if draw_card instanceof emptycard, then dont do anything, maybe send FailedDrawEvent
 
@@ -117,10 +126,10 @@ public class PlayerFieldController implements Initializable, Publisher {
                 summoned_character_box.prefWidthProperty().bind(player_zone.prefWidthProperty().divide(8));
                 summoned_character_box.prefHeightProperty().bind(player_zone.prefHeightProperty().divide(2));
 
-                player_zone.add(summoned_character_box, col, row);
+                zone_panes[character_row][col].getChildren().add(summoned_character_box);
 
                 col++;
-                if (col==8){col=0;row++;}
+//                if (col==8){col=0;row++;}
             } catch (Exception e) {
                 System.out.println("ADDING CARD TO ZONE: " + e);
             }
@@ -128,6 +137,32 @@ public class PlayerFieldController implements Initializable, Publisher {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        character_row = 0;
+        skill_row = 1;
+        zone_panes = new Pane[2][8];
+        cardcontrollers_on_hand = new ArrayList<CardController>();
+
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 8; j++) {
+                addPane(j, i);
+            }
+        }
+    }
+
+    private void addPane(int col, int row) {
+        zone_panes[row][col] = new Pane();
+        player_zone.add(zone_panes[row][col], col, row);
+        zone_panes[row][col].setOnMouseEntered(e -> {
+            System.out.println("Pane entered on " + col + " " + row);
+        });
+    }
+
+    /**
+     * Flips character and skill row, used for player2
+     */
+    public void flipRow() {
+        character_row ^= 1;
+        skill_row ^= 1;
     }
 
     @Override

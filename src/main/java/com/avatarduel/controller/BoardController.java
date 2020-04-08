@@ -104,6 +104,7 @@ public class BoardController implements Initializable, Subscriber {
     public void setPlayer2(Player player) {
         this.player2 = player;
         player2_controller.setPlayer(this.player2);
+        player2_controller.flipRow();
     }
 
     /**
