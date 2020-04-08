@@ -18,4 +18,8 @@ public abstract class Skill extends Card implements Summonable {
     public int getPower() {
         return this.power;
     }
+
+    public Element getElement() {
+        return super.getElement();
+    }
 }

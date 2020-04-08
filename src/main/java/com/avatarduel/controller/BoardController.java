@@ -177,27 +177,14 @@ public class BoardController implements Initializable, Subscriber {
     }
 
     public void proceedPhase(ActionEvent actionEvent) {
-        phase_bar[phase_id].setStyle("-fx-background-color: darkgray;" +
+        phase_bar[phase_id].setStyle(
+                "-fx-background-color: darkgray;" +
                 "-fx-color: dimgray");
         phase_id++;
         phase_id %= 5;
-        phase_bar[phase_id].setStyle("-fx-background-color: aquamarine;" +
+        phase_bar[phase_id].setStyle(
+                "-fx-background-color: aquamarine;" +
                 "-fx-color: black");
         System.out.println(phases[phase_id]);
     }
-
-//    public void addCardField(CardController card_controller) {
-//        StackPane card_box = card_controller.getContent();
-//
-////        card_box.prefHeightProperty().bind(card_field.prefWidthProperty().divide(8));
-////        card_field.add(card_box,col,row);
-////        col++;
-////        if (col==8){col=0;row++;}
-//    }
-//
-//    public void updateDeck(IntegerProperty neff, int size){
-//        // deck.getChildren().add(card_box);
-//        neff_deck.textProperty().bind(Bindings.convert(neff));
-//        size_deck.textProperty().setValue(Integer.toString(size));
-//    }
 }

@@ -50,8 +50,8 @@ public class Player {
 
         for (Element e: Element.values()) {
             max_power.put(e,  new SimpleIntegerProperty(0));
-//            power.put(e, new SimpleIntegerProperty(12));
-            power.put(e, new SimpleIntegerProperty(0));
+            power.put(e, new SimpleIntegerProperty(100));
+//            power.put(e, new SimpleIntegerProperty(0));
         }
         hand = new ArrayList<Card>();
         this.deck = deck;
@@ -135,14 +135,20 @@ public class Player {
     }
 
     /**
-     * Asumsi: player mananya sudah cukup untuk summon character
-     * @param character
+     * Asumsi: player mananya sudah cukup untuk summon kartu, dan zone gak penuh
+     * @param summonable
      * @return
      */
-    public SummonedCharacter summonCharacter(Character character) {
-        usePower(character.getElement(), character.getPower());
-        SummonedCharacter summoned_character = new SummonedCharacter(character);
-        character_zone.add(summoned_character);
-        return summoned_character;
+    public Summoned summonCard(Summonable summonable) {
+        usePower(summonable.getElement(), summonable.getPower());
+        Summoned summoned_card;
+        if (summonable instanceof Character) {
+            summoned_card = new SummonedCharacter((Character) summonable);
+            character_zone.add((SummonedCharacter) summoned_card);
+        } else { // its a skill
+            summoned_card = new SummonedSkill((Skill) summonable);
+            skill_zone.add((SummonedSkill) summoned_card);
+        }
+        return summoned_card;
     }
 }

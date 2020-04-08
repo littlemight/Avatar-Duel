@@ -45,11 +45,11 @@ public class Deck {
     }
 
     public Card drawCard(){
-        for (Card card: deck) {
-            if (card instanceof Character) {
-                return card;
-            }
-        }
+//        for (Card card: deck) {
+//            if (card instanceof Character) {
+//                return card;
+//            }
+//        }
         this.neff.setValue(this.neff.getValue()-1);
         return this.deck.get(this.neff.getValue());
     }

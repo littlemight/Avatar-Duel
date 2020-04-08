@@ -151,11 +151,11 @@ public class PlayerFieldController implements Initializable, Publisher {
             this.player_hand.getChildren().add(card_box);
 
 
-            if (drawn_card instanceof Character) {
+            if (drawn_card instanceof Summonable) {
                 VBox card_front = controller.getCardFront();
                 card_front.setCursor(Cursor.HAND);
                 card_front.setOnDragDetected(e -> {
-                    Dragboard db = card_front.startDragAndDrop(TransferMode.ANY);
+                    Dragboard db = card_front.startDragAndDrop(TransferMode.MOVE);
                     db.setDragView(card_front.snapshot(null, null));
                     ClipboardContent cc = new ClipboardContent();
                     cc.put(vbox_format, "Card Front");
@@ -185,6 +185,24 @@ public class PlayerFieldController implements Initializable, Publisher {
             System.out.println("ADDING CARD TO ZONE: " + e);
         }
         return summoned_character_box;
+    }
+
+    public StackPane addSummonedSkillBox(SummonedSkill summoned_skill) {
+        StackPane summoned_skill_box = null;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/SummonedSkill.fxml"));
+            loader.setControllerFactory(c -> new SummonedSkillController(this.channel));
+            summoned_skill_box = loader.load();
+
+            SummonedSkillController controller = loader.getController();
+            controller.setSummonedCharacter(summoned_skill);
+
+            summoned_skill_box.prefWidthProperty().bind(player_zone.prefWidthProperty().divide(8));
+            summoned_skill_box.prefHeightProperty().bind(player_zone.prefHeightProperty().divide(2));
+        } catch (Exception e) {
+            System.out.println("ADDING CARD TO ZONE: " + e);
+        }
+        return summoned_skill_box;
     }
 
     @Override
@@ -227,9 +245,12 @@ public class PlayerFieldController implements Initializable, Publisher {
                         Node dragged_card_box = dragged_card_controller.getContent();
                         ((Pane)dragged_card_box.getParent()).getChildren().remove(dragged_card_box);
 
-                        // coba character dulu
-                        SummonedCharacter card = player.summonCharacter((Character)dragged_card_controller.getCard());
-                        zone_panes[row][col].getChildren().add(this.addSummonedCharacterBox(card));
+                        Summoned card = player.summonCard((Summonable) dragged_card_controller.getCard());
+                        if (card instanceof SummonedCharacter) {
+                            zone_panes[row][col].getChildren().add(this.addSummonedCharacterBox((SummonedCharacter) card));
+                        } else { // its a SummonedSkill
+                            zone_panes[row][col].getChildren().add(this.addSummonedSkillBox((SummonedSkill) card));
+                        }
                     }
                 }
                 dragged_card = null;
