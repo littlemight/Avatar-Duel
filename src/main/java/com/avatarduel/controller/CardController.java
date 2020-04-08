@@ -172,9 +172,9 @@ public class CardController implements Initializable, Subscriber, Publisher {
 
         setOpened();
         this.card = card;
-        this.card_name.textProperty().bind(card.getNameProperty());
-        this.card_description.textProperty().bind(card.getDescriptionProperty());
-        this.card_element.textProperty().bind(card.getElementProperty().asString());
+        this.card_name.setText(card.getName());
+        this.card_description.setText(card.getDescription());
+        this.card_element.setText(card.getElement().toString());
 
         String type;
         this.card_attribute_pane.getChildren().clear();

@@ -50,7 +50,8 @@ public class Player {
 
         for (Element e: Element.values()) {
             max_power.put(e,  new SimpleIntegerProperty(0));
-            power.put(e, new SimpleIntegerProperty(12));
+//            power.put(e, new SimpleIntegerProperty(12));
+            power.put(e, new SimpleIntegerProperty(0));
         }
         hand = new ArrayList<Card>();
         this.deck = deck;

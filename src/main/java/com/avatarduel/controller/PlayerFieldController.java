@@ -1,5 +1,6 @@
 package com.avatarduel.controller;
 
+import com.avatarduel.model.Element;
 import com.avatarduel.model.card.*;
 import com.avatarduel.event.Event;
 import com.avatarduel.event.EventChannel;
@@ -78,11 +79,44 @@ public class PlayerFieldController implements Initializable, Publisher {
     public void setPlayer(Player player) {
         this.player = player;
 
-        this.player_hp_value.textProperty().bind(this.player.getHealthProperty().asString());
-        this.player_hp_bar.progressProperty().bind(this.player.getHealthProperty().divide(80));
-        this.deck_neff.textProperty().bind(this.player.getDeck().getNeff().asString());
-        this.deck_size.setText(Integer.toString(this.player.getDeck().getSize()));
-        this.player_name.setText(this.player.getName());
+        this.player_hp_value.
+                textProperty().
+                bind(this.player.getHealthProperty().asString());
+        this.player_hp_bar.
+                progressProperty().
+                bind(this.player.getHealthProperty().divide(80));
+        this.deck_neff.
+                textProperty().
+                bind(this.player.getDeck().getNeff().asString());
+        this.deck_size.
+                setText(Integer.toString(this.player.getDeck().getSize()));
+        this.player_name.
+                setText(this.player.getName());
+
+        this.earth_power.
+                textProperty().
+                bind(this.player.getPowerProperty(Element.EARTH).asString());
+        this.earth_max.
+                textProperty().
+                bind(this.player.getMaxPowerProperty(Element.EARTH).asString());
+        this.fire_power.
+                textProperty().
+                bind(this.player.getPowerProperty(Element.FIRE).asString());
+        this.fire_max.
+                textProperty().
+                bind(this.player.getMaxPowerProperty(Element.FIRE).asString());
+        this.water_power.
+                textProperty().
+                bind(this.player.getPowerProperty(Element.WATER).asString());
+        this.water_max.
+                textProperty().
+                bind(this.player.getMaxPowerProperty(Element.WATER).asString());
+        this.air_power.
+                textProperty().
+                bind(this.player.getPowerProperty(Element.AIR).asString());
+        this.air_max.
+                textProperty().
+                bind(this.player.getMaxPowerProperty(Element.AIR).asString());
     }
 
     /**
@@ -198,6 +232,7 @@ public class PlayerFieldController implements Initializable, Publisher {
                         zone_panes[row][col].getChildren().add(this.addSummonedCharacterBox(card));
                     }
                 }
+                dragged_card = null;
             }
         });
     }

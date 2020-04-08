@@ -56,22 +56,6 @@ public class AvatarDuel extends Application {
       stage.setTitle("Avatar Duel");
       stage.setScene(scene);
       stage.show();
-
-
-//      while (deck.getNeffValue()>0) {
-//        Card card = deck.drawCard();
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("view/Card.fxml"));
-//        loader.setControllerFactory(c -> new CardController(channel));
-//        StackPane card_view = loader.load();
-
-//        CardController controller = loader.getController();
-//        controller.setCard(card);
-//        cardControllers.add(controller);
-
-//        board_controller.addCardField(controller);
-//        if (deck.getSize()-deck.getNeffValue()<=16)
-////        else board_controller.addCard(controller);
-//      }
     } catch (Exception e) {
         System.out.println("WTF: " + e);
     }
