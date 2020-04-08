@@ -253,8 +253,22 @@ public class CardController implements Initializable, Subscriber, Publisher {
         }
     }
 
+    public VBox getCardFront() {
+        return this.card_front;
+    }
+
+    public void setInHandBehavior() {
+        this.card_front.setOnDragDetected(e -> {
+
+        });
+    }
+
     public StackPane getContent() {
         return this.card_box;
+    }
+
+    public Card getCard() {
+        return this.card;
     }
 
     @Override

@@ -1,8 +1,7 @@
 package com.avatarduel.model;
 
-import com.avatarduel.model.card.Card;
-import com.avatarduel.model.card.SummonedCharacter;
-import com.avatarduel.model.card.SummonedSkill;
+import com.avatarduel.model.card.*;
+import com.avatarduel.model.card.Character;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
@@ -38,6 +37,9 @@ public class Player {
         }
         hand = new ArrayList<Card>();
         deck = new Deck();
+
+        character_zone = new ArrayList<SummonedCharacter>();
+        skill_zone = new ArrayList<SummonedSkill>();
     }
 
     public Player(String name, Deck deck) {
@@ -48,10 +50,13 @@ public class Player {
 
         for (Element e: Element.values()) {
             max_power.put(e,  new SimpleIntegerProperty(0));
-            power.put(e, new SimpleIntegerProperty(0));
+            power.put(e, new SimpleIntegerProperty(12));
         }
         hand = new ArrayList<Card>();
         this.deck = deck;
+
+        character_zone = new ArrayList<SummonedCharacter>();
+        skill_zone = new ArrayList<SummonedSkill>();
     }
 
     public IntegerProperty getMaxPowerProperty(Element e) {
@@ -85,13 +90,12 @@ public class Player {
     }
 
     /**
-     * Asumsi: amount <= max_power(e)
+     * Asumsi: amount <= power(e)
      * @param e Element yang mana
      * @param amount Banyaknya power yang digunakan
      */
     public void usePower(Element e, int amount) {
-//        power.put(e, power.get(e).substract(amount));
-        power.get(e).subtract(amount);
+        power.get(e).set(power.get(e).getValue() - amount);
     }
 
     /**
@@ -99,8 +103,7 @@ public class Player {
      * @param e element power yang ditambahin
      */
     public void addPower(Element e) {
-//        max_power.put(e, max_power.get(e) + 1);
-        max_power.get(e).add(1);
+        max_power.get(e).set(max_power.get(e).getValue() + 1);
     }
 
     /**
@@ -108,16 +111,37 @@ public class Player {
      */
     public void resetPower() {
         for (Element e: Element.values()) {
-//            power.put(e, max_power.get(e));
-            power.get(e).setValue(0);
+            power.get(e).set(max_power.get(e).getValue());
         }
     }
 
     public Card drawCard() {
-
-        // if hand size < 7 then do this and public DrawedCardEvent, so that ui can update
         Card ret = deck.drawCard();
-        hand.add(ret); // in the meantime this'll suffice
+        hand.add(ret);
         return ret;
+    }
+
+    public boolean canSummon(Summonable summonable) {
+        Element el = ((Card)summonable).getElement();
+        boolean enough_power = this.getPower(el) >= summonable.getPower();
+        boolean enough_zone = true;
+        if (summonable instanceof Character) {
+            enough_zone = character_zone.size() < 8;
+        } else { // its a skill
+            enough_zone = skill_zone.size() < 8;
+        }
+        return enough_power && enough_zone;
+    }
+
+    /**
+     * Asumsi: player mananya sudah cukup untuk summon character
+     * @param character
+     * @return
+     */
+    public SummonedCharacter summonCharacter(Character character) {
+        usePower(character.getElement(), character.getPower());
+        SummonedCharacter summoned_character = new SummonedCharacter(character);
+        character_zone.add(summoned_character);
+        return summoned_character;
     }
 }
