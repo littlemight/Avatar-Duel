@@ -12,14 +12,14 @@
       <VBox fx:id="base_card_pane" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" />
       <VBox alignment="BOTTOM_CENTER" prefHeight="500.0" prefWidth="768.0">
          <children>
-            <HBox fx:id="net_atk_box" alignment="CENTER" style="-fx-background-color: pink;">
+            <HBox fx:id="net_atk_box" alignment="CENTER" style="-fx-background-color: AEDBF6;">
                <children>
-                  <Label fx:id="net_atk_text" alignment="CENTER" contentDisplay="CENTER" text="ATK" textAlignment="CENTER">
+                  <Label fx:id="net_atk_text" alignment="CENTER" contentDisplay="CENTER" text="ATK" textAlignment="CENTER" textFill="#3f3c53">
                      <font>
                         <Font size="60.0" />
                      </font>
                   </Label>
-                  <Label fx:id="net_atk" alignment="CENTER" contentDisplay="CENTER" text="5" textAlignment="CENTER">
+                  <Label fx:id="net_atk" alignment="CENTER" contentDisplay="CENTER" text="5" textAlignment="CENTER" textFill="#3f3c53">
                      <font>
                         <Font size="60.0" />
                      </font>
@@ -29,14 +29,14 @@
                   <Cursor fx:constant="DEFAULT" />
                </cursor>
             </HBox>
-            <HBox fx:id="net_def_box" alignment="CENTER" style="-fx-background-color: lightgreen;">
+            <HBox fx:id="net_def_box" alignment="CENTER" style="-fx-background-color: #616C8C;">
                <children>
-                  <Label fx:id="net_def_text" alignment="CENTER" contentDisplay="CENTER" text="DEF" textAlignment="CENTER">
+                  <Label fx:id="net_def_text" alignment="CENTER" contentDisplay="CENTER" text="DEF" textAlignment="CENTER" textFill="#dedacc">
                      <font>
                         <Font size="60.0" />
                      </font>
                   </Label>
-                  <Label fx:id="net_def" alignment="CENTER" contentDisplay="CENTER" text="5" textAlignment="CENTER">
+                  <Label fx:id="net_def" alignment="CENTER" contentDisplay="CENTER" text="5" textAlignment="CENTER" textFill="#dedacc">
                      <font>
                         <Font size="60.0" />
                      </font>
