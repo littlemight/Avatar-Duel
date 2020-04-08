@@ -51,7 +51,7 @@
                      <children>
                         <HBox maxWidth="-Infinity" minHeight="20.0" minWidth="-Infinity" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                            <children>
-                              <Label fx:id="dp_label" alignment="CENTER" prefHeight="40.0" prefWidth="170.0" style="-fx-background-color: aquamarine;" text="DP">
+                              <Label fx:id="dp_label" alignment="CENTER" prefHeight="40.0" prefWidth="170.0" style="-fx-background-color: #AEDBF6;" text="DP">
                                  <font>
                                     <Font size="25.0" />
                                  </font></Label>
