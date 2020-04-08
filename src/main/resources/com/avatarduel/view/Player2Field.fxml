@@ -87,7 +87,7 @@
                         <Insets right="15.0" />
                      </HBox.margin>
                   </StackPane>
-                  <HBox fx:id="player_hand" alignment="CENTER" prefHeight="122.0" prefWidth="776.0" spacing="25.0" style="-fx-border-color: black; -fx-background-color: EAB56B;">
+                  <HBox fx:id="player_hand" alignment="CENTER" prefHeight="122.0" prefWidth="776.0" spacing="25.0" style="-fx-border-color: EAB56B; -fx-background-color: #3A1C0B;">
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
