@@ -104,7 +104,7 @@
       </VBox>
       <HBox layoutX="5.0" layoutY="177.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="169.0" prefWidth="1014.0" spacing="5.0">
          <children>
-            <GridPane alignment="CENTER" prefHeight="186.0" prefWidth="100.0" style="-fx-border-color: black;">
+            <GridPane fx:id="power_pane" alignment="CENTER" prefHeight="186.0" prefWidth="100.0" style="-fx-border-color: black;">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="55.0" minWidth="10.0" prefWidth="39.0" />
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="73.0" minWidth="10.0" prefWidth="59.0" />
