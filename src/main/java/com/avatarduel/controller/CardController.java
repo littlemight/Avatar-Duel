@@ -303,4 +303,12 @@ public class CardController implements Initializable, Subscriber, Publisher {
     public void publish(Event event) {
         this.channel.sendEvent(this, event);
     }
+
+    public void rotate() {
+        if (card_box.getRotate() == 0) {
+            card_box.setRotate(90);
+        } else {
+            card_box.setRotate(0);
+        }
+    }
 }

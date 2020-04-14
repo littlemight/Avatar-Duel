@@ -53,6 +53,17 @@ public class SummonedCharacterController implements Initializable, Publisher {
         base_card_pane.prefWidthProperty().bind(summoned_character_box.prefWidthProperty());
         net_atk_box.prefHeightProperty().bind(summoned_character_box.prefHeightProperty().multiply((double)(88) / 500));
         net_def_box.prefHeightProperty().bind(summoned_character_box.prefHeightProperty().multiply((double)(88) / 500));
+
+        // Should only be enabled on Main Phase
+        summoned_character_box.setOnMouseClicked(e -> rotateCharacter());
+    }
+
+    /**
+     * Rotates the character card
+     */
+    private void rotateCharacter() {
+        this.summoned_character.rotate();
+        this.base_card_controller.rotate();
     }
 
     public void setSummonedCharacter(SummonedCharacter summoned_character) {
