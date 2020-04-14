@@ -47,3 +47,8 @@ id	name	element	description	imagepath	attack	defense	power
 62	June	EARTH	Bounty hunter with a shirshu as her pet.	card/image/character/June.png	5	8	2
 63	Suki	EARTH	Leader of Kyoshi Warrior.	card/image/character/Suki.png	8	8	3
 64	Pipsqueak	EARTH	Strongest member of Freedom Fighters.	card/image/character/Pipsqueak.png	3	10	2
+65	Air Lion Turtle	ENERGY	Lion Turtle associated with air.	card/image/character/Air Lion Turtle.png	5	6	1
+66	Earth Lion Turtle	ENERGY	Lion Turtle associated with earth.	card/image/character/Earth Lion Turtle.png	3	10	2
+67	Fire Lion Turtle	ENERGY	Lion Turtle associated with fire.	card/image/character/Fire Lion Turtle.png	12	4	3
+68	Water Lion Turtle	ENERGY	Lion Turtle associated with water.	card/image/character/Water Lion Turtle.png	7	12	4
+69	Last Lion Turtle	ENERGY	The last of the Lion Turtles.	card/image/character/Last Lion Turtle.png	6	15	5

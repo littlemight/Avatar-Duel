@@ -27,3 +27,6 @@ id	name	element	description	imagepath	power	attack	defense
 90	Ice Prison	WATER	This technique covers an opponent in a prison made of ice.	card/image/skill/Ice Prison.png	3	-4	2
 91	Tangle Mine	WATER	Military weapons invented by Hakoda to aid the Southern Water Tribe's quest to defeat the Fire Nation.	card/image/skill/Tangle Mine.png	2	2	-1
 92	Wolf Armor	WATER	Protective battle gear worn by the warriors of the Southern Water Tribe.	card/image/skill/Wolf Armor.png	2	2	1
+93	Astral Projection	ENERGY	Create an astral projection of own spirit by tapping into the vast expanse of cosmic energy with the help of the Tree of Time.	card/image/skill/Astral Projection.png	3	6	-1
+94	Energy Restoration	ENERGY	Restore someone's bending	card/image/skill/Energy Restoration.png	3	4	4
+95	Spirit barrier	ENERGY	The ability to manipulate energy originating from the Spirit World.	card/image/skill/Spirit Barrier.png	3	0	6
