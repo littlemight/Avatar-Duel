@@ -234,7 +234,7 @@ public class PlayerFieldController implements Initializable, Publisher {
         power_pane.setOnDragDropped (e -> {
             Dragboard db = e.getDragboard();
             if (db.hasContent(vbox_format)
-                // && player.hasUsedLand == false
+                && player.hasUsedLand == false
             ) {
                 Card dragged_card = dragged_card_controller.getCard();
 
@@ -246,6 +246,7 @@ public class PlayerFieldController implements Initializable, Publisher {
                     ((Pane)dragged_card_box.getParent()).getChildren().remove(dragged_card_box);
 
                     this.player.addPower(dragged_card.getElement());
+                    player.hasUsedLand = true;
                 }
                 dragged_card = null;
             }

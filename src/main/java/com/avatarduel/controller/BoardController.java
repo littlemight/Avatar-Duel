@@ -1,18 +1,25 @@
 package com.avatarduel.controller;
 
+import com.avatarduel.Game;
 import com.avatarduel.event.*;
 import com.avatarduel.model.Phase;
 import com.avatarduel.model.Player;
 import com.avatarduel.model.card.*;
 import com.avatarduel.model.card.Character;
+
+import javafx.animation.PauseTransition;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.*;
+import javafx.util.Duration;
 import javafx.scene.control.Label;
 
 import java.io.IOException;
@@ -53,6 +60,7 @@ public class BoardController implements Initializable, Subscriber {
      */
     Player player1, player2;
     PlayerFieldController player1_controller, player2_controller;
+    Game game_engine;
 
     StackPane hover_card_box;
     private CardController hover_card_controller;
@@ -135,6 +143,12 @@ public class BoardController implements Initializable, Subscriber {
         player2_controller.flipRow();
     }
 
+    public void startGame(Game game_engine){
+        this.game_engine = game_engine;
+        this.channel.addSubscriber(game_engine, this);
+        this.drawBoth();
+    }
+
     /**
      * For testing purposes.
      */
@@ -142,6 +156,7 @@ public class BoardController implements Initializable, Subscriber {
         for (int i = 0; i < 7; i++) {
             player1_controller.draw();
             player2_controller.draw();
+            this.sleep(5000);
         }
     }
 
@@ -207,5 +222,12 @@ public class BoardController implements Initializable, Subscriber {
                 "-fx-color: black"
         );
         System.out.println("CURRENT PHASE: " + phases[phase_id]);
+    }
+
+    public void sleep(int ms){
+        PauseTransition pause = new PauseTransition(
+            Duration.millis(ms)
+        );
+        pause.play();
     }
 }
