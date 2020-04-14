@@ -8,7 +8,7 @@ public class Game {
     // components
     private Player player1, player2;
     // defined game phases
-    Phase[] phases = new Phase[]{Phase.DRAW, Phase.MAIN1, Phase.BATTLE, Phase.MAIN2, Phase.END};
+    Phase[] phases = new Phase[]{Phase.DRAW, Phase.MAIN, Phase.BATTLE, Phase.END};
     int phase_id = 0;
 
     // initialize

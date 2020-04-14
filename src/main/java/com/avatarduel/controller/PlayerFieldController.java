@@ -36,10 +36,10 @@ public class PlayerFieldController implements Initializable, Publisher {
     public GridPane power_pane;
 
     @FXML
-    public Label earth_power, fire_power, water_power, air_power;
+    public Label earth_power, fire_power, water_power, air_power, energy_power;
 
     @FXML
-    public Label earth_max, fire_max, water_max, air_max;
+    public Label earth_max, fire_max, water_max, air_max, energy_max;
 
     @FXML
     public HBox player_hand;
@@ -118,6 +118,12 @@ public class PlayerFieldController implements Initializable, Publisher {
         this.air_max.
                 textProperty().
                 bind(this.player.getMaxPowerProperty(Element.AIR).asString());
+        this.energy_power.
+                textProperty().
+                bind(this.player.getPowerProperty(Element.ENERGY).asString());
+        this.energy_max.
+                textProperty().
+                bind(this.player.getMaxPowerProperty(Element.ENERGY).asString());
     }
 
     /**

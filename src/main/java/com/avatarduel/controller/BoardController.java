@@ -40,7 +40,7 @@ public class BoardController implements Initializable, Subscriber {
     Pane player2_pane;
 
     @FXML
-    Label dp_label, mp1_label, bp_label, mp2_label, ep_label;
+    Label dp_label, mp_label, bp_label, ep_label;
 
     Label[] phase_bar;
 
@@ -67,7 +67,7 @@ public class BoardController implements Initializable, Subscriber {
     /**
      * For testing purposes
      */
-    Phase[] phases = new Phase[]{Phase.DRAW, Phase.MAIN1, Phase.BATTLE, Phase.MAIN2, Phase.END};
+    Phase[] phases = new Phase[]{Phase.DRAW, Phase.MAIN, Phase.BATTLE, Phase.END};
     int phase_id = 0;
 
     @Override
@@ -113,7 +113,7 @@ public class BoardController implements Initializable, Subscriber {
             /**
              * Initialize the phase change mid bar
              */
-            phase_bar = new Label[]{dp_label, mp1_label, bp_label, mp2_label, ep_label};
+            phase_bar = new Label[]{dp_label, mp_label, bp_label, ep_label};
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println(e);
@@ -201,7 +201,7 @@ public class BoardController implements Initializable, Subscriber {
                 "-fx-color: dimgray"
         );
         phase_id++;
-        phase_id %= 5;
+        phase_id %= 4;
         phase_bar[phase_id].setStyle(
                 "-fx-background-color: aquamarine;" +
                 "-fx-color: black"

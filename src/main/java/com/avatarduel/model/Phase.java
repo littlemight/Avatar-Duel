@@ -2,8 +2,7 @@ package com.avatarduel.model;
 
 public enum Phase {
     DRAW,
-    MAIN1,
+    MAIN,
     BATTLE,
-    MAIN2,
     END
 }
