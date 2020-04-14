@@ -5,6 +5,8 @@ import com.avatarduel.event.DestroyCardEvent;
 import com.avatarduel.event.Event;
 import com.avatarduel.event.Publisher;
 import com.avatarduel.model.Position;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,8 @@ public class SummonedCharacter implements Summoned, Publisher {
     private Character card;
     private int d_atk;
     private int d_def;
+    private IntegerProperty net_atk;
+    private IntegerProperty net_def;
     private Position position; // attack or defense or destroyed(????)
     private boolean has_attacked;
     private boolean just_summoned;
@@ -31,6 +35,8 @@ public class SummonedCharacter implements Summoned, Publisher {
         this.has_attacked = false;
         this.just_summoned = true;
         this.powered_up = 0;
+        this.net_atk = new SimpleIntegerProperty(this.card.getAtk());
+        this.net_def = new SimpleIntegerProperty(this.card.getDef());
         this.attached_skills = new ArrayList<SummonedSkill>();
     }
 
@@ -46,12 +52,20 @@ public class SummonedCharacter implements Summoned, Publisher {
         return this.d_def;
     }
 
+    public IntegerProperty getNetAtkProperty() {
+        return this.net_atk;
+    }
+
     public int getNetAtk() {
-        return card.getAtk() + this.getDAtk();
+        return this.net_atk.getValue();
+    }
+
+    public IntegerProperty getNetDefProperty() {
+        return this.net_def;
     }
 
     public int getNetDef() {
-        return card.getDef() + this.getDDef();
+        return this.net_def.getValue();
     }
 
     public int getCombatValue() {
@@ -76,6 +90,8 @@ public class SummonedCharacter implements Summoned, Publisher {
         if (skill_card instanceof Aura) {
             this.d_atk += ((Aura) skill_card).getDeltaAtk();
             this.d_def += ((Aura) skill_card).getDeltaDef();
+            this.net_atk.set(this.d_atk + this.card.getAtk());
+            this.net_def.set(this.d_def + this.card.getDef());
         } else if (skill_card instanceof PowerUp) {
             this.powered_up++;
         } else { // destroy

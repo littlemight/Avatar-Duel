@@ -79,8 +79,8 @@ public class SummonedCharacterController implements Initializable, Publisher, Su
         card_channel.addSubscriber(summoned_character, this);
         this.summoned_character = summoned_character;
 
-        this.net_atk.setText(Integer.toString(summoned_character.getNetAtk()));
-        this.net_def.setText(Integer.toString(summoned_character.getNetDef()));
+        this.net_atk.textProperty().bind(summoned_character.getNetAtkProperty().asString());
+        this.net_def.textProperty().bind(summoned_character.getNetDefProperty().asString());
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/Card.fxml"));
         loader.setControllerFactory(c -> new CardController(this.channel));
