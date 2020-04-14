@@ -24,6 +24,7 @@ public class Player {
 
     private List<SummonedCharacter> character_zone;
     private List<SummonedSkill> skill_zone;
+	public boolean hasUsedLand;
 
     public Player() {
         this.name = "Placeholder";
@@ -80,6 +81,11 @@ public class Player {
 
     public int getHealth() {
         return this.health.getValue();
+    }
+
+    public void decreaseHealth(int modifier){
+        if (modifier>this.getHealth()) modifier = this.getHealth();
+        this.health.setValue(this.getHealth()-modifier);
     }
 
     public String getName() {

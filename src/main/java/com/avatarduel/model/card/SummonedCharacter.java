@@ -89,4 +89,12 @@ public class SummonedCharacter implements Summoned {
     public List<Skill> getAttachedSkills() {
         return this.attached_skills;
     }
+
+    public Position getPosition(){
+        return this.position;
+    }
+
+    public void removeCard(){
+        this.position = Position.DESTROYED;
+    }
 }

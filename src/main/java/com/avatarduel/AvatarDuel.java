@@ -26,6 +26,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 // currently for testing purposes
 public class AvatarDuel extends Application {
@@ -49,13 +50,15 @@ public class AvatarDuel extends Application {
 
       board_controller.setPlayer1(player1);
       board_controller.setPlayer2(player2);
-
-      board_controller.drawBoth();
-
+      
+      Game game_engine = new Game(player1, player2);
+      board_controller.startGame(game_engine);
+      
       Scene scene = new Scene(root, 1280, 720);
       stage.setTitle("Avatar Duel");
       stage.setScene(scene);
       stage.show();
+
     } catch (Exception e) {
         System.out.println("WTF: " + e);
     }
