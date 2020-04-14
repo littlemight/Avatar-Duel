@@ -7,20 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BoardChannel implements EventChannel {
+public class CardChannel implements EventChannel {
     private Map<Publisher, List<Subscriber>> subscribers;
-    private BoardController main;
 
-    public BoardChannel() {
+    public CardChannel() {
         subscribers = new HashMap<Publisher, List<Subscriber>>();
-    }
-
-    public Object getMain() {
-        return this.main;
-    }
-
-    public void setMain(Object main) {
-        this.main = (BoardController) main;
     }
 
     @Override

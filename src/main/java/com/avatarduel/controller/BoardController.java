@@ -64,9 +64,9 @@ public class BoardController implements Initializable, Subscriber {
 
     StackPane hover_card_box;
     private CardController hover_card_controller;
-    private EventChannel channel;
+    private BoardChannel channel;
 
-    public BoardController(EventChannel channel) {
+    public BoardController(BoardChannel channel) {
         this.channel = channel;
         this.player1 = new Player(); // should be a singleton object
         this.player2 = new Player();
@@ -160,11 +160,19 @@ public class BoardController implements Initializable, Subscriber {
         }
     }
 
+    SummonedSkill placed_skill;
     @Override
     public void onEvent(Event event) {
         if (event instanceof NewCardDrawnEvent || event instanceof NewSummonedCardEvent) {
             CardController controller = (CardController) event.getInfo();
             this.channel.addSubscriber(controller, this.hover_card_controller);
+            if (event instanceof NewSummonedCardEvent) {
+                Card card = controller.getCard();
+                if (card instanceof Character) {
+                    this.game_engine.getPlayer(0).canSummonSkill = true;
+                    this.game_engine.getPlayer(1).canSummonSkill = true;
+                }
+            }
         } else if (event instanceof HoverSummonedCardEvent) {
             Summoned summoned_card = (Summoned)event.getInfo();
             if (summoned_card == null) {
@@ -182,7 +190,8 @@ public class BoardController implements Initializable, Subscriber {
                 if (((SummonedCharacter) summoned_card).getAttachedSkills().isEmpty()) {
                     description += "None\n";
                 } else {
-                    for (Skill skill: ((SummonedCharacter) summoned_card).getAttachedSkills()) {
+                    for (SummonedSkill summoned_kill: ((SummonedCharacter) summoned_card).getAttachedSkills()) {
+                        Skill skill = (Skill) summoned_kill.getBaseCard();
                         description += skill.getName() + "\n";
                     }
                 }
@@ -207,7 +216,33 @@ public class BoardController implements Initializable, Subscriber {
                 }
             }
             this.summoned_description.setText(description);
+        } else if (event instanceof NewSkillCardPlaced) {
+            System.out.println("New skill card placed");
+
+            // TODO: lock player1 + 2 field except SummonedCharacter cards
+            placed_skill = (SummonedSkill) event.getInfo();
+            // make all the summonedcharacter listen to a clicked event
+            this.setSkillPickBehavior();
+        } else if (event instanceof SkillCharacterPickedEvent) {
+            // TODO: apply the skill
+            SummonedCharacterController controller = (SummonedCharacterController) event.getInfo();
+            placed_skill.setAppliedTo(controller.getSummonedCharacter());
+            controller.getSummonedCharacter().addSkill(placed_skill);
+
+            // TODO: unlock the board
+            this.undoSkillPickBehavior();
+            placed_skill = null;
         }
+    }
+
+    public void setSkillPickBehavior() {
+        player1_controller.setSkillPickBehavior();
+        player2_controller.setSkillPickBehavior();
+    }
+
+    public void undoSkillPickBehavior() {
+        player1_controller.undoSkillPickBehavior();
+        player2_controller.undoSkillPickBehavior();
     }
 
     public void proceedPhase(ActionEvent actionEvent) {

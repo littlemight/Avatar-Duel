@@ -199,6 +199,7 @@ public class CardController implements Initializable, Subscriber, Publisher {
             card_type.setStyle("-fx-text-fill: #f0cd8c");
             card_description.setStyle("-fx-text-fill: #eff49b;");
         }
+
         String type;
         this.card_attribute_pane.getChildren().clear();
         FXMLLoader attribute_loader;
@@ -223,13 +224,13 @@ public class CardController implements Initializable, Subscriber, Publisher {
                     attribute_loader = new FXMLLoader(getClass().getResource("../view/OtherAttribute.fxml"));
                     card_attribute_box = attribute_loader.load();
                     OtherAttributeController controller = attribute_loader.getController();
-                    controller.setAttribute("Powers up a character when attacking a defense character card", ((Skill)this.card).getPower());
+                    controller.setAttribute("Powers up a character", ((Skill)this.card).getPower());
                 } else {
                     type = "DESTROY";
                     attribute_loader = new FXMLLoader(getClass().getResource("../view/OtherAttribute.fxml"));
                     card_attribute_box = attribute_loader.load();
                     OtherAttributeController controller = attribute_loader.getController();
-                    controller.setAttribute("Destroys a character card", ((Skill)this.card).getPower());
+                    controller.setAttribute("Destroys a character", ((Skill)this.card).getPower());
                 }
             }
             if (!(card instanceof Land)) {

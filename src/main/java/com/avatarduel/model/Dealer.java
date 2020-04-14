@@ -7,11 +7,8 @@ import java.util.Collections;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import com.avatarduel.model.card.Card;
-import com.avatarduel.model.card.Aura;
+import com.avatarduel.model.card.*;
 import com.avatarduel.model.card.Character;
-import com.avatarduel.model.card.Land;
-import com.avatarduel.model.card.Skill;
 import com.avatarduel.util.CSVReader;
 
 public class Dealer {
@@ -19,6 +16,8 @@ public class Dealer {
     private static final String LAND_CSV_FILE_PATH = "../card/data/land.csv";
     private static final String CHARACTER_CSV_FILE_PATH = "../card/data/character.csv";
     private static final String SKILL_AURA_CSV_FILE_PATH = "../card/data/skill_aura.csv";
+    private static final String SKILL_POWER_UP_CSV_FILE_PATH = "../card/data/skill_power_up.csv";
+    private static final String SKILL_DESTROY_CSV_FILE_PATH = "../card/data/skill_destroy.csv";
 
     public Dealer(){
       try{
@@ -33,19 +32,27 @@ public class Dealer {
         File landCSVFile = new File(getClass().getResource(LAND_CSV_FILE_PATH).toURI());
         File characterCSVFile = new File(getClass().getResource(CHARACTER_CSV_FILE_PATH).toURI());
         File skillAuraCSVFile = new File(getClass().getResource(SKILL_AURA_CSV_FILE_PATH).toURI());
+        File skillPowerUpCSVFile = new File(getClass().getResource(SKILL_POWER_UP_CSV_FILE_PATH).toURI());
+        File skillDestroyCSVFile = new File(getClass().getResource(SKILL_DESTROY_CSV_FILE_PATH).toURI());
 
         CSVReader landReader = new CSVReader(landCSVFile, "\t");
         CSVReader characterReader = new CSVReader(characterCSVFile, "\t");
         CSVReader skillAuraReader= new CSVReader(skillAuraCSVFile, "\t");
-    
+        CSVReader skillPowerUpReader= new CSVReader(skillPowerUpCSVFile, "\t");
+        CSVReader skillDestroyReader= new CSVReader(skillDestroyCSVFile, "\t");
+
         landReader.setSkipHeader(true);
         characterReader.setSkipHeader(true);
         skillAuraReader.setSkipHeader(true);
-    
+        skillPowerUpReader.setSkipHeader(true);
+        skillDestroyReader.setSkipHeader(true);
+
         List<String[]> landRows = landReader.read();
         List<String[]> characterRows = characterReader.read();
         List<String[]> skillAuraRows = skillAuraReader.read();
-    
+        List<String[]> skillPowerUpRows = skillPowerUpReader.read();
+        List<String[]> skillDestroyRows = skillDestroyReader.read();
+
         this.cards = new ArrayList<Card>();
 
         for (String[] row: landRows) {
@@ -68,6 +75,20 @@ public class Dealer {
                   Integer.parseInt(row[5]),
                   Integer.parseInt(row[6]),
                   Integer.parseInt(row[7])));
+        }
+        for (String[] row: skillPowerUpRows) {
+            this.cards.add(new PowerUp(row[1],
+                    row[3],
+                    Element.valueOf(row[2]),
+                    row[4],
+                    Integer.parseInt(row[5])));
+        }
+        for (String[] row: skillDestroyRows) {
+            this.cards.add(new Destroy(row[1],
+                    row[3],
+                    Element.valueOf(row[2]),
+                    row[4],
+                    Integer.parseInt(row[5])));
         }
       }
   

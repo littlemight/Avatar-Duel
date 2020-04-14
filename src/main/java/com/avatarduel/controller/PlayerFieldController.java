@@ -1,11 +1,8 @@
 package com.avatarduel.controller;
 
+import com.avatarduel.event.*;
 import com.avatarduel.model.Element;
 import com.avatarduel.model.card.*;
-import com.avatarduel.event.Event;
-import com.avatarduel.event.EventChannel;
-import com.avatarduel.event.NewCardDrawnEvent;
-import com.avatarduel.event.Publisher;
 import com.avatarduel.model.Player;
 import com.avatarduel.model.card.Character;
 import javafx.event.EventHandler;
@@ -36,10 +33,7 @@ public class PlayerFieldController implements Initializable, Publisher {
     public GridPane power_pane;
 
     @FXML
-    public Label earth_power, fire_power, water_power, air_power, energy_power;
-
-    @FXML
-    public Label earth_max, fire_max, water_max, air_max, energy_max;
+    public Label earth_power, fire_power, water_power, air_power, energy_power, earth_max, fire_max, water_max, air_max, energy_max;
 
     @FXML
     public HBox player_hand;
@@ -63,16 +57,18 @@ public class PlayerFieldController implements Initializable, Publisher {
     public AnchorPane player_field;
 
     private List<CardController> cardcontrollers_on_hand;
+    private List<SummonedCharacterController> summonedchara_controllers;
+    private List<SummonedSkillController> summonedskill_controllers;
 
     private CardController dragged_card_controller; // dragging card from hand to field / element (buat land)
 
-    private EventChannel channel;
+    private BoardChannel channel;
 
     private Player player;
 
     private int character_row, skill_row;
 
-    public PlayerFieldController(EventChannel channel) {
+    public PlayerFieldController(BoardChannel channel) {
         this.channel = channel;
         this.player = new Player();
     }
@@ -184,6 +180,7 @@ public class PlayerFieldController implements Initializable, Publisher {
             summoned_character_box = loader.load();
 
             SummonedCharacterController controller = loader.getController();
+            summonedchara_controllers.add(controller);
             controller.setSummonedCharacter(summoned_character);
 
             summoned_character_box.prefWidthProperty().bind(player_zone.prefWidthProperty().divide(6));
@@ -202,6 +199,7 @@ public class PlayerFieldController implements Initializable, Publisher {
             summoned_skill_box = loader.load();
 
             SummonedSkillController controller = loader.getController();
+            summonedskill_controllers.add(controller);
             controller.setSummonedCharacter(summoned_skill);
 
             summoned_skill_box.prefWidthProperty().bind(player_zone.prefWidthProperty().divide(6));
@@ -218,6 +216,8 @@ public class PlayerFieldController implements Initializable, Publisher {
         skill_row = 1;
         zone_panes = new Pane[2][6];
         cardcontrollers_on_hand = new ArrayList<CardController>();
+        summonedchara_controllers = new ArrayList<SummonedCharacterController>();
+        summonedskill_controllers = new ArrayList<SummonedSkillController>();
         dragged_card_controller = null;
 
         for (int i = 0; i < 2; i++) {
@@ -278,6 +278,11 @@ public class PlayerFieldController implements Initializable, Publisher {
             Dragboard db = e.getDragboard();
             if (db.hasContent(vbox_format) && zone_panes[row][col].getChildren().isEmpty()) {
                 Card dragged_card = dragged_card_controller.getCard();
+                if (dragged_card instanceof Skill && !this.player.canSummonSkill) {
+                    System.out.println("No character in both player fields.");
+                    return;
+                }
+
 
                 /**
                  * Only receive summonable card
@@ -300,6 +305,18 @@ public class PlayerFieldController implements Initializable, Publisher {
                 dragged_card = null;
             }
         });
+    }
+
+    public void setSkillPickBehavior() {
+        for (SummonedCharacterController controller: this.summonedchara_controllers) {
+            controller.setSkillPickBehavior();
+        }
+    }
+
+    public void undoSkillPickBehavior() {
+        for (SummonedCharacterController controller: this.summonedchara_controllers) {
+            controller.undoSkillPickBehavior();
+        }
     }
 
     /**

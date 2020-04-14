@@ -1,8 +1,13 @@
 package com.avatarduel.model.card;
 
-public class SummonedSkill implements Summoned{
+import com.avatarduel.event.CardChannel;
+import com.avatarduel.event.Event;
+import com.avatarduel.event.Publisher;
+
+public class SummonedSkill implements Summoned, Publisher {
     private Skill card;
     private SummonedCharacter applied_to; // dia apply ke mana
+    CardChannel channel;
 
     public SummonedSkill(Skill card) {
         this.card = card;
@@ -11,7 +16,6 @@ public class SummonedSkill implements Summoned{
 
     public void setAppliedTo(SummonedCharacter applied_to) {
         this.applied_to = applied_to;
-        this.applied_to.addSkill(this.card);
     }
 
     public Card getBaseCard() {
@@ -20,5 +24,14 @@ public class SummonedSkill implements Summoned{
 
     public SummonedCharacter getAppliedTo() {
         return this.applied_to;
+    }
+
+    public void setChannel(CardChannel channel) {
+        this.channel = channel;
+    }
+
+    @Override
+    public void publish(Event event) {
+        this.channel.sendEvent(this, event);
     }
 }

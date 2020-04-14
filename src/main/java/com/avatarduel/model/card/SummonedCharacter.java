@@ -1,11 +1,14 @@
 package com.avatarduel.model.card;
 
+import com.avatarduel.event.CardChannel;
+import com.avatarduel.event.Event;
+import com.avatarduel.event.Publisher;
 import com.avatarduel.model.Position;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SummonedCharacter implements Summoned {
+public class SummonedCharacter implements Summoned, Publisher {
     private Character card;
     private int d_atk;
     private int d_def;
@@ -15,7 +18,9 @@ public class SummonedCharacter implements Summoned {
     private int powered_up; // bisa aja di powered_up oleh 2 kartu, meskipun efeknya sama aja
     // berguna kalo kita mau discard kartu
 
-    private List<Skill> attached_skills;
+    CardChannel channel;
+
+    private List<SummonedSkill> attached_skills;
 
     public SummonedCharacter(Character card) {
         this.card = card;
@@ -25,7 +30,7 @@ public class SummonedCharacter implements Summoned {
         this.has_attacked = false;
         this.just_summoned = true;
         this.powered_up = 0;
-        this.attached_skills = new ArrayList<Skill>();
+        this.attached_skills = new ArrayList<SummonedSkill>();
     }
 
     public Card getBaseCard() {
@@ -64,8 +69,9 @@ public class SummonedCharacter implements Summoned {
         }
     }
 
-    public void addSkill(Skill skill_card) {
-        attached_skills.add(skill_card);
+    public void addSkill(SummonedSkill summonedskill_card) {
+        attached_skills.add(summonedskill_card);
+        Skill skill_card = (Skill) summonedskill_card.getBaseCard();
         if (skill_card instanceof Aura) {
             this.d_atk += ((Aura) skill_card).getDeltaAtk();
             this.d_def += ((Aura) skill_card).getDeltaDef();
@@ -86,7 +92,7 @@ public class SummonedCharacter implements Summoned {
         }
     }
 
-    public List<Skill> getAttachedSkills() {
+    public List<SummonedSkill> getAttachedSkills() {
         return this.attached_skills;
     }
 
@@ -100,5 +106,14 @@ public class SummonedCharacter implements Summoned {
 
     public int checkPowerUp(){
         return this.powered_up;
+    }
+
+    public void setChannel(CardChannel channel) {
+        this.channel = channel;
+    }
+
+    @Override
+    public void publish(Event event) {
+        this.channel.sendEvent(this, event);
     }
 }

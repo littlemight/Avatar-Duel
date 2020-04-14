@@ -16,7 +16,7 @@ public class OtherAttributeController implements Initializable {
     HBox card_attribute_box;
 
     @FXML
-    Label desc, pow;
+    Label desc, pow, pow_text;
 
     public void setAttribute(String desc, int pow) {
         this.desc.setText(desc);
@@ -28,6 +28,7 @@ public class OtherAttributeController implements Initializable {
         card_attribute_box.heightProperty().addListener(e -> {
             desc.setFont(new Font(((double) 30 / 60) * card_attribute_box.getHeight()));
             pow.setFont(new Font(((double) 30 / 60) * card_attribute_box.getHeight()));
+            pow_text.setFont(new Font(((double) 30 / 60) * card_attribute_box.getHeight()));
         });
         card_attribute_box.
                 paddingProperty().

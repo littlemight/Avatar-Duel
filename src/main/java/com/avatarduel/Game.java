@@ -16,11 +16,16 @@ public class Game implements Publisher{
     Phase[] phases = new Phase[]{Phase.DRAW, Phase.MAIN, Phase.BATTLE, Phase.END};
     int phase_id = 0;
 
+
     // initialize
     public Game(Player p1, Player p2) {
         this.players = new Player[2];
         this.players[0] = p1;
         this.players[1] = p2;
+    }
+
+    public Player getPlayer(int id) {
+        return this.players[id];
     }
 
     public void stageController(Phase phase){

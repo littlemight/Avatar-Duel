@@ -1,6 +1,7 @@
 package com.avatarduel.controller;
 
 import com.avatarduel.event.*;
+import com.avatarduel.model.card.Card;
 import com.avatarduel.model.card.EmptyCard;
 import com.avatarduel.model.card.SummonedCharacter;
 import javafx.fxml.FXML;
@@ -9,6 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -16,7 +18,7 @@ import javafx.scene.text.Font;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class SummonedCharacterController implements Initializable, Publisher {
+public class SummonedCharacterController implements Initializable, Publisher, Subscriber {
     @FXML
     StackPane summoned_character_box;
 
@@ -35,9 +37,10 @@ public class SummonedCharacterController implements Initializable, Publisher {
     CardController base_card_controller;
     SummonedCharacter summoned_character;
 
-    EventChannel channel;
+    BoardChannel channel;
+    CardChannel card_channel;
 
-    public SummonedCharacterController(EventChannel channel) {
+    public SummonedCharacterController(BoardChannel channel) {
         this.channel = channel;
     }
 
@@ -58,6 +61,10 @@ public class SummonedCharacterController implements Initializable, Publisher {
         summoned_character_box.setOnMouseClicked(e -> rotateCharacter());
     }
 
+    public SummonedCharacter getSummonedCharacter() {
+        return this.summoned_character;
+    }
+
     /**
      * Rotates the character card
      */
@@ -67,6 +74,9 @@ public class SummonedCharacterController implements Initializable, Publisher {
     }
 
     public void setSummonedCharacter(SummonedCharacter summoned_character) {
+        card_channel = new CardChannel();
+        summoned_character.setChannel(card_channel);
+        card_channel.addSubscriber(summoned_character, this);
         this.summoned_character = summoned_character;
 
         this.net_atk.setText(Integer.toString(summoned_character.getNetAtk()));
@@ -91,18 +101,37 @@ public class SummonedCharacterController implements Initializable, Publisher {
         }
     }
 
+    public void setSkillPickBehavior() {
+        summoned_character_box.setOnMouseClicked(e -> {
+           publish(new SkillCharacterPickedEvent(this));
+        });
+    }
+
+    public void undoSkillPickBehavior() {
+        summoned_character_box.setOnMouseClicked(null);
+    }
+
     public void onMouseEnter(MouseEvent mouseEvent) {
-        this.channel.sendEvent(base_card_controller, new HoverCardEvent(this.summoned_character.getBaseCard()));
+        base_card_controller.publish(new HoverCardEvent(this.summoned_character.getBaseCard()));
         publish(new HoverSummonedCardEvent(this.summoned_character));
     }
 
     public void onMouseExit(MouseEvent mouseEvent) {
-        this.channel.sendEvent(base_card_controller, new HoverCardEvent(EmptyCard.getInstance()));
+        base_card_controller.publish(new HoverCardEvent(EmptyCard.getInstance()));
         publish(new HoverSummonedCardEvent(null));
+    }
+
+    public void destroy() {
+        ((Pane)summoned_character_box.getParent()).getChildren().remove(summoned_character_box);
     }
 
     @Override
     public void publish(Event event) {
         this.channel.sendEvent(this, event);
+    }
+
+    @Override
+    public void onEvent(Event event) {
+        this.destroy();
     }
 }

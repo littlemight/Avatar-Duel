@@ -25,6 +25,7 @@ public class Player {
     private List<SummonedCharacter> character_zone;
     private List<SummonedSkill> skill_zone;
 	public boolean hasUsedLand;
+	public boolean canSummonSkill;
 
     public Player() {
         this.name = "Placeholder";
@@ -38,9 +39,9 @@ public class Player {
         }
         hand = new ArrayList<Card>();
         deck = new Deck();
-
         character_zone = new ArrayList<SummonedCharacter>();
         skill_zone = new ArrayList<SummonedSkill>();
+        canSummonSkill = false;
     }
 
     public Player(String name, Deck deck) {
@@ -59,6 +60,7 @@ public class Player {
 
         character_zone = new ArrayList<SummonedCharacter>();
         skill_zone = new ArrayList<SummonedSkill>();
+        canSummonSkill = false;
     }
 
     public IntegerProperty getMaxPowerProperty(Element e) {
@@ -99,6 +101,8 @@ public class Player {
     public List<Card> getHand() {
         return hand;
     }
+
+    public List<SummonedCharacter> getCharacterZone() {return character_zone;}
 
     /**
      * Asumsi: amount <= power(e)

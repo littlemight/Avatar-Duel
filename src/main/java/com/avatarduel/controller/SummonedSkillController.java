@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -15,7 +16,7 @@ import javafx.scene.text.Font;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class SummonedSkillController implements Initializable, Publisher {
+public class SummonedSkillController implements Initializable, Publisher, Subscriber {
     @FXML
     StackPane summoned_skill_box;
 
@@ -31,9 +32,10 @@ public class SummonedSkillController implements Initializable, Publisher {
     CardController base_card_controller;
     SummonedSkill summoned_skill;
 
-    EventChannel channel;
+    BoardChannel channel;
+    CardChannel card_channel;
 
-    public SummonedSkillController(EventChannel channel) {
+    public SummonedSkillController(BoardChannel channel) {
         this.channel = channel;
     }
 
@@ -48,6 +50,10 @@ public class SummonedSkillController implements Initializable, Publisher {
     }
 
     public void setSummonedCharacter(SummonedSkill summoned_skill) {
+        card_channel = new CardChannel();
+        summoned_skill.setChannel(card_channel);
+        card_channel.addSubscriber(summoned_skill, this);
+
         this.summoned_skill = summoned_skill;
 
         Skill base_card = (Skill) summoned_skill.getBaseCard();
@@ -76,23 +82,33 @@ public class SummonedSkillController implements Initializable, Publisher {
 
             this.channel.addSubscriber(this, (Subscriber) this.channel.getMain());
             publish(new NewSummonedCardEvent(this.base_card_controller));
+            publish(new NewSkillCardPlaced(this.summoned_skill));
         } catch (Exception e) {
             System.out.println("IN SUMMONEDCARD: " + e);
         }
     }
 
     public void onMouseEnter(MouseEvent mouseEvent) {
-        this.channel.sendEvent(base_card_controller, new HoverCardEvent(this.summoned_skill.getBaseCard()));
+        base_card_controller.publish(new HoverCardEvent(this.summoned_skill.getBaseCard()));
         publish(new HoverSummonedCardEvent(this.summoned_skill));
     }
 
     public void onMouseExit(MouseEvent mouseEvent) {
-        this.channel.sendEvent(base_card_controller, new HoverCardEvent(EmptyCard.getInstance()));
+        base_card_controller.publish(new HoverCardEvent(EmptyCard.getInstance()));
         publish(new HoverSummonedCardEvent(null));
+    }
+
+    public void destroy() {
+        ((Pane)summoned_skill_box.getParent()).getChildren().remove(summoned_skill_box);
     }
 
     @Override
     public void publish(Event event) {
         this.channel.sendEvent(this, event);
+    }
+
+    @Override
+    public void onEvent(Event event) {
+        this.destroy();
     }
 }

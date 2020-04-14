@@ -3,7 +3,7 @@ package com.avatarduel.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.avatarduel.model.card.Card;
+import com.avatarduel.model.card.*;
 
 import com.avatarduel.model.card.Character;
 import javafx.beans.property.IntegerProperty;
@@ -46,9 +46,12 @@ public class Deck {
 
     public Card drawCard(){
         for (Card card: deck) {
-            if (card instanceof Character) {
+            if (card instanceof PowerUp || card instanceof Destroy) {
                 return card;
             }
+        }
+        while (this.deck.get(this.neff.getValue() - 1) instanceof Land) {
+            this.neff.setValue(this.neff.getValue()-1);
         }
         this.neff.setValue(this.neff.getValue()-1);
         return this.deck.get(this.neff.getValue());
