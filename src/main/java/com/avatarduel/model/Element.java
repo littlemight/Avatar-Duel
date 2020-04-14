@@ -4,7 +4,8 @@ public enum Element {
   WATER("WATER"),
   FIRE("FIRE"),
   AIR("AIR"),
-  EARTH("EARTH");
+  EARTH("EARTH"),
+  ENERGY("ENERGY");
 
   String name; // or maybe asset file path, buat logo
   private Element(String name) {

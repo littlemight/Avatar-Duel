@@ -180,7 +180,7 @@ public class PlayerFieldController implements Initializable, Publisher {
             SummonedCharacterController controller = loader.getController();
             controller.setSummonedCharacter(summoned_character);
 
-            summoned_character_box.prefWidthProperty().bind(player_zone.prefWidthProperty().divide(8));
+            summoned_character_box.prefWidthProperty().bind(player_zone.prefWidthProperty().divide(6));
             summoned_character_box.prefHeightProperty().bind(player_zone.prefHeightProperty().divide(2));
         } catch (Exception e) {
             System.out.println("ADDING CARD TO ZONE: " + e);
@@ -198,7 +198,7 @@ public class PlayerFieldController implements Initializable, Publisher {
             SummonedSkillController controller = loader.getController();
             controller.setSummonedCharacter(summoned_skill);
 
-            summoned_skill_box.prefWidthProperty().bind(player_zone.prefWidthProperty().divide(8));
+            summoned_skill_box.prefWidthProperty().bind(player_zone.prefWidthProperty().divide(6));
             summoned_skill_box.prefHeightProperty().bind(player_zone.prefHeightProperty().divide(2));
         } catch (Exception e) {
             System.out.println("ADDING CARD TO ZONE: " + e);
@@ -210,12 +210,12 @@ public class PlayerFieldController implements Initializable, Publisher {
     public void initialize(URL location, ResourceBundle resources) {
         character_row = 0;
         skill_row = 1;
-        zone_panes = new Pane[2][8];
+        zone_panes = new Pane[2][6];
         cardcontrollers_on_hand = new ArrayList<CardController>();
         dragged_card_controller = null;
 
         for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 8; j++) {
+            for (int j = 0; j < 6; j++) {
                 addPane(j, i);
             }
         }

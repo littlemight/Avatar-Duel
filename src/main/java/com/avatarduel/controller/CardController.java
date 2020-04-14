@@ -176,28 +176,28 @@ public class CardController implements Initializable, Subscriber, Publisher {
             card_name.setStyle("-fx-background-color: #B46826; -fx-text-fill: #fdfbc8;");
             card_element.setStyle("-fx-text-fill: #edfefe");
             card_type.setStyle("-fx-text-fill: #f0cd8c");
-            card_description.setStyle("-fx-text-fill: #b46826; -fx-text-alignment: CENTER;");
+            card_description.setStyle("-fx-text-fill: #b46826; -fx-background-color: #EBF5EE");
         }
         else if(card.getElement() == Element.WATER){
             card_front.setStyle("-fx-background-color: #80B6E3; -fx-border-color: #E6C38C;");
             card_name.setStyle("-fx-background-color: #1A4C9C; -fx-text-fill: #fdfbc8;");
             card_element.setStyle("-fx-text-fill: #7ba2ba");
             card_type.setStyle("-fx-text-fill: #987446");
-            card_description.setStyle("-fx-text-fill: #EDFEFE; -fx-text-alignment: CENTER;");
+            card_description.setStyle("-fx-text-fill: #EDFEFE;");
         }
         else if(card.getElement() == Element.FIRE){
             card_front.setStyle("-fx-background-color: #BA5D22; -fx-border-color: #F18517;");
             card_name.setStyle("-fx-background-color: #841E00; -fx-text-fill: #efeab9;");
             card_element.setStyle("-fx-text-fill: #fffc69");
             card_type.setStyle("-fx-text-fill: #ffc12f");
-            card_description.setStyle("-fx-text-fill: #ffffb4; -fx-text-alignment: CENTER;");
+            card_description.setStyle("-fx-text-fill: #ffffb4; -fx-background-color: #DDA448;");
         }
         else if(card.getElement() == Element.EARTH){
             card_front.setStyle("-fx-background-color: #4C4A29; -fx-border-color: EE9B44;");
             card_name.setStyle("-fx-background-color: #2F2F1B; -fx-text-fill:#efeab9;");
             card_element.setStyle("-fx-text-fill: #bc965b");
             card_type.setStyle("-fx-text-fill: #f0cd8c");
-            card_description.setStyle("-fx-text-fill: #eff49b; -fx-text-alignment: CENTER;");
+            card_description.setStyle("-fx-text-fill: #eff49b;");
         }
         String type;
         this.card_attribute_pane.getChildren().clear();
