@@ -44,15 +44,37 @@ public class Deck {
         return this.size;
     }
 
+    int charcnt = 0;
+    int destcnt = 0;
     public Card drawCard(){
-        for (Card card: deck) {
-            if (card instanceof PowerUp || card instanceof Destroy) {
-                return card;
+        // startof custom draw
+        // buat test, only draw 1 karakter + 1 destroy
+        if (charcnt == 0) {
+            charcnt = 1;
+            for (Card card: this.deck) {
+                if (card instanceof Character) {
+                    return card;
+                }
             }
         }
-        while (this.deck.get(this.neff.getValue() - 1) instanceof Land) {
+        if (destcnt == 0) {
+            destcnt = 1;
+            for (Card card: this.deck) {
+                if (card instanceof Destroy) {
+                    return card;
+                }
+            }
+        }
+
+        // dan cuman draw kartu skill
+        while (this.deck.get(this.neff.getValue() - 1) instanceof Land ||
+                this.deck.get(this.neff.getValue() - 1) instanceof Character ||
+                this.deck.get(this.neff.getValue() - 1) instanceof Destroy
+        ) {
             this.neff.setValue(this.neff.getValue()-1);
         }
+        // endof custom draw
+
         this.neff.setValue(this.neff.getValue()-1);
         return this.deck.get(this.neff.getValue());
     }

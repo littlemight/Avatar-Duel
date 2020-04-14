@@ -163,6 +163,10 @@ public class BoardController implements Initializable, Subscriber {
     SummonedSkill placed_skill;
     @Override
     public void onEvent(Event event) {
+//        boolean canSummonSkill = this.game_engine.getPlayer(0).getCharacterZone().size() > 0 || this.game_engine.getPlayer(0).getCharacterZone().size() > 0;
+//        this.game_engine.getPlayer(0).canSummonSkill = canSummonSkill;
+//        this.game_engine.getPlayer(1).canSummonSkill = canSummonSkill;
+
         if (event instanceof NewCardDrawnEvent || event instanceof NewSummonedCardEvent) {
             CardController controller = (CardController) event.getInfo();
             this.channel.addSubscriber(controller, this.hover_card_controller);
@@ -224,7 +228,6 @@ public class BoardController implements Initializable, Subscriber {
             // make all the summonedcharacter listen to a clicked event
             this.setSkillPickBehavior();
         } else if (event instanceof SkillCharacterPickedEvent) {
-            // TODO: apply the skill
             SummonedCharacterController controller = (SummonedCharacterController) event.getInfo();
             placed_skill.setAppliedTo(controller.getSummonedCharacter());
             controller.getSummonedCharacter().addSkill(placed_skill);

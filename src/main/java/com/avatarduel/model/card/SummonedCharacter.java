@@ -1,6 +1,7 @@
 package com.avatarduel.model.card;
 
 import com.avatarduel.event.CardChannel;
+import com.avatarduel.event.DestroyCardEvent;
 import com.avatarduel.event.Event;
 import com.avatarduel.event.Publisher;
 import com.avatarduel.model.Position;
@@ -78,7 +79,11 @@ public class SummonedCharacter implements Summoned, Publisher {
         } else if (skill_card instanceof PowerUp) {
             this.powered_up++;
         } else { // destroy
-            this.position = Position.DESTROYED;
+//            this.position = Position.DESTROYED;
+            for (SummonedSkill summoned_skill: attached_skills) {
+                summoned_skill.publish(new DestroyCardEvent(summoned_skill));
+            }
+            publish(new DestroyCardEvent(this));
         }
     }
 
@@ -102,6 +107,7 @@ public class SummonedCharacter implements Summoned, Publisher {
 
     public void removeCard(){
         this.position = Position.DESTROYED;
+        publish(new DestroyCardEvent(this));
     }
 
     public int checkPowerUp(){
