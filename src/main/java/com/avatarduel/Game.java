@@ -26,12 +26,10 @@ public class Game implements Publisher{
     public void stageController(Phase phase){
         if (phase == Phase.DRAW){
             this.draw();
-        } else if (phase == Phase.MAIN1){
+        } else if (phase == Phase.MAIN){
             
         } else if (phase == Phase.BATTLE){
             this.battleStage();
-        } else if (phase == Phase.MAIN2){
-            
         } else if (phase == Phase.END){
             this.endStage();
         } else {
