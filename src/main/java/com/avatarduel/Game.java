@@ -95,7 +95,7 @@ public class Game implements Publisher{
             if (cur_player_card.getCombatValue() > enemy_player_card.getCombatValue()){
                 enemy_player_card.removeCard();
                 // TODO: publish kartu yang di remove
-                if (enemy_player_card.getPosition()==Position.ATTACK){
+                if (enemy_player_card.getPosition()==Position.ATTACK || cur_player_card.checkPowerUp()>0){
                     this.players[(cur_player+1)%2].decreaseHealth(cur_player_card.getCombatValue()-enemy_player_card.getCombatValue());
                     if (this.players[(cur_player+1)%2].getHealth()==0){
                         // TODO: publish player win

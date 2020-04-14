@@ -97,4 +97,8 @@ public class SummonedCharacter implements Summoned {
     public void removeCard(){
         this.position = Position.DESTROYED;
     }
+
+    public int checkPowerUp(){
+        return this.powered_up;
+    }
 }
