@@ -188,8 +188,14 @@ public class BoardController implements Initializable, Subscriber {
             this.summoned_name.setText(summoned_card.getBaseCard().getName());
             String description = "";
             if (summoned_card instanceof SummonedCharacter) {
-                description += "ATK: " + ((SummonedCharacter)summoned_card).getNetAtk() + "\n";
-                description += "DEF: " + ((SummonedCharacter)summoned_card).getNetDef() + "\n";
+                int d_atk = ((SummonedCharacter)summoned_card).getDAtk();
+                int d_def = ((SummonedCharacter)summoned_card).getDDef();
+                Character character = (Character) summoned_card.getBaseCard();
+                int atk = character.getAtk();
+                int def = character.getDef();
+
+                description += "ATK: " + atk + (d_atk != 0 ? (d_atk > 0 ? " + " : " - ") + Math.abs(d_atk) : "") + "\n";
+                description += "DEF: " + def + (d_def != 0 ? (d_def > 0 ? " + " : " - ") + Math.abs(d_def) : "") + "\n";
                 description += "Skills atttached:\n";
                 if (((SummonedCharacter) summoned_card).getAttachedSkills().isEmpty()) {
                     description += "None\n";
@@ -205,7 +211,7 @@ public class BoardController implements Initializable, Subscriber {
                     description += "+ATK: " + ((Aura) base_card).getDeltaAtk() + "\n";
                     description += "+DEF: " + ((Aura) base_card).getDeltaAtk() + "\n";
                 } else if (base_card instanceof PowerUp) {
-                    description += "Powers up a character when attacking a defense character\n";
+                    description += "Powers up a character\n";
                 } else if (base_card instanceof Destroy) {
                     description += "Destroys a chosen character card\n";
                 }
@@ -262,7 +268,7 @@ public class BoardController implements Initializable, Subscriber {
         System.out.println("CURRENT PHASE: " + phases[phase_id]);
     }
 
-    public void sleep(int ms){
+    public void sleep(double ms){
         PauseTransition pause = new PauseTransition(
             Duration.millis(ms)
         );

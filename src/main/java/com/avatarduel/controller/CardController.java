@@ -230,7 +230,7 @@ public class CardController implements Initializable, Subscriber, Publisher {
                     attribute_loader = new FXMLLoader(getClass().getResource("../view/OtherAttribute.fxml"));
                     card_attribute_box = attribute_loader.load();
                     OtherAttributeController controller = attribute_loader.getController();
-                    controller.setAttribute("Destroys a character", ((Skill)this.card).getPower());
+                    controller.setAttribute("Destroys a character card", ((Skill)this.card).getPower());
                 }
             }
             if (!(card instanceof Land)) {
