@@ -38,12 +38,12 @@
                      </font>
                   </Label>
                   <ProgressBar fx:id="player_hp_bar" prefHeight="18.0" prefWidth="687.0" progress="1.0" />
-                  <Label fx:id="player_hp_value" text="80">
+                  <Label fx:id="player_hp_value" text="80" textFill="#e8d9a2">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <Label prefHeight="20.0" prefWidth="23.0" text="HP">
+                  <Label prefHeight="20.0" prefWidth="23.0" text="HP" textFill="#ff9008">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>

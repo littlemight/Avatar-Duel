@@ -114,7 +114,7 @@
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <Label prefHeight="42.0" prefWidth="10.0" text="/" textFill="#99e0e4">
+                        <Label prefHeight="42.0" prefWidth="10.0" text="/" textFill="#f9f4e3">
                            <font>
                               <Font size="16.0" />
                            </font>
@@ -204,12 +204,12 @@
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0">
                <children>
-                  <Label minWidth="-Infinity" prefHeight="20.0" prefWidth="23.0" text="HP">
+                  <Label minWidth="-Infinity" prefHeight="20.0" prefWidth="23.0" text="HP" textFill="#ff9008">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
-                  <Label fx:id="player_hp_value" minWidth="-Infinity" prefWidth="25.0" text="80">
+                  <Label fx:id="player_hp_value" minWidth="-Infinity" prefWidth="25.0" text="80" textFill="#e8d9a2">
                      <font>
                         <Font size="14.0" />
                      </font>

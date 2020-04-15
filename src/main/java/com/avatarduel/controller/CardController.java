@@ -174,15 +174,15 @@ public class CardController implements Initializable, Subscriber, Publisher {
         if (card.getElement() == Element.AIR) {
             card_front.setStyle("-fx-background-color: #FCE5B0; -fx-border-color: #91ccef;");
             card_name.setStyle("-fx-background-color: #B46826; -fx-text-fill: #fdfbc8;");
-            card_element.setStyle("-fx-text-fill: #edfefe");
-            card_type.setStyle("-fx-text-fill: #f0cd8c");
+            card_element.setStyle("-fx-text-fill: #655645");
+            card_type.setStyle("-fx-text-fill: #967862");
             card_description.setStyle("-fx-text-fill: #b46826; -fx-background-color: #EBF5EE");
         }
         else if(card.getElement() == Element.WATER){
             card_front.setStyle("-fx-background-color: #80B6E3; -fx-border-color: #E6C38C;");
             card_name.setStyle("-fx-background-color: #1A4C9C; -fx-text-fill: #fdfbc8;");
-            card_element.setStyle("-fx-text-fill: #7ba2ba");
-            card_type.setStyle("-fx-text-fill: #987446");
+            card_element.setStyle("-fx-text-fill: #4E7688");
+            card_type.setStyle("-fx-text-fill: #173158");
             card_description.setStyle("-fx-text-fill: #EDFEFE;");
         }
         else if(card.getElement() == Element.FIRE){
@@ -199,7 +199,13 @@ public class CardController implements Initializable, Subscriber, Publisher {
             card_type.setStyle("-fx-text-fill: #f0cd8c");
             card_description.setStyle("-fx-text-fill: #eff49b;");
         }
-
+        else if(card.getElement() == Element.ENERGY){
+            card_front.setStyle("-fx-background-color: #d796ea; -fx-border-color: #3C215F;");
+            card_name.setStyle("-fx-background-color: #69499C; -fx-text-fill:#fdfbc8;");
+            card_element.setStyle("-fx-text-fill: #e6f6ff");
+            card_type.setStyle("-fx-text-fill: #921299");
+            card_description.setStyle("-fx-text-fill: #955a84;");
+        }
         String type;
         this.card_attribute_pane.getChildren().clear();
         FXMLLoader attribute_loader;
