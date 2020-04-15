@@ -34,7 +34,6 @@ public class SummonedSkillController implements Initializable, Publisher, Subscr
     private int position;
 
     BoardChannel channel;
-    CardChannel card_channel;
 
     public SummonedSkillController(BoardChannel channel) {
         this.channel = channel;
@@ -51,9 +50,8 @@ public class SummonedSkillController implements Initializable, Publisher, Subscr
     }
 
     public void setSummonedCharacter(SummonedSkill summoned_skill) {
-        card_channel = new CardChannel();
-        summoned_skill.setChannel(card_channel);
-        card_channel.addSubscriber(summoned_skill, this);
+        summoned_skill.setChannel(channel);
+        channel.addSubscriber(summoned_skill, this);
 
         this.summoned_skill = summoned_skill;
 

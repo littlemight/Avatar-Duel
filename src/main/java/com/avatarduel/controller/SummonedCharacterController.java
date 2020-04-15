@@ -40,7 +40,6 @@ public class SummonedCharacterController implements Initializable, Publisher, Su
     private int position;
 
     BoardChannel channel;
-    CardChannel card_channel;
 
     public SummonedCharacterController(BoardChannel channel) {
         this.channel = channel;
@@ -77,9 +76,8 @@ public class SummonedCharacterController implements Initializable, Publisher, Su
     }
 
     public void setSummonedCharacter(SummonedCharacter summoned_character) {
-        card_channel = new CardChannel();
-        summoned_character.setChannel(card_channel);
-        card_channel.addSubscriber(summoned_character, this);
+        summoned_character.setChannel(channel);
+        channel.addSubscriber(summoned_character, this);
         this.summoned_character = summoned_character;
 
         this.net_atk.textProperty().bind(summoned_character.getNetAtkProperty().asString());

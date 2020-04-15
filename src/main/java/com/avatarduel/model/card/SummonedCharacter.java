@@ -1,9 +1,6 @@
 package com.avatarduel.model.card;
 
-import com.avatarduel.event.CardChannel;
-import com.avatarduel.event.DestroyCardEvent;
-import com.avatarduel.event.Event;
-import com.avatarduel.event.Publisher;
+import com.avatarduel.event.*;
 import com.avatarduel.model.Position;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -23,7 +20,7 @@ public class SummonedCharacter implements Summoned, Publisher {
     private int powered_up; // bisa aja di powered_up oleh 2 kartu, meskipun efeknya sama aja
     // berguna kalo kita mau discard kartu
 
-    CardChannel channel;
+    BoardChannel channel;
 
     private List<SummonedSkill> attached_skills;
 
@@ -130,7 +127,7 @@ public class SummonedCharacter implements Summoned, Publisher {
         return this.powered_up;
     }
 
-    public void setChannel(CardChannel channel) {
+    public void setChannel(BoardChannel channel) {
         this.channel = channel;
     }
 
