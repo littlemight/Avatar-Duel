@@ -52,15 +52,17 @@ public class BoardController implements Initializable, Publisher, Subscriber {
 
     Label[] phase_bar;
 
-    AnchorPane player1_field, player2_field;
-
+//    AnchorPane player1_field, player2_field;
+    AnchorPane[] player_fields;
 
     /**
      * The model
      * It should be a class Game which has the deck, 2 players, and other game rules for each phase
      */
-    Player player1, player2;
-    PlayerFieldController player1_controller, player2_controller;
+//    Player player1, player2;
+    Player[] players;
+//    PlayerFieldController[] player1_controller, player2_controller;
+    PlayerFieldController[] player_controllers;
     Game game_engine;
 
     StackPane hover_card_box;
@@ -70,8 +72,9 @@ public class BoardController implements Initializable, Publisher, Subscriber {
 
     public BoardController(BoardChannel channel) {
         this.channel = channel;
-        this.player1 = new Player(); // should be a singleton object
-        this.player2 = new Player();
+        this.players = new Player[3];
+        this.player_controllers = new PlayerFieldController[3];
+        this.player_fields = new AnchorPane[3];
     }
 
     /**
@@ -101,21 +104,21 @@ public class BoardController implements Initializable, Publisher, Subscriber {
              */
             FXMLLoader player1_loader = new FXMLLoader(getClass().getResource("../view/Player1Field.fxml"));
             player1_loader.setControllerFactory(c -> new PlayerFieldController(this.channel));
-            player1_field = player1_loader.load();
-            this.player1_controller = player1_loader.getController();
-            this.player1_pane.getChildren().add(player1_field);
+            player_fields[1] = player1_loader.load();
+            this.player_controllers[1] = player1_loader.getController();
+            this.player1_pane.getChildren().add(player_fields[1]);
 
             /**
              * Initialize player 2 field
              */
             FXMLLoader player2_loader = new FXMLLoader(getClass().getResource("../view/Player2Field.fxml"));
             player2_loader.setControllerFactory(c -> new PlayerFieldController(this.channel));
-            player2_field = player2_loader.load();
-            this.player2_controller = player2_loader.getController();
-            this.player2_pane.getChildren().add(player2_field);
+            player_fields[2] = player2_loader.load();
+            this.player_controllers[2] = player2_loader.getController();
+            this.player2_pane.getChildren().add(player_fields[2]);
 
-            this.channel.addSubscriber(player1_controller, this);
-            this.channel.addSubscriber(player2_controller, this);
+            this.channel.addSubscriber(player_controllers[1], this);
+            this.channel.addSubscriber(player_controllers[2], this);
 
             summoned_name.setText("");
             summoned_description.setText("");
@@ -132,19 +135,21 @@ public class BoardController implements Initializable, Publisher, Subscriber {
         }
     }
 
-    public void setPlayer1(Player player) {
+    /**
+     * id nya 1 atau 2
+     * @param id
+     * @param player
+     */
+    public void setPlayer(int id, Player player) {
         try {
-            this.player1 = player;
-            player1_controller.setPlayer(this.player1);
+            this.players[id] = player;
+            player_controllers[id].setPlayer(this.players[id]);
+            if (id == 2) {
+                player_controllers[id].flipRow();
+            }
         } catch (Exception e) {
             System.out.println("In Player Controller: " + e);
         }
-    }
-
-    public void setPlayer2(Player player) {
-        this.player2 = player;
-        player2_controller.setPlayer(this.player2);
-        player2_controller.flipRow();
     }
 
     public void startGame(Game game_engine){
@@ -158,8 +163,8 @@ public class BoardController implements Initializable, Publisher, Subscriber {
      */
     public void drawBoth() {
         for (int i = 0; i < 7; i++) {
-            player1_controller.draw();
-            player2_controller.draw();
+            player_controllers[1].draw();
+            player_controllers[2].draw();
             this.sleep(5000);
         }
     }
@@ -177,8 +182,8 @@ public class BoardController implements Initializable, Publisher, Subscriber {
             if (event instanceof NewSummonedCardEvent) {
                 Card card = controller.getCard();
                 if (card instanceof Character) {
-                    this.game_engine.getPlayer(0).canSummonSkill = true;
                     this.game_engine.getPlayer(1).canSummonSkill = true;
+                    this.game_engine.getPlayer(2).canSummonSkill = true;
                 }
             }
         } else if (event instanceof HoverSummonedCardEvent) {
@@ -266,13 +271,15 @@ public class BoardController implements Initializable, Publisher, Subscriber {
     }
 
     public void setSkillPickBehavior() {
-        player1_controller.setSkillPickBehavior();
-        player2_controller.setSkillPickBehavior();
+        for (int i = 1; i <= 2; i++) {
+            player_controllers[i].setSkillPickBehavior();
+        }
     }
 
     public void undoSkillPickBehavior() {
-        player1_controller.undoSkillPickBehavior();
-        player2_controller.undoSkillPickBehavior();
+        for (int i = 1; i <= 2; i++) {
+            player_controllers[i].undoSkillPickBehavior();
+        }
     }
 
     public void proceedPhase(ActionEvent actionEvent) {
