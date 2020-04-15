@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class PlayerFieldController implements Initializable, Publisher {
+public class PlayerFieldController implements Initializable, Publisher, Subscriber {
     @FXML
     public GridPane player_zone;
 
@@ -62,7 +62,7 @@ public class PlayerFieldController implements Initializable, Publisher {
     @FXML
     public AnchorPane player_field;
 
-    private Phase phase = Phase.BATTLE;
+    private Phase phase = Phase.DRAW;
 
     private List<CardController> cardcontrollers_on_hand;
     private List<SummonedCharacterController> summonedchara_controllers;
@@ -169,14 +169,14 @@ public class PlayerFieldController implements Initializable, Publisher {
             VBox card_front = controller.getCardFront();
             card_front.setCursor(Cursor.HAND);
             card_front.setOnDragDetected(e -> {
-                // if (this.phase==Phase.DRAW) {
+                if (this.phase==Phase.MAIN) {
                     Dragboard db = card_front.startDragAndDrop(TransferMode.MOVE);
                     db.setDragView(card_front.snapshot(null, null));
                     ClipboardContent cc = new ClipboardContent();
                     cc.put(vbox_format, "Card Front");
                     db.setContent(cc);
                     dragged_card_controller = controller;
-                // }
+                }
             });
         } catch (Exception e) {
             System.out.println("IN DRAW: " + e);
@@ -191,6 +191,7 @@ public class PlayerFieldController implements Initializable, Publisher {
             summoned_character_box = loader.load();
 
             SummonedCharacterController controller = loader.getController();
+            this.channel.addSubscriber((BoardController) this.channel.getMain(), controller);
             summonedchara_controllers.add(controller);
             controller.setSummonedCharacter(summoned_character);
             controller.setPosition(position);
@@ -325,17 +326,17 @@ public class PlayerFieldController implements Initializable, Publisher {
         
         // if (row==this.character_row){
         zone_panes[row][col].setOnMouseClicked(e -> {
-            // if (this.phase==Phase.BATTLE){
+            if (this.phase==Phase.BATTLE){
                 if (!zone_panes[row][col].getChildren().isEmpty()){
                     for (SummonedCharacterController chara_controller :summonedchara_controllers){
                         if (chara_controller.getPosition()==col) {
-                            chara_controller.toggleSelected();
-                            publish(new CharacterSelectedEvent(chara_controller));
+                            // chara_controller.toggleSelected();
+                            publish(new CharacterSelectedEvent(chara_controller, this.player));
                             break;
                         }
                     }
                 }
-            // }
+            }
         });
         // }
     }
@@ -363,5 +364,13 @@ public class PlayerFieldController implements Initializable, Publisher {
     @Override
     public void publish(Event event) {
         this.channel.sendEvent(this, event);
+    }
+
+    @Override
+    public void onEvent(Event event) {
+        if (event instanceof PhaseChangedEvent){
+            this.phase = (Phase)event.getInfo();
+        }
+
     }
 }

@@ -37,6 +37,22 @@ public class SummonedCharacter implements Summoned, Publisher {
         this.attached_skills = new ArrayList<SummonedSkill>();
     }
 
+    public boolean getHasAttacked(){
+        return this.has_attacked;
+    }
+
+    public boolean getJustSummoned(){
+        return this.just_summoned;
+    }
+
+    public void setHasAttacked(boolean status){
+        this.has_attacked = status;
+    }
+
+    public void setJustSummoned(boolean status){
+        this.just_summoned = status;
+    }
+
     public Card getBaseCard() {
         return this.card;
     }

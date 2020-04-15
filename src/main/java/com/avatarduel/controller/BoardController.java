@@ -69,6 +69,7 @@ public class BoardController implements Initializable, Publisher, Subscriber {
     private CardController hover_card_controller;
     private BoardChannel channel;
     private ArrayList<SummonedCharacterController> targeting;
+    private int cur_player;
 
     public BoardController(BoardChannel channel) {
         this.channel = channel;
@@ -119,6 +120,8 @@ public class BoardController implements Initializable, Publisher, Subscriber {
 
             this.channel.addSubscriber(player_controllers[1], this);
             this.channel.addSubscriber(player_controllers[2], this);
+            this.channel.addSubscriber(this,player_controllers[1]);
+            this.channel.addSubscriber(this,player_controllers[2]);
 
             summoned_name.setText("");
             summoned_description.setText("");
@@ -155,7 +158,9 @@ public class BoardController implements Initializable, Publisher, Subscriber {
     public void startGame(Game game_engine){
         this.game_engine = game_engine;
         this.channel.addSubscriber(game_engine, this);
-        this.drawBoth();
+        this.channel.addSubscriber(this, game_engine);
+        this.drawBoth(); // harusnya lewat game
+        this.game_engine.setup();
     }
 
     /**
@@ -252,21 +257,35 @@ public class BoardController implements Initializable, Publisher, Subscriber {
             placed_skill = null;
         } else if (event instanceof CharacterSelectedEvent){
             //Setting Penarget
-            SummonedCharacterController selectedCard = (SummonedCharacterController) event.getInfo();
+            ArrayList selected = (ArrayList) event.getInfo();
+            SummonedCharacterController selected_card = (SummonedCharacterController) selected.get(0);
+            Player selected_card_player = (Player) selected.get(1);
             if (this.targeting.isEmpty()){
-                this.targeting.add(selectedCard);
+                // dibawah ini if yang asli
+                // if (selected_card_player==game_engine.getPlayer(this.cur_player) && (!selected_card.summoned_character.getHasAttacked() && !selected_card.summoned_character.getJustSummoned())){
+                // kalo yg dibawah ini buat testing purpose
+                if (selected_card_player==game_engine.getPlayer(this.cur_player)){
+                    selected_card.toggleSelected();
+                    this.targeting.add(selected_card);
+                }
             }
             //Setting target
             else{
-                this.targeting.add(selectedCard);
-                int battleResult=game_engine.solveBattle(this.targeting.get(0).summoned_character, this.targeting.get(1).summoned_character);
+                selected_card.toggleSelected();
+                this.targeting.add(selected_card);
+                if (selected_card_player==game_engine.getPlayer(this.cur_player%2+1)){
+                    game_engine.solveBattle(this.targeting.get(0).summoned_character, this.targeting.get(1).summoned_character);
+                }
                 this.targeting.get(0).toggleSelected();
                 this.targeting.get(1).toggleSelected();
                 this.targeting.clear();
                 
             }
-            System.out.println(selectedCard.base_card_controller.card_name);
+            System.out.println(selected_card.base_card_controller.card_name);
             System.out.println(this.targeting.size());
+        } else if (event instanceof PlayerChangedEvent){
+            this.cur_player = (int)event.getInfo();
+            System.out.println("CURRENT PLAYER:" + this.cur_player);
         }
     }
 
@@ -294,6 +313,7 @@ public class BoardController implements Initializable, Publisher, Subscriber {
                 "-fx-color: black"
         );
         System.out.println("CURRENT PHASE: " + phases[phase_id]);
+        publish(new PhaseChangedEvent(phases[phase_id]));
     }
 
     public void sleep(double ms){
@@ -305,7 +325,7 @@ public class BoardController implements Initializable, Publisher, Subscriber {
 
     @Override
     public void publish(Event event) {
-        // TODO Auto-generated method stub
+        this.channel.sendEvent(this, event);
 
     }
 }

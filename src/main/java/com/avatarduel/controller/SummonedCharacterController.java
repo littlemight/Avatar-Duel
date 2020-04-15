@@ -1,6 +1,7 @@
 package com.avatarduel.controller;
 
 import com.avatarduel.event.*;
+import com.avatarduel.model.Phase;
 import com.avatarduel.model.card.Card;
 import com.avatarduel.model.card.EmptyCard;
 import com.avatarduel.model.card.SummonedCharacter;
@@ -36,6 +37,7 @@ public class SummonedCharacterController implements Initializable, Publisher, Su
 
     CardController base_card_controller;
     SummonedCharacter summoned_character;
+    Phase phase = Phase.MAIN;
     private boolean is_selected;
     private int position;
 
@@ -59,7 +61,7 @@ public class SummonedCharacterController implements Initializable, Publisher, Su
         net_def_box.prefHeightProperty().bind(summoned_character_box.prefHeightProperty().multiply((double)(88) / 500));
 
         // Should only be enabled on Main Phase
-        // summoned_character_box.setOnMouseClicked(e -> rotateCharacter());
+        summoned_character_box.setOnMouseClicked(e -> rotateCharacter());
         is_selected=false;
     }
 
@@ -71,8 +73,10 @@ public class SummonedCharacterController implements Initializable, Publisher, Su
      * Rotates the character card
      */
     private void rotateCharacter() {
-        this.summoned_character.rotate();
-        this.base_card_controller.rotate();
+        if (this.phase == Phase.MAIN){
+            this.summoned_character.rotate();
+            this.base_card_controller.rotate();
+        }
     }
 
     public void setSummonedCharacter(SummonedCharacter summoned_character) {
@@ -125,7 +129,7 @@ public class SummonedCharacterController implements Initializable, Publisher, Su
     public void destroy() {
         ((Pane)summoned_character_box.getParent()).getChildren().remove(summoned_character_box);
     }
-    
+
     public void toggleSelected(){
         if (is_selected){
             this.base_card_pane.setStyle("");
@@ -150,6 +154,10 @@ public class SummonedCharacterController implements Initializable, Publisher, Su
 
     @Override
     public void onEvent(Event event) {
-        this.destroy();
+        if (event instanceof DestroyCardEvent){
+            this.destroy();
+        } else if (event instanceof PhaseChangedEvent){
+            this.phase = (Phase) event.getInfo();
+        }
     }
 }

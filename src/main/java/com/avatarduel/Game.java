@@ -11,7 +11,7 @@ public class Game implements Publisher, Subscriber{
     // components
     EventChannel channel;
     private Player players[];
-    int cur_player;
+    int cur_player = 1;
     // defined game phases
     Phase[] phases = new Phase[]{Phase.DRAW, Phase.MAIN, Phase.BATTLE, Phase.END};
     int phase_id = 0;
@@ -24,6 +24,12 @@ public class Game implements Publisher, Subscriber{
         this.players[2] = p2;
         this.channel = channel;
         this.cur_player = 1;
+    }
+
+    public void setup(){
+        //Draw Both
+        publish(new PlayerChangedEvent(this.cur_player));
+        // stageController(phases[phase_id]); masuk phase draw
     }
 
     public Player getPlayer(int id) {
@@ -56,10 +62,11 @@ public class Game implements Publisher, Subscriber{
      * @param player : The player which going to draw phase
      */
     public void draw() {
-        Player player = this.players[cur_player];
-        Card card = player.drawCard();
-        // when safe, reset player power
-        player.resetPower();
+
+        // Player player = this.players[cur_player];
+        // Card card = player.drawCard();
+        // // when safe, reset player power
+        // player.resetPower();
 
     }
     // main
@@ -69,31 +76,37 @@ public class Game implements Publisher, Subscriber{
         // TODO: publish ke board_controller udah masuk ke phase battle
     }
 
-    public int solveBattle(SummonedCharacter cur_player_card, SummonedCharacter enemy_player_card){
+    public void solveBattle(SummonedCharacter cur_player_card, SummonedCharacter enemy_player_card){
         if (cur_player_card.getPosition()==Position.ATTACK){
             System.out.print(cur_player_card.getCombatValue());
             System.out.print(" vs ");
             System.out.println(enemy_player_card.getCombatValue());
             if (cur_player_card.getCombatValue() > enemy_player_card.getCombatValue()){
-                // TODO: publish kartu yang di remove
+                cur_player_card.setHasAttacked(true);
                 if (enemy_player_card.getPosition()==Position.ATTACK || cur_player_card.checkPowerUp()>0){
-                    System.out.println(this.players[cur_player%2 + 1].getHealth());
-                    this.players[cur_player%2 + 1].decreaseHealth(cur_player_card.getCombatValue()-enemy_player_card.getCombatValue());
-                    enemy_player_card.removeCard();
-                    if (this.players[cur_player%2 + 1].getHealth()==0){
+                    System.out.println(this.players[cur_player%2+1].getHealth());
+                    this.players[cur_player%2+1].decreaseHealth(cur_player_card.getCombatValue()-enemy_player_card.getCombatValue());
+                    if (this.players[cur_player%2+1].getHealth()==0){
                         // TODO: publish player win
                     }
-                    return cur_player%2 + 1;
                 }                    
+                enemy_player_card.removeCard();
             }
         }
-        return -1;
     }
 
     // endturn
     public void endStage(){
-        // TODO: publish ke board_controller utk udah masuk endPhase
-        this.cur_player = (this.cur_player)%2 + 1;
+        for (SummonedCharacter summoned_chara : this.players[this.cur_player].getCharacterZone()){
+            if (summoned_chara.getHasAttacked()==true){
+                summoned_chara.setHasAttacked(false);
+            }
+            if (summoned_chara.getJustSummoned()==true){
+                summoned_chara.setJustSummoned(false);
+            }
+        }
+        this.cur_player = this.cur_player%2+1;
+        publish(new PlayerChangedEvent(this.cur_player));
     }
 
     @Override
@@ -104,9 +117,9 @@ public class Game implements Publisher, Subscriber{
 
     @Override
     public void onEvent(Event event) {
-        // if (event instanceof ChangePhaseEvent){
-        //     stageController((Phase)event.getInfo());
-        // }
+        if (event instanceof PhaseChangedEvent){
+            stageController((Phase)event.getInfo());
+        }
 
     }
 }
