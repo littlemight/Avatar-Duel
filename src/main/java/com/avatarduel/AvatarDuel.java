@@ -51,7 +51,7 @@ public class AvatarDuel extends Application {
       board_controller.setPlayer1(player1);
       board_controller.setPlayer2(player2);
       
-      Game game_engine = new Game(player1, player2);
+      Game game_engine = new Game(player1, player2, channel);
       board_controller.startGame(game_engine);
       
       Scene scene = new Scene(root, 1280, 720);

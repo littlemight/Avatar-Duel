@@ -25,9 +25,10 @@ import javafx.scene.control.Label;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class BoardController implements Initializable, Subscriber {
+public class BoardController implements Initializable, Publisher, Subscriber {
     @FXML
     Pane hover_card_pane;
 
@@ -65,6 +66,7 @@ public class BoardController implements Initializable, Subscriber {
     StackPane hover_card_box;
     private CardController hover_card_controller;
     private BoardChannel channel;
+    private ArrayList<SummonedCharacterController> targeting;
 
     public BoardController(BoardChannel channel) {
         this.channel = channel;
@@ -122,6 +124,8 @@ public class BoardController implements Initializable, Subscriber {
              * Initialize the phase change mid bar
              */
             phase_bar = new Label[]{dp_label, mp_label, bp_label, ep_label};
+
+            this.targeting = new ArrayList<SummonedCharacterController>(2);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println(e);
@@ -241,6 +245,23 @@ public class BoardController implements Initializable, Subscriber {
             // TODO: unlock the board
             this.undoSkillPickBehavior();
             placed_skill = null;
+        } else if (event instanceof CharacterSelectedEvent){
+            //Setting Penarget
+            SummonedCharacterController selectedCard = (SummonedCharacterController) event.getInfo();
+            if (this.targeting.isEmpty()){
+                this.targeting.add(selectedCard);
+            }
+            //Setting target
+            else{
+                this.targeting.add(selectedCard);
+                int battleResult=game_engine.solveBattle(this.targeting.get(0).summoned_character, this.targeting.get(1).summoned_character);
+                this.targeting.get(0).toggleSelected();
+                this.targeting.get(1).toggleSelected();
+                this.targeting.clear();
+                
+            }
+            System.out.println(selectedCard.base_card_controller.card_name);
+            System.out.println(this.targeting.size());
         }
     }
 
@@ -273,5 +294,11 @@ public class BoardController implements Initializable, Subscriber {
             Duration.millis(ms)
         );
         pause.play();
+    }
+
+    @Override
+    public void publish(Event event) {
+        // TODO Auto-generated method stub
+
     }
 }

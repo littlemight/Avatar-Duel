@@ -2,7 +2,13 @@ package com.avatarduel.controller;
 
 import com.avatarduel.event.*;
 import com.avatarduel.model.Element;
+import com.avatarduel.model.Phase;
 import com.avatarduel.model.card.*;
+import com.avatarduel.event.CharacterSelectedEvent;
+import com.avatarduel.event.Event;
+import com.avatarduel.event.EventChannel;
+import com.avatarduel.event.NewCardDrawnEvent;
+import com.avatarduel.event.Publisher;
 import com.avatarduel.model.Player;
 import com.avatarduel.model.card.Character;
 import javafx.event.EventHandler;
@@ -56,6 +62,8 @@ public class PlayerFieldController implements Initializable, Publisher {
     @FXML
     public AnchorPane player_field;
 
+    private Phase phase = Phase.BATTLE;
+
     private List<CardController> cardcontrollers_on_hand;
     private List<SummonedCharacterController> summonedchara_controllers;
     private List<SummonedSkillController> summonedskill_controllers;
@@ -71,6 +79,7 @@ public class PlayerFieldController implements Initializable, Publisher {
     public PlayerFieldController(BoardChannel channel) {
         this.channel = channel;
         this.player = new Player();
+
     }
 
     public void setPlayer(Player player) {
@@ -160,19 +169,21 @@ public class PlayerFieldController implements Initializable, Publisher {
             VBox card_front = controller.getCardFront();
             card_front.setCursor(Cursor.HAND);
             card_front.setOnDragDetected(e -> {
-                Dragboard db = card_front.startDragAndDrop(TransferMode.MOVE);
-                db.setDragView(card_front.snapshot(null, null));
-                ClipboardContent cc = new ClipboardContent();
-                cc.put(vbox_format, "Card Front");
-                db.setContent(cc);
-                dragged_card_controller = controller;
+                // if (this.phase==Phase.DRAW) {
+                    Dragboard db = card_front.startDragAndDrop(TransferMode.MOVE);
+                    db.setDragView(card_front.snapshot(null, null));
+                    ClipboardContent cc = new ClipboardContent();
+                    cc.put(vbox_format, "Card Front");
+                    db.setContent(cc);
+                    dragged_card_controller = controller;
+                // }
             });
         } catch (Exception e) {
             System.out.println("IN DRAW: " + e);
         }
     }
 
-    public StackPane addSummonedCharacterBox(SummonedCharacter summoned_character) {
+    public StackPane addSummonedCharacterBox(SummonedCharacter summoned_character, int position) {
         StackPane summoned_character_box = null;
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/SummonedCharacter.fxml"));
@@ -182,16 +193,19 @@ public class PlayerFieldController implements Initializable, Publisher {
             SummonedCharacterController controller = loader.getController();
             summonedchara_controllers.add(controller);
             controller.setSummonedCharacter(summoned_character);
+            controller.setPosition(position);
 
             summoned_character_box.prefWidthProperty().bind(player_zone.prefWidthProperty().divide(6));
             summoned_character_box.prefHeightProperty().bind(player_zone.prefHeightProperty().divide(2));
+
+            summonedchara_controllers.add(controller);
         } catch (Exception e) {
             System.out.println("ADDING CARD TO ZONE: " + e);
         }
         return summoned_character_box;
     }
 
-    public StackPane addSummonedSkillBox(SummonedSkill summoned_skill) {
+    public StackPane addSummonedSkillBox(SummonedSkill summoned_skill, int position) {
         StackPane summoned_skill_box = null;
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/SummonedSkill.fxml"));
@@ -201,9 +215,12 @@ public class PlayerFieldController implements Initializable, Publisher {
             SummonedSkillController controller = loader.getController();
             summonedskill_controllers.add(controller);
             controller.setSummonedCharacter(summoned_skill);
+            controller.setPosition(position);
 
             summoned_skill_box.prefWidthProperty().bind(player_zone.prefWidthProperty().divide(6));
             summoned_skill_box.prefHeightProperty().bind(player_zone.prefHeightProperty().divide(2));
+
+            summonedskill_controllers.add(controller);
         } catch (Exception e) {
             System.out.println("ADDING CARD TO ZONE: " + e);
         }
@@ -296,15 +313,31 @@ public class PlayerFieldController implements Initializable, Publisher {
 
                         Summoned card = player.summonCard((Summonable) dragged_card_controller.getCard());
                         if (card instanceof SummonedCharacter) {
-                            zone_panes[row][col].getChildren().add(this.addSummonedCharacterBox((SummonedCharacter) card));
+                            zone_panes[row][col].getChildren().add(this.addSummonedCharacterBox((SummonedCharacter) card, col));
                         } else { // its a SummonedSkill
-                            zone_panes[row][col].getChildren().add(this.addSummonedSkillBox((SummonedSkill) card));
+                            zone_panes[row][col].getChildren().add(this.addSummonedSkillBox((SummonedSkill) card, col));
                         }
                     }
                 }
                 dragged_card = null;
             }
         });
+        
+        // if (row==this.character_row){
+        zone_panes[row][col].setOnMouseClicked(e -> {
+            // if (this.phase==Phase.BATTLE){
+                if (!zone_panes[row][col].getChildren().isEmpty()){
+                    for (SummonedCharacterController chara_controller :summonedchara_controllers){
+                        if (chara_controller.getPosition()==col) {
+                            chara_controller.toggleSelected();
+                            publish(new CharacterSelectedEvent(chara_controller));
+                            break;
+                        }
+                    }
+                }
+            // }
+        });
+        // }
     }
 
     public void setSkillPickBehavior() {

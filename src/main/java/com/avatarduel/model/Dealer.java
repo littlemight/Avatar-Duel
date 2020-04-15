@@ -105,15 +105,15 @@ public class Dealer {
         while(nk+nl+ns<n){
             if (!it.hasNext()) it = cards.listIterator();
             Card card = it.next();
-            if ((card instanceof Character) && nk<Math.round(portion*2)){
+            if ((card instanceof Character) && nk<=Math.round(portion*2)){
                 deck.addCard(card);
                 nk++;
             }
-        else if ((card instanceof Land) && nl<Math.round(portion*2)){
+            else if ((card instanceof Land) && nl<=Math.round(portion*2)){
                 deck.addCard(card);
                 nl++;
             }
-        else if ((card instanceof Skill) && ns<Math.round(portion*2)){
+            else if ((card instanceof Skill) && (ns<=Math.round(portion) || (ns>=Math.round(portion) && nk+nl>=Math.round(portion*2)*2))){
                 deck.addCard(card);
                 ns++;
             }

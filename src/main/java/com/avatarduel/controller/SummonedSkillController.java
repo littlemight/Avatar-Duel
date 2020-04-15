@@ -31,6 +31,7 @@ public class SummonedSkillController implements Initializable, Publisher, Subscr
 
     CardController base_card_controller;
     SummonedSkill summoned_skill;
+    private int position;
 
     BoardChannel channel;
     CardChannel card_channel;
@@ -100,6 +101,10 @@ public class SummonedSkillController implements Initializable, Publisher, Subscr
 
     public void destroy() {
         ((Pane)summoned_skill_box.getParent()).getChildren().remove(summoned_skill_box);
+    }
+    
+    public void setPosition(int position){
+        this.position = position;
     }
 
     @Override

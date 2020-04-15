@@ -36,6 +36,8 @@ public class SummonedCharacterController implements Initializable, Publisher, Su
 
     CardController base_card_controller;
     SummonedCharacter summoned_character;
+    private boolean is_selected;
+    private int position;
 
     BoardChannel channel;
     CardChannel card_channel;
@@ -58,7 +60,8 @@ public class SummonedCharacterController implements Initializable, Publisher, Su
         net_def_box.prefHeightProperty().bind(summoned_character_box.prefHeightProperty().multiply((double)(88) / 500));
 
         // Should only be enabled on Main Phase
-        summoned_character_box.setOnMouseClicked(e -> rotateCharacter());
+        // summoned_character_box.setOnMouseClicked(e -> rotateCharacter());
+        is_selected=false;
     }
 
     public SummonedCharacter getSummonedCharacter() {
@@ -123,6 +126,23 @@ public class SummonedCharacterController implements Initializable, Publisher, Su
 
     public void destroy() {
         ((Pane)summoned_character_box.getParent()).getChildren().remove(summoned_character_box);
+    }
+    
+    public void toggleSelected(){
+        if (is_selected){
+            this.base_card_pane.setStyle("");
+            is_selected=false;
+        }else{
+            this.base_card_pane.setStyle("-fx-border-color: #e00004; -fx-border-width:  6");
+            is_selected=true;
+        }
+    }
+
+    public void setPosition(int position){
+        this.position = position;
+    }
+    public int getPosition(){
+        return this.position;
     }
 
     @Override

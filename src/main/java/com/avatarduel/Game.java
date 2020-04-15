@@ -1,15 +1,15 @@
 package com.avatarduel;
 
-import com.avatarduel.controller.BoardController;
 import com.avatarduel.event.*;
 import com.avatarduel.model.*;
 import com.avatarduel.model.card.*;
 
 import javafx.geometry.Pos;
 
-public class Game implements Publisher{
+public class Game implements Publisher, Subscriber{
     
     // components
+    EventChannel channel;
     private Player players[];
     int cur_player;
     // defined game phases
@@ -18,10 +18,11 @@ public class Game implements Publisher{
 
 
     // initialize
-    public Game(Player p1, Player p2) {
+    public Game(Player p1, Player p2, EventChannel channel) {
         this.players = new Player[2];
         this.players[0] = p1;
         this.players[1] = p2;
+        this.channel = channel;
     }
 
     public Player getPlayer(int id) {
@@ -29,6 +30,7 @@ public class Game implements Publisher{
     }
 
     public void stageController(Phase phase){
+        System.out.println("Masuk stage!");
         if (phase == Phase.DRAW){
             this.draw();
         } else if (phase == Phase.MAIN){
@@ -54,36 +56,7 @@ public class Game implements Publisher{
      */
     public void draw() {
         Player player = this.players[cur_player];
-        // initialize variable to hold count
-        int landCardCount = 0, skillCardCount = 0, charaCardCount = 0, destroyCardCount = 0;
-        int powerUpCardCount = 0, auraCardCount = 0, totalCardCount;
-        Card card;
-        boolean isSafe = false;
-        // loop until safe
-        while (!isSafe) {
-            // traverse each card in player hand
-            for (Card c : player.getHand()) {
-                if (c instanceof Aura) {
-                    auraCardCount++;
-                } else if (c instanceof com.avatarduel.model.card.Character) {
-                    charaCardCount++;
-                } else if (c instanceof Destroy) {
-                    destroyCardCount++;
-                } else if (c instanceof Land) {
-                    landCardCount++;
-                } else if (c instanceof PowerUp) {
-                    powerUpCardCount++;
-                } else if (c instanceof Skill) {
-                    skillCardCount++;
-                }
-            }
-            // check if no card takes it all
-            totalCardCount = player.getHand().size();
-            isSafe = auraCardCount != totalCardCount && charaCardCount != totalCardCount && destroyCardCount != totalCardCount && landCardCount != totalCardCount && powerUpCardCount != totalCardCount && skillCardCount != totalCardCount;
-            // draw new card if the status is not safe
-            player.getHand().remove(0);
-            card = player.drawCard();
-        }
+        Card card = player.drawCard();
         // when safe, reset player power
         player.resetPower();
 
@@ -95,19 +68,25 @@ public class Game implements Publisher{
         // TODO: publish ke board_controller udah masuk ke phase battle
     }
 
-    public void solveBattle(SummonedCharacter cur_player_card, SummonedCharacter enemy_player_card){
+    public int solveBattle(SummonedCharacter cur_player_card, SummonedCharacter enemy_player_card){
         if (cur_player_card.getPosition()==Position.ATTACK){
+            System.out.print(cur_player_card.getCombatValue());
+            System.out.print(" vs ");
+            System.out.println(enemy_player_card.getCombatValue());
             if (cur_player_card.getCombatValue() > enemy_player_card.getCombatValue()){
-                enemy_player_card.removeCard();
                 // TODO: publish kartu yang di remove
                 if (enemy_player_card.getPosition()==Position.ATTACK || cur_player_card.checkPowerUp()>0){
+                    System.out.println(this.players[(cur_player+1)%2].getHealth());
                     this.players[(cur_player+1)%2].decreaseHealth(cur_player_card.getCombatValue()-enemy_player_card.getCombatValue());
+                    enemy_player_card.removeCard();
                     if (this.players[(cur_player+1)%2].getHealth()==0){
                         // TODO: publish player win
                     }
+                    return (cur_player+1)%2+1;
                 }                    
             }
         }
+        return -1;
     }
 
     // endturn
@@ -118,7 +97,15 @@ public class Game implements Publisher{
 
     @Override
     public void publish(Event event) {
-        // TODO Auto-generated method stub
+        this.channel.sendEvent(this, event);
+
+    }
+
+    @Override
+    public void onEvent(Event event) {
+        // if (event instanceof ChangePhaseEvent){
+        //     stageController((Phase)event.getInfo());
+        // }
 
     }
 }
