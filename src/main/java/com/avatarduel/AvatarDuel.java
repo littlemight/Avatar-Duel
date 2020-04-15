@@ -48,17 +48,17 @@ public class AvatarDuel extends Application {
       BoardController board_controller = board_loader.getController();
       channel.setMain(board_controller);
 
-      board_controller.setPlayer1(player1);
-      board_controller.setPlayer2(player2);
-      
-      Game game_engine = new Game(player1, player2, channel);
-      board_controller.startGame(game_engine);
-      
+      board_controller.setPlayer(1, player1);
+      board_controller.setPlayer(2, player2);
+
+
       Scene scene = new Scene(root, 1280, 720);
       stage.setTitle("Avatar Duel");
       stage.setScene(scene);
       stage.show();
 
+      Game game_engine = new Game(player1, player2, channel);
+      board_controller.startGame(game_engine);
     } catch (Exception e) {
         System.out.println("WTF: " + e);
     }

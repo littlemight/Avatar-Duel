@@ -120,6 +120,9 @@ public class SummonedCharacter implements Summoned, Publisher {
 
     public void removeCard(){
         this.position = Position.DESTROYED;
+        for (SummonedSkill summoned_skill: attached_skills) {
+            summoned_skill.publish(new DestroyCardEvent(summoned_skill));
+        }
         publish(new DestroyCardEvent(this));
     }
 

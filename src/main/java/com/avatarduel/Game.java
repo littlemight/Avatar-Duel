@@ -19,10 +19,11 @@ public class Game implements Publisher, Subscriber{
 
     // initialize
     public Game(Player p1, Player p2, EventChannel channel) {
-        this.players = new Player[2];
-        this.players[0] = p1;
-        this.players[1] = p2;
+        this.players = new Player[3];
+        this.players[1] = p1;
+        this.players[2] = p2;
         this.channel = channel;
+        this.cur_player = 1;
     }
 
     public Player getPlayer(int id) {
@@ -76,13 +77,13 @@ public class Game implements Publisher, Subscriber{
             if (cur_player_card.getCombatValue() > enemy_player_card.getCombatValue()){
                 // TODO: publish kartu yang di remove
                 if (enemy_player_card.getPosition()==Position.ATTACK || cur_player_card.checkPowerUp()>0){
-                    System.out.println(this.players[(cur_player+1)%2].getHealth());
-                    this.players[(cur_player+1)%2].decreaseHealth(cur_player_card.getCombatValue()-enemy_player_card.getCombatValue());
+                    System.out.println(this.players[cur_player%2 + 1].getHealth());
+                    this.players[cur_player%2 + 1].decreaseHealth(cur_player_card.getCombatValue()-enemy_player_card.getCombatValue());
                     enemy_player_card.removeCard();
-                    if (this.players[(cur_player+1)%2].getHealth()==0){
+                    if (this.players[cur_player%2 + 1].getHealth()==0){
                         // TODO: publish player win
                     }
-                    return (cur_player+1)%2+1;
+                    return cur_player%2 + 1;
                 }                    
             }
         }
@@ -92,7 +93,7 @@ public class Game implements Publisher, Subscriber{
     // endturn
     public void endStage(){
         // TODO: publish ke board_controller utk udah masuk endPhase
-        this.cur_player = (this.cur_player+1)%2;
+        this.cur_player = (this.cur_player)%2 + 1;
     }
 
     @Override

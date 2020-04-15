@@ -90,7 +90,7 @@ public class PlayerFieldController implements Initializable, Publisher {
                 bind(this.player.getHealthProperty().asString());
         this.player_hp_bar.
                 progressProperty().
-                bind(this.player.getHealthProperty().divide(80));
+                bind(this.player.getHealthProperty().divide((double)80));
         this.deck_neff.
                 textProperty().
                 bind(this.player.getDeck().getNeff().asString());
