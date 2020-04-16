@@ -116,11 +116,14 @@ public class SummonedCharacter implements Summoned, Publisher {
         }
     }
 
-    public void removeSkill(Skill skill_card) {
-        attached_skills.remove(skill_card);
+    public void removeSkill(SummonedSkill summonedskill_card) {
+        attached_skills.remove(summonedskill_card);
+        Skill skill_card = (Skill) summonedskill_card.getBaseCard();
         if (skill_card instanceof Aura) {
             this.d_atk -= ((Aura) skill_card).getDeltaAtk();
             this.d_def -= ((Aura) skill_card).getDeltaDef();
+            this.net_atk.set(this.d_atk + this.card.getAtk());
+            this.net_def.set(this.d_def + this.card.getDef());
         } else if (skill_card instanceof PowerUp) {
             this.powered_up--;
         }

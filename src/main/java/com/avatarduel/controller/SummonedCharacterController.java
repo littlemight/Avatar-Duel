@@ -78,7 +78,6 @@ public class SummonedCharacterController implements Initializable, Publisher, Su
         });
         summoned_character_box.setOnMouseEntered(e -> {
             this.onMouseEnter(e);
-
             switch (this.channel.getPhase()) {
                 case SKILLPICK:
                     summoned_character_box.setCursor(Cursor.HAND);

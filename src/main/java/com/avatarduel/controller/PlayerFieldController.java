@@ -337,8 +337,13 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
         
         // if (row==this.character_row){
         zone_panes[row][col].setOnMouseClicked(e -> {
-            if (this.channel.getPhase()==Phase.BATTLE){
-                if (!zone_panes[row][col].getChildren().isEmpty()){
+            if (zone_panes[row][col].getChildren().isEmpty()) {
+                return;
+            }
+            switch (this.channel.getPhase()) {
+                case MAIN:
+
+                case BATTLE:
                     for (SummonedCharacterController chara_controller :summonedchara_controllers){
                         if (chara_controller.getPosition()==col) {
                             // chara_controller.toggleSelected();
@@ -346,10 +351,14 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
                             break;
                         }
                     }
-                }
+                    break;
+                default:
+                    break;
+
+            }
+            if (this.channel.getPhase()==Phase.BATTLE){
             }
         });
-        // }
     }
 
     /**

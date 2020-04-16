@@ -1,6 +1,7 @@
 package com.avatarduel.controller;
 
 import com.avatarduel.event.*;
+import com.avatarduel.model.ConfirmBox;
 import com.avatarduel.model.card.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -83,6 +84,23 @@ public class SummonedSkillController implements Initializable, Publisher, Subscr
             this.channel.addSubscriber(this, (Subscriber) this.channel.getMain());
             publish(new NewSummonedCardEvent(this.base_card_controller));
             publish(new NewSkillCardPlaced(this.summoned_skill));
+
+            this.summoned_skill_box.setOnMouseClicked(e -> {
+                switch (this.channel.getPhase()) {
+                    case MAIN:
+                        if (e.getClickCount() == 2) {
+                            if (ConfirmBox.display(e.getScreenX(), e.getScreenY(),
+                            "Discard " + this.summoned_skill.getBaseCard().getName(),
+                        "Attached to [" + this.summoned_skill.getAppliedTo().getBaseCard().getName() + "]")
+                            ) {
+                                this.summoned_skill.removeCard();
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            });
         } catch (Exception e) {
             System.out.println("IN SUMMONEDCARD: " + e);
         }
