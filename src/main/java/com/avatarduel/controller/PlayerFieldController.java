@@ -11,10 +11,17 @@ import com.avatarduel.event.NewCardDrawnEvent;
 import com.avatarduel.event.Publisher;
 import com.avatarduel.model.Player;
 import com.avatarduel.model.card.Character;
+import javafx.animation.FadeTransition;
+import javafx.animation.SequentialTransition;
+import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -24,6 +31,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -66,18 +75,13 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
     @FXML
     public AnchorPane player_field;
 
-//    private Phase phase = Phase.DRAW;
-
     private List<CardController> cardcontrollers_on_hand;
     private List<SummonedCharacterController> summonedchara_controllers;
     private List<SummonedSkillController> summonedskill_controllers;
-
     private CardController dragged_card_controller; // dragging card from hand to field / element (buat land)
-
     private BoardChannel channel;
-
     private Player player;
-
+    private int player_id; // buat ngasih tau ini controller player 1 atau 2
     private int character_row, skill_row;
 
     public PlayerFieldController(BoardChannel channel) {
@@ -86,7 +90,8 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
 
     }
 
-    public void setPlayer(Player player) {
+    public void setPlayer(int player_id, Player player) {
+        this.player_id = player_id;
         this.player = player;
         this.channel.addSubscriber(this.player, this);
 
@@ -202,6 +207,7 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
             SummonedCharacterController controller = loader.getController();
             this.channel.addSubscriber((BoardController) this.channel.getMain(), controller);
             controller.setSummonedCharacter(summoned_character);
+            controller.setOwner(this.player_id);
             controller.setPosition(position);
 
             summoned_character_box.prefWidthProperty().bind(player_zone.prefWidthProperty().divide(6));
@@ -223,6 +229,7 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
 
             SummonedSkillController controller = loader.getController();
             controller.setSummonedCharacter(summoned_skill);
+            controller.setOwner(this.player_id);
             controller.setPosition(position);
 
             summoned_skill_box.prefWidthProperty().bind(player_zone.prefWidthProperty().divide(6));
@@ -327,6 +334,34 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
                 ) {
                     if (player.canSummon((Summonable)dragged_card)) {
                         Node dragged_card_box = dragged_card_controller.getContent();
+                        // Make card
+                        Bounds b = dragged_card_box.localToScene(dragged_card_box.getBoundsInLocal());
+                        // Bounds parent_bound = ((Pane)dragged_card_box.getParent()).localToScene(((Pane)dragged_card_box.getParent()).getBoundsInLocal());
+                        Bounds target = zone_panes[row][col].localToScene(dragged_card_box.getBoundsInLocal());
+                        System.out.println("Min : " + b.getMinX() + "," + b.getMinY());
+                        System.out.println("Max : " + b.getMaxX() + "," + b.getMaxY());
+                        // System.out.println("Min : " + parent_bound.getMinX() + "," + parent_bound.getMinY());
+                        // System.out.println("Max : " + parent_bound.getMaxX() + "," + parent_bound.getMaxY());
+
+                        Circle cir = new Circle();
+                        cir.setFill(Color.BROWN);
+                        cir.setRadius(50);
+                        cir.setLayoutY(50);
+                        cir.setLayoutX(50);
+
+                        // transition
+                        TranslateTransition transition = new TranslateTransition();
+                        transition.setDuration(Duration.seconds(1));
+                        transition.setFromX(b.getMinX()-640);
+                        transition.setFromY(b.getMinY()-360);
+                        transition.setToX(target.getMinX()-640);
+                        transition.setToY(target.getMinY()-360);
+                        transition.setNode(cir);
+                        ((Pane)dragged_card_box.getParent().getParent()
+                                .getParent().getParent().getParent()
+                                .getParent().getParent().getParent()).getChildren().add(cir);
+                        // do this thing below
+
                         ((Pane)dragged_card_box.getParent()).getChildren().remove(dragged_card_box);
 
                         Summoned card = player.summonCard((Summonable) dragged_card_controller.getCard());
@@ -337,6 +372,20 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
                             this.channel.addSubscriber((SummonedSkill) card, this);
                             zone_panes[row][col].getChildren().add(this.addSummonedSkillBox((SummonedSkill) card, col));
                         }
+
+                        // fade out
+                        FadeTransition ft = new FadeTransition();
+                        ft.setFromValue(1.0);
+                        ft.setToValue(0.0);
+                        ft.setDuration(Duration.seconds(0.2));
+                        ft.setNode(cir);
+
+                        SequentialTransition sq = new SequentialTransition();
+                        sq.getChildren().addAll(transition,ft);
+                        sq.play();
+
+                        ((Pane)dragged_card_box.getParent()).getChildren().remove(cir);
+                        sq.stop();
                     }
                 }
                 dragged_card = null;
@@ -358,18 +407,6 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
             }
         });
         // }
-    }
-
-    public void setSkillPickBehavior() {
-        for (SummonedCharacterController controller: this.summonedchara_controllers) {
-            controller.setSkillPickBehavior();
-        }
-    }
-
-    public void undoSkillPickBehavior() {
-        for (SummonedCharacterController controller: this.summonedchara_controllers) {
-            controller.undoSkillPickBehavior();
-        }
     }
 
     /**

@@ -78,7 +78,9 @@ public class Game implements Publisher, Subscriber{
 
     }
     // main
-
+    public void main(Player player) {
+        // 
+    }
     // battle
     public void battleStage(){
         // TODO: publish ke board_controller udah masuk ke phase battle

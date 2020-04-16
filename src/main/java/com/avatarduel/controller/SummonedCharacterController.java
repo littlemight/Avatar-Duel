@@ -8,6 +8,7 @@ import com.avatarduel.model.card.SummonedCharacter;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
@@ -41,7 +42,7 @@ public class SummonedCharacterController implements Initializable, Publisher, Su
     SummonedCharacter summoned_character;
     private boolean is_selected;
     private int position;
-
+    private int owner;
     BoardChannel channel;
 
     public SummonedCharacterController(BoardChannel channel) {
@@ -61,8 +62,33 @@ public class SummonedCharacterController implements Initializable, Publisher, Su
         net_atk_box.prefHeightProperty().bind(summoned_character_box.prefHeightProperty().multiply((double)(88) / 500));
         net_def_box.prefHeightProperty().bind(summoned_character_box.prefHeightProperty().multiply((double)(88) / 500));
 
-        // Should only be enabled on Main Phase
-        summoned_character_box.setOnMouseClicked(e -> rotateCharacter());
+        summoned_character_box.setOnMouseClicked(e -> {
+            switch (this.channel.getPhase()) {
+                case SKILLPICK:
+                    publish(new SkillCharacterPickedEvent(this));
+                    summoned_character_box.setCursor(Cursor.DEFAULT);
+                    break;
+                case MAIN:
+                    if (this.channel.getPlayerID() == this.owner) {
+                        rotateCharacter();
+                    }
+                    break;
+                default:
+                    // do nothing
+                    break;
+            }
+        });
+        summoned_character_box.setOnMouseEntered(e -> {
+            this.onMouseEnter(e);
+
+            switch (this.channel.getPhase()) {
+                case SKILLPICK:
+                    summoned_character_box.setCursor(Cursor.HAND);
+                    break;
+                default:
+                    break;
+            }
+        });
         is_selected=false;
     }
 
@@ -74,10 +100,8 @@ public class SummonedCharacterController implements Initializable, Publisher, Su
      * Rotates the character card
      */
     private void rotateCharacter() {
-        if (this.channel.getPhase() == Phase.MAIN){
-            this.summoned_character.rotate();
-            this.base_card_controller.rotate();
-        }
+        this.summoned_character.rotate();
+        this.base_card_controller.rotate();
     }
 
     public void setSummonedCharacter(SummonedCharacter summoned_character) {
@@ -107,14 +131,8 @@ public class SummonedCharacterController implements Initializable, Publisher, Su
         }
     }
 
-    public void setSkillPickBehavior() {
-        summoned_character_box.setOnMouseClicked(e -> {
-           publish(new SkillCharacterPickedEvent(this));
-        });
-    }
-
-    public void undoSkillPickBehavior() {
-        summoned_character_box.setOnMouseClicked(null);
+    public void setOwner(int owner) {
+        this.owner = owner;
     }
 
     public void onMouseEnter(MouseEvent mouseEvent) {
