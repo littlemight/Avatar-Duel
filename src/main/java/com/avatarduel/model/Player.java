@@ -6,7 +6,9 @@ import com.avatarduel.event.Event;
 import com.avatarduel.event.Publisher;
 import com.avatarduel.model.card.*;
 import com.avatarduel.model.card.Character;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 import java.util.ArrayList;
@@ -17,7 +19,7 @@ import java.util.Map;
 public class Player implements Publisher {
     public static final int MAX_HEALTH = 80;
     public static final int MAX_HAND = 7;
-    public static final int MAX_ZONE = 8;
+    public static final int MAX_ZONE = 6;
 
     private String name;
     private IntegerProperty health;
@@ -29,7 +31,7 @@ public class Player implements Publisher {
     private List<SummonedCharacter> character_zone;
     private List<SummonedSkill> skill_zone;
     public boolean hasUsedLand;
-    public boolean canSummonSkill;
+    public boolean anyCharOnField;
 
     public BoardChannel channel;
 
@@ -47,7 +49,7 @@ public class Player implements Publisher {
         deck = new Deck();
         character_zone = new ArrayList<SummonedCharacter>();
         skill_zone = new ArrayList<SummonedSkill>();
-        canSummonSkill = false;
+        anyCharOnField = false;
     }
 
     public Player(String name, Deck deck, BoardChannel channel) {
@@ -58,7 +60,7 @@ public class Player implements Publisher {
 
         for (Element e : Element.values()) {
 //            max_power.put(e, new SimpleIntegerProperty(0));
-            max_power.put(e, new SimpleIntegerProperty(2)); // buat testing
+            max_power.put(e, new SimpleIntegerProperty(100)); // buat testing
             power.put(e, new SimpleIntegerProperty(0));
         }
         hand = new ArrayList<Card>();
@@ -66,7 +68,7 @@ public class Player implements Publisher {
 
         character_zone = new ArrayList<SummonedCharacter>();
         skill_zone = new ArrayList<SummonedSkill>();
-        canSummonSkill = false;
+        anyCharOnField = false;
 
         this.channel = channel;
     }
@@ -152,6 +154,9 @@ public class Player implements Publisher {
 
     public void drawCard() {
         Card ret = deck.drawCard();
+//        if (hand.size() >= MAX_HAND) {
+//            // do something
+//        }
         hand.add(ret);
         publish(new CardDrawnEvent(ret));
     }
@@ -161,9 +166,9 @@ public class Player implements Publisher {
         boolean enough_power = this.getPower(el) >= summonable.getPower();
         boolean enough_zone = true;
         if (summonable instanceof Character) {
-            enough_zone = character_zone.size() < 6;
+            enough_zone = character_zone.size() < MAX_ZONE;
         } else { // its a skill
-            enough_zone = skill_zone.size() < 6 && !character_zone.isEmpty();
+            enough_zone = skill_zone.size() < MAX_ZONE && anyCharOnField;
         }
         return enough_power && enough_zone;
     }

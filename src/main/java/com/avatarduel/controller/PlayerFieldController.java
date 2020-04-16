@@ -309,9 +309,7 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
 
         zone_panes[row][col].setOnDragOver(e -> {
             Dragboard db = e.getDragboard();
-            if (db.hasContent(vbox_format)
-                    && dragged_card_controller != null
-            ) {
+            if (db.hasContent(vbox_format) && dragged_card_controller != null) {
                 if (dragged_card_controller.getCard() instanceof Summonable) {
                     e.acceptTransferModes(TransferMode.MOVE);
                 }
@@ -322,7 +320,8 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
             Dragboard db = e.getDragboard();
             if (db.hasContent(vbox_format) && zone_panes[row][col].getChildren().isEmpty()) {
                 Card dragged_card = dragged_card_controller.getCard();
-                if (dragged_card instanceof Skill && !this.player.canSummonSkill) {
+                if (dragged_card instanceof Skill && !this.player.anyCharOnField) {
+                    System.out.println(this.player.getCharacterZone().size());
                     System.out.println("No character in both player fields.");
                     return;
                 }

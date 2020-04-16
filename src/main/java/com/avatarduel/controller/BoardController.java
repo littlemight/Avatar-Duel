@@ -165,20 +165,9 @@ public class BoardController implements Initializable, Publisher, Subscriber {
     SummonedSkill placed_skill;
     @Override
     public void onEvent(Event event) {
-//        boolean canSummonSkill = this.game_engine.getPlayer(0).getCharacterZone().size() > 0 || this.game_engine.getPlayer(0).getCharacterZone().size() > 0;
-//        this.game_engine.getPlayer(0).canSummonSkill = canSummonSkill;
-//        this.game_engine.getPlayer(1).canSummonSkill = canSummonSkill;
-
         if (event instanceof NewCardDrawnEvent || event instanceof NewSummonedCardEvent) {
             CardController controller = (CardController) event.getInfo();
             this.channel.addSubscriber(controller, this.hover_card_controller);
-            if (event instanceof NewSummonedCardEvent) {
-                Card card = controller.getCard();
-                if (card instanceof Character) {
-                    this.game_engine.getPlayer(1).canSummonSkill = true;
-                    this.game_engine.getPlayer(2).canSummonSkill = true;
-                }
-            }
         } else if (event instanceof HoverSummonedCardEvent) {
             Summoned summoned_card = (Summoned)event.getInfo();
             if (summoned_card == null) {
@@ -292,6 +281,9 @@ public class BoardController implements Initializable, Publisher, Subscriber {
                 this.targeting.clear();
             }
         }
+        this.game_engine.getPlayer(1).anyCharOnField = this.game_engine.getPlayer(2).anyCharOnField =
+                this.game_engine.getPlayer(1).getCharacterZone().size() > 0 ||
+                this.game_engine.getPlayer(2).getCharacterZone().size() > 0;
     }
 
     public void proceedPhase(ActionEvent actionEvent) {
@@ -336,7 +328,6 @@ public class BoardController implements Initializable, Publisher, Subscriber {
                 "-fx-color: black"
         );
         System.out.println("CURRENT PHASE: " + phases[phase_id]);
-//        publish(new PhaseChangedEvent(phases[phase_id]));
     }
 
     public void sleep(double ms){
