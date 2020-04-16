@@ -20,6 +20,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
+import javafx.scene.control.Button;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
@@ -53,6 +54,9 @@ public class BoardController implements Initializable, Publisher, Subscriber {
 
     @FXML
     Label dp_label, mp_label, bp_label, ep_label;
+
+    @FXML
+    Button next_phase_btn;
 
     Label[] phase_bar;
     AnchorPane[] player_fields;
@@ -127,10 +131,18 @@ public class BoardController implements Initializable, Publisher, Subscriber {
              * Initialize the phase change mid bar
              */
             phase_bar = new Label[]{dp_label, mp_label, bp_label, ep_label};
-
+            this.next_phase_btn.setOnAction(e -> {
+                switch (this.channel.getPhase()) {
+                    case SKILLPICK:
+                        break;
+                    default:
+                        this.proceedPhase(e);
+                        break;
+                }
+            });
             this.targeting = new ArrayList<SummonedCharacterController>(2);
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             System.out.println(e);
         }
     }

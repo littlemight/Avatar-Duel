@@ -67,7 +67,7 @@
                                  <font>
                                     <Font size="20.0" />
                                  </font></Label>
-                              <Button fx:id="next_phase_btn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#proceedPhase" prefHeight="40.0" prefWidth="203.2" text="NP">
+                              <Button fx:id="next_phase_btn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="203.2" text="NP">
                                  <font>
                                     <Font size="15.0" />
                                  </font>

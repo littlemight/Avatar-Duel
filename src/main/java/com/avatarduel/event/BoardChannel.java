@@ -16,6 +16,7 @@ public class BoardChannel implements EventChannel {
 
     public BoardChannel() {
         subscribers = new HashMap<Publisher, List<Subscriber>>();
+        phase = Phase.DRAW;
     }
 
     public Object getMain() {
