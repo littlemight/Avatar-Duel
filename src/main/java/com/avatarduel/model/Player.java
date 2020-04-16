@@ -57,9 +57,9 @@ public class Player implements Publisher {
         this.power = new HashMap<Element, IntegerProperty>();
 
         for (Element e : Element.values()) {
-            max_power.put(e, new SimpleIntegerProperty(0));
-            power.put(e, new SimpleIntegerProperty(100));
-            // power.put(e, new SimpleIntegerProperty(0));
+//            max_power.put(e, new SimpleIntegerProperty(0));
+            max_power.put(e, new SimpleIntegerProperty(100)); // buat testing
+            power.put(e, new SimpleIntegerProperty(0));
         }
         hand = new ArrayList<Card>();
         this.deck = deck;

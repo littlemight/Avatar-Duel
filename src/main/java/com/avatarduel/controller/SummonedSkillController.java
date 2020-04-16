@@ -32,6 +32,7 @@ public class SummonedSkillController implements Initializable, Publisher, Subscr
     CardController base_card_controller;
     SummonedSkill summoned_skill;
     private int position;
+    private int owner;
 
     BoardChannel channel;
 
@@ -85,6 +86,10 @@ public class SummonedSkillController implements Initializable, Publisher, Subscr
         } catch (Exception e) {
             System.out.println("IN SUMMONEDCARD: " + e);
         }
+    }
+
+    public void setOwner(int owner) {
+        this.owner = owner;
     }
 
     public void onMouseEnter(MouseEvent mouseEvent) {

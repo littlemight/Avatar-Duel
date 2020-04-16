@@ -64,18 +64,13 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
     @FXML
     public AnchorPane player_field;
 
-//    private Phase phase = Phase.DRAW;
-
     private List<CardController> cardcontrollers_on_hand;
     private List<SummonedCharacterController> summonedchara_controllers;
     private List<SummonedSkillController> summonedskill_controllers;
-
     private CardController dragged_card_controller; // dragging card from hand to field / element (buat land)
-
     private BoardChannel channel;
-
     private Player player;
-
+    private int player_id; // buat ngasih tau ini controller player 1 atau 2
     private int character_row, skill_row;
 
     public PlayerFieldController(BoardChannel channel) {
@@ -84,7 +79,8 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
 
     }
 
-    public void setPlayer(Player player) {
+    public void setPlayer(int player_id, Player player) {
+        this.player_id = player_id;
         this.player = player;
         this.channel.addSubscriber(this.player, this);
 
@@ -196,6 +192,7 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
             SummonedCharacterController controller = loader.getController();
             this.channel.addSubscriber((BoardController) this.channel.getMain(), controller);
             controller.setSummonedCharacter(summoned_character);
+            controller.setOwner(this.player_id);
             controller.setPosition(position);
 
             summoned_character_box.prefWidthProperty().bind(player_zone.prefWidthProperty().divide(6));
@@ -217,6 +214,7 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
 
             SummonedSkillController controller = loader.getController();
             controller.setSummonedCharacter(summoned_skill);
+            controller.setOwner(this.player_id);
             controller.setPosition(position);
 
             summoned_skill_box.prefWidthProperty().bind(player_zone.prefWidthProperty().divide(6));
@@ -352,18 +350,6 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
             }
         });
         // }
-    }
-
-    public void setSkillPickBehavior() {
-        for (SummonedCharacterController controller: this.summonedchara_controllers) {
-            controller.setSkillPickBehavior();
-        }
-    }
-
-    public void undoSkillPickBehavior() {
-        for (SummonedCharacterController controller: this.summonedchara_controllers) {
-            controller.undoSkillPickBehavior();
-        }
     }
 
     /**
