@@ -12,7 +12,7 @@ public class BoardChannel implements EventChannel {
     private Map<Publisher, List<Subscriber>> subscribers;
     private BoardController main;
     private Phase phase;
-    private int player;
+    private int player_id;
 
     public BoardChannel() {
         subscribers = new HashMap<Publisher, List<Subscriber>>();
@@ -26,12 +26,16 @@ public class BoardChannel implements EventChannel {
         return phase;
     }
 
+    public int getPlayerID() {
+        return this.player_id;
+    }
+
     public void setPhase(Phase phase) {
         this.phase = phase;
     }
 
-    public void setPlayer(int id) {
-        this.player = id;
+    public void setPlayerID(int id) {
+        this.player_id = id;
     }
 
     public void setMain(Object main) {

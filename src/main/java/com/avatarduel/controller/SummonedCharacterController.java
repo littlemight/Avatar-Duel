@@ -37,7 +37,6 @@ public class SummonedCharacterController implements Initializable, Publisher, Su
 
     CardController base_card_controller;
     SummonedCharacter summoned_character;
-    Phase phase = Phase.MAIN;
     private boolean is_selected;
     private int position;
 
@@ -73,7 +72,7 @@ public class SummonedCharacterController implements Initializable, Publisher, Su
      * Rotates the character card
      */
     private void rotateCharacter() {
-        if (this.phase == Phase.MAIN){
+        if (this.channel.getPhase() == Phase.MAIN){
             this.summoned_character.rotate();
             this.base_card_controller.rotate();
         }
@@ -157,7 +156,7 @@ public class SummonedCharacterController implements Initializable, Publisher, Su
         if (event instanceof DestroyCardEvent){
             this.destroy();
         } else if (event instanceof PhaseChangedEvent){
-            this.phase = (Phase) event.getInfo();
+//            this.phase = (Phase) event.getInfo();
         }
     }
 }
