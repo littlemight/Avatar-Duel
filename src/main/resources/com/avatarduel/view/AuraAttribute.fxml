@@ -6,38 +6,38 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox fx:id="card_attribute_box" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="480.0" spacing="5.0" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.avatarduel.controller.AtkDefAttributeController">
+<HBox fx:id="card_attribute_box" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="480.0" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.avatarduel.controller.AtkDefAttributeController">
    <children>
       <Label fx:id="atk_text" text="+ATK">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Separator minHeight="0.0" minWidth="0.0" orientation="VERTICAL" rotate="10.0" />
+      <Separator minHeight="0.0" minWidth="0.0" opacity="0.0" orientation="VERTICAL" rotate="10.0" />
       <Label fx:id="atk_value" text="12">
          <font>
             <Font size="30.0" />
          </font>
       </Label>
-      <Separator minHeight="0.0" minWidth="0.0" orientation="VERTICAL" />
+      <Separator minHeight="0.0" minWidth="0.0" opacity="0.0" orientation="VERTICAL" />
       <Label fx:id="def_text" text="+DEF">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Separator minHeight="0.0" minWidth="0.0" orientation="VERTICAL" rotate="10.0" />
+      <Separator minHeight="0.0" minWidth="0.0" opacity="0.0" orientation="VERTICAL" rotate="10.0" />
       <Label fx:id="def_value" text="34">
          <font>
             <Font size="30.0" />
          </font>
       </Label>
-      <Separator minHeight="0.0" minWidth="0.0" orientation="VERTICAL" />
+      <Separator minHeight="0.0" minWidth="0.0" opacity="0.0" orientation="VERTICAL" />
       <Label fx:id="pow_text" text="POW">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Separator minHeight="0.0" minWidth="0.0" orientation="VERTICAL" rotate="10.0" />
+      <Separator minHeight="0.0" minWidth="0.0" opacity="0.0" orientation="VERTICAL" rotate="10.0" />
       <Label fx:id="pow_value" text="5">
          <font>
             <Font size="30.0" />

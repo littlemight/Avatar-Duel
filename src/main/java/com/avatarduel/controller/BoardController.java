@@ -178,6 +178,7 @@ public class BoardController implements Initializable, Publisher, Subscriber {
 
             this.summoned_name.setText(summoned_card.getBaseCard().getName());
             String description = "";
+            description += summoned_card.getBaseCard().getDescription() + "\n\n";
             if (summoned_card instanceof SummonedCharacter) {
                 int d_atk = ((SummonedCharacter)summoned_card).getDAtk();
                 int d_def = ((SummonedCharacter)summoned_card).getDDef();

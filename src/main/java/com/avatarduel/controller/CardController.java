@@ -19,6 +19,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 
@@ -28,7 +29,10 @@ import java.util.ResourceBundle;
 
 public class CardController implements Initializable, Subscriber, Publisher {
     @FXML
-    Label card_name, card_type, card_element, card_description;
+    Label card_name, card_type, card_description;
+
+    @FXML
+    ImageView card_element;
 
     @FXML
     Label type_left_bracket, type_right_bracket;
@@ -66,15 +70,22 @@ public class CardController implements Initializable, Subscriber, Publisher {
     public void initialize(URL location, ResourceBundle resources) {
         // Maintains aspect ratio
         this.card_box.prefWidthProperty().bind(this.card_box.prefHeightProperty().multiply((double) 5 / 7));
-        this.card_front.spacingProperty().bind(this.card_box.prefHeightProperty().multiply((double) 10 / 700));
+        this.card_front.spacingProperty().bind(this.card_box.prefHeightProperty().multiply((double) 5 / 700));
         this.card_front.
                 paddingProperty().
                 bind(
                         Bindings.createObjectBinding(() -> new Insets(
-                                        card_front.prefHeightProperty().multiply((double) 5 / 700).getValue()),
-                                card_front.prefHeightProperty()
+                                        card_front.prefHeightProperty().multiply((double) 10 / 700).getValue()), card_front.prefHeightProperty()
                         )
-                );
+        );
+
+        this.card_description.
+                paddingProperty().
+                bind(
+                        Bindings.createObjectBinding(() -> new Insets(
+                                card_front.prefHeightProperty().multiply((double) 5 / 700).getValue()), card_front.prefHeightProperty()
+                        )
+        );
 
         File file = null;
         try {
@@ -86,22 +97,22 @@ public class CardController implements Initializable, Subscriber, Publisher {
         this.card_image.setImage(image);
         card_box.widthProperty().addListener(e -> {
             card_name.setFont(new Font(((double)30 / 500) * card_box.getWidth()));
-            card_type.setFont(new Font(((double)30 / 500) * card_box.getWidth()));
-            type_left_bracket.setFont(new Font(((double)30 / 500) * card_box.getWidth()));
-            type_right_bracket.setFont(new Font(((double)30 / 500) * card_box.getWidth()));
-            card_type.setFont(new Font(((double)30 / 500) * card_box.getWidth()));
-            card_element.setFont(new Font(((double)30 / 500) * card_box.getWidth()));
-            card_description.setFont(new Font(((double)24 / 500) * card_box.getWidth()));
+            card_type.setFont(new Font(((double)24 / 500) * card_box.getWidth()));
+            type_left_bracket.setFont(new Font(((double)24 / 500) * card_box.getWidth()));
+            type_right_bracket.setFont(new Font(((double)24 / 500) * card_box.getWidth()));
+            card_description.setFont(new Font(((double)22 / 500) * card_box.getWidth()));
         });
 
-        card_image.
-                fitWidthProperty().bind(card_box.widthProperty().multiply(0.6));
+        card_name.prefHeightProperty().bind(card_box.heightProperty().multiply((double) 60 / 700));
+        card_image.fitWidthProperty().bind(card_box.widthProperty().multiply((double) 400 / 500));
         card_image.fitHeightProperty().bind(card_image.fitWidthProperty());
-        card_bottom.prefHeightProperty().bind(card_box.heightProperty().multiply((double) 240 / 700));
-        card_bottom.prefWidthProperty().bind(card_bottom.prefHeightProperty().multiply((double) 480 / 240));
-        card_description.prefHeightProperty().bind(card_bottom.prefHeightProperty().multiply(0.8));
+        card_element.fitWidthProperty().bind(card_box.widthProperty().multiply((double) 60 / 500));
+        card_element.fitHeightProperty().bind(card_element.fitWidthProperty());
+        card_bottom.prefHeightProperty().bind(card_box.heightProperty().multiply((double) 170 / 700));
+        card_bottom.prefWidthProperty().bind(card_bottom.prefHeightProperty().multiply((double) 460 / 170));
+        card_description.prefHeightProperty().bind(card_bottom.prefHeightProperty().multiply(0.7));
         card_description.prefWidthProperty().bind(card_bottom.prefWidthProperty());
-        card_attribute_pane.prefHeightProperty().bind(card_bottom.prefHeightProperty().multiply(0.2));
+        card_attribute_pane.prefHeightProperty().bind(card_bottom.prefHeightProperty().multiply(0.3));
         card_attribute_pane.prefWidthProperty().bind(card_bottom.prefWidthProperty());
 
         card_front.
@@ -171,42 +182,36 @@ public class CardController implements Initializable, Subscriber, Publisher {
         this.card = card;
         this.card_name.setText(card.getName());
         this.card_description.setText(card.getDescription());
-        this.card_element.setText(card.getElement().toString());
 
         if (card.getElement() == Element.AIR) {
             card_front.setStyle("-fx-background-color: #FCE5B0; -fx-border-color: #91ccef;");
             card_name.setStyle("-fx-background-color: #B46826; -fx-text-fill: #fdfbc8;");
-            card_element.setStyle("-fx-text-fill: #655645");
             card_type.setStyle("-fx-text-fill: #967862");
-            card_description.setStyle("-fx-text-fill: #b46826; -fx-background-color: #EBF5EE");
+            card_description.setStyle("-fx-background-color: #EBF5EE");
         }
         else if(card.getElement() == Element.WATER){
             card_front.setStyle("-fx-background-color: #80B6E3; -fx-border-color: #E6C38C;");
             card_name.setStyle("-fx-background-color: #1A4C9C; -fx-text-fill: #fdfbc8;");
-            card_element.setStyle("-fx-text-fill: #4E7688");
             card_type.setStyle("-fx-text-fill: #173158");
-            card_description.setStyle("-fx-text-fill: #EDFEFE;");
+            card_description.setStyle("-fx-background-color: #C4E0F9;");
         }
         else if(card.getElement() == Element.FIRE){
             card_front.setStyle("-fx-background-color: #BA5D22; -fx-border-color: #F18517;");
             card_name.setStyle("-fx-background-color: #841E00; -fx-text-fill: #efeab9;");
-            card_element.setStyle("-fx-text-fill: #fffc69");
             card_type.setStyle("-fx-text-fill: #ffc12f");
-            card_description.setStyle("-fx-text-fill: #ffffb4; -fx-background-color: #DDA448;");
+            card_description.setStyle("-fx-background-color: #DDA448;");
         }
         else if(card.getElement() == Element.EARTH){
             card_front.setStyle("-fx-background-color: #4C4A29; -fx-border-color: EE9B44;");
             card_name.setStyle("-fx-background-color: #2F2F1B; -fx-text-fill:#efeab9;");
-            card_element.setStyle("-fx-text-fill: #bc965b");
             card_type.setStyle("-fx-text-fill: #f0cd8c");
-            card_description.setStyle("-fx-text-fill: #eff49b;");
+            card_description.setStyle("-fx-background-color: #F1F7ED;");
         }
         else if(card.getElement() == Element.ENERGY){
             card_front.setStyle("-fx-background-color: #d796ea; -fx-border-color: #3C215F;");
             card_name.setStyle("-fx-background-color: #69499C; -fx-text-fill:#fdfbc8;");
-            card_element.setStyle("-fx-text-fill: #e6f6ff");
             card_type.setStyle("-fx-text-fill: #921299");
-            card_description.setStyle("-fx-text-fill: #955a84;");
+            card_description.setStyle("-fx-background-color: #F0E6EF;");
         }
         String type;
         this.card_attribute_pane.getChildren().clear();
@@ -242,8 +247,8 @@ public class CardController implements Initializable, Subscriber, Publisher {
                 }
             }
             if (!(card instanceof Land)) {
-                card_description.prefHeightProperty().bind(card_bottom.prefHeightProperty().multiply(0.8));
-                card_attribute_pane.prefHeightProperty().bind(card_bottom.prefHeightProperty().multiply(0.2));
+                card_description.prefHeightProperty().bind(card_bottom.prefHeightProperty().multiply(0.7));
+                card_attribute_pane.prefHeightProperty().bind(card_bottom.prefHeightProperty().multiply(0.3));
 
                 this.card_attribute_box.prefHeightProperty().bind(this.card_attribute_pane.prefHeightProperty());
                 this.card_attribute_box.prefWidthProperty().bind(this.card_attribute_pane.prefWidthProperty());
@@ -267,6 +272,14 @@ public class CardController implements Initializable, Subscriber, Publisher {
         }
         Image image = new Image(file.toURI().toString());
         this.card_image.setImage(image);
+
+        try {
+            file = new File(getClass().getResource("../" + this.card.getElement().toString()).toURI());
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
+        image = new Image(file.toURI().toString());
+        this.card_element.setImage(image);
     }
 
     public void onMouseEnter(MouseEvent mouseEvent) {
@@ -287,12 +300,6 @@ public class CardController implements Initializable, Subscriber, Publisher {
 
     public VBox getCardFront() {
         return this.card_front;
-    }
-
-    public void setInHandBehavior() {
-        this.card_front.setOnDragDetected(e -> {
-
-        });
     }
 
     public StackPane getContent() {

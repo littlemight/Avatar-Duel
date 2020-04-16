@@ -13,13 +13,13 @@
             <Font size="30.0" />
          </font>
       </Label>
-      <Separator minHeight="0.0" minWidth="0.0" orientation="VERTICAL" />
+      <Separator minHeight="0.0" minWidth="0.0" opacity="0.0" orientation="VERTICAL" />
       <Label fx:id="pow_text" text="POW">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Separator minHeight="0.0" minWidth="0.0" orientation="VERTICAL" rotate="10.0" />
+      <Separator minHeight="0.0" minWidth="0.0" opacity="0.0" orientation="VERTICAL" rotate="10.0" />
       <Label fx:id="pow" text="5">
          <font>
             <Font size="30.0" />

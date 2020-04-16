@@ -1,19 +1,19 @@
 package com.avatarduel.model;
 
 public enum Element {
-  WATER("WATER"),
-  FIRE("FIRE"),
-  AIR("AIR"),
-  EARTH("EARTH"),
-  ENERGY("ENERGY");
+  WATER("card/image/element/water.png"),
+  FIRE("card/image/element/fire.png"),
+  AIR("card/image/element/air.png"),
+  EARTH("card/image/element/earth.png"),
+  ENERGY("card/image/element/energy.png");
 
-  String name; // or maybe asset file path, buat logo
-  private Element(String name) {
-    this.name = name;
+  String path; // or maybe asset file path, buat logo
+  private Element(String path) {
+    this.path = path;
   }
 
   @Override
   public String toString() {
-    return name;
+    return path;
   }
 };
