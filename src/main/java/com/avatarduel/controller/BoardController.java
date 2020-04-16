@@ -69,7 +69,7 @@ public class BoardController implements Initializable, Publisher, Subscriber {
     private CardController hover_card_controller;
     private BoardChannel channel;
     private ArrayList<SummonedCharacterController> targeting;
-    private int cur_player;
+//    private int cur_player;
 
     public BoardController(BoardChannel channel) {
         this.channel = channel;
@@ -159,6 +159,7 @@ public class BoardController implements Initializable, Publisher, Subscriber {
         this.game_engine = game_engine;
         this.channel.addSubscriber(game_engine, this);
         this.channel.addSubscriber(this, game_engine);
+        this.channel.setPlayerID(1);
         this.drawBoth(); // harusnya lewat game
         this.player_controllers[2].closeHand();
         this.game_engine.setup();
@@ -263,9 +264,9 @@ public class BoardController implements Initializable, Publisher, Subscriber {
             Player selected_card_player = (Player) selected.get(1);
             if (this.targeting.isEmpty()){
                 // dibawah ini if yang asli
-                if (selected_card_player==game_engine.getPlayer(this.cur_player) && (!selected_card.summoned_character.getHasAttacked() && !selected_card.summoned_character.getJustSummoned())){
+                // if (selected_card_player==game_engine.getPlayer(this.cur_player) && (!selected_card.summoned_character.getHasAttacked() && !selected_card.summoned_character.getJustSummoned())){
                 // kalo yg dibawah ini buat testing purpose
-                // if (selected_card_player==game_engine.getPlayer(this.cur_player)){
+                if (selected_card_player==game_engine.getPlayer(this.channel.getPlayerID())){
                     selected_card.toggleSelected();
                     this.targeting.add(selected_card);
                 }
@@ -274,7 +275,7 @@ public class BoardController implements Initializable, Publisher, Subscriber {
             else{
                 selected_card.toggleSelected();
                 this.targeting.add(selected_card);
-                if (selected_card_player==game_engine.getPlayer(this.cur_player%2+1)){
+                if (selected_card_player==game_engine.getPlayer(this.channel.getPlayerID()%2+1)){
                     game_engine.solveBattle(this.targeting.get(0).summoned_character, this.targeting.get(1).summoned_character);
                 }
                 this.targeting.get(0).toggleSelected();
@@ -285,8 +286,8 @@ public class BoardController implements Initializable, Publisher, Subscriber {
             System.out.println(selected_card.base_card_controller.card_name);
             System.out.println(this.targeting.size());
         } else if (event instanceof PlayerChangedEvent){
-            this.cur_player = (int)event.getInfo();
-            System.out.println("CURRENT PLAYER:" + this.cur_player);
+//            this.cur_player = (int)event.getInfo();
+//            System.out.println("CURRENT PLAYER:" + this.cur_player);
         }
     }
 
@@ -310,14 +311,16 @@ public class BoardController implements Initializable, Publisher, Subscriber {
         phase_id++;
         if (phase_id == 4) {
             // TODO: swap the player, flip each respective cards, toggle current player behavior, etc
-            this.game_engine.endStage();
-            this.channel.setPlayer(this.game_engine.getCurPlayer());
             for (int i = 1; i <= 2; i++) {
                 this.player_controllers[i].flipHand();
             }
+            System.out.println("CURRENT PLAYER: " + this.game_engine.getCurPlayer());
         }
         phase_id %= 4;
-
+        this.game_engine.stageController(phases[phase_id]);
+        if (phase_id == 0) {
+            this.channel.setPlayerID(this.game_engine.getCurPlayer());
+        }
         this.channel.setPhase(phases[phase_id]);
 
         phase_bar[phase_id].setStyle(
@@ -325,7 +328,7 @@ public class BoardController implements Initializable, Publisher, Subscriber {
                 "-fx-color: black"
         );
         System.out.println("CURRENT PHASE: " + phases[phase_id]);
-        publish(new PhaseChangedEvent(phases[phase_id]));
+//        publish(new PhaseChangedEvent(phases[phase_id]));
     }
 
     public void sleep(double ms){
