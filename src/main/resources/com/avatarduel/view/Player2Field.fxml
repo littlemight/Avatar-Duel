@@ -50,7 +50,7 @@
                   </Label>
                </children>
             </HBox>
-            <HBox prefHeight="31.0" prefWidth="1023.0" spacing="15.0">
+            <HBox fx:id="player_home" prefHeight="31.0" prefWidth="1023.0" spacing="15.0">
                <children>
                   <ImageView fx:id="player_photo" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true">
                      <image>

@@ -53,6 +53,9 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
     public Label player_name;
 
     @FXML
+    public HBox player_home;
+
+    @FXML
     public Label deck_neff, deck_size;
 
     @FXML
@@ -191,7 +194,6 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
 
             SummonedCharacterController controller = loader.getController();
             this.channel.addSubscriber((BoardController) this.channel.getMain(), controller);
-            summonedchara_controllers.add(controller);
             controller.setSummonedCharacter(summoned_character);
             controller.setPosition(position);
 
@@ -213,7 +215,6 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
             summoned_skill_box = loader.load();
 
             SummonedSkillController controller = loader.getController();
-            summonedskill_controllers.add(controller);
             controller.setSummonedCharacter(summoned_skill);
             controller.setPosition(position);
 
@@ -274,6 +275,16 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
                 dragged_card = null;
             }
         });
+
+        player_home.setOnMouseClicked(e -> {
+            if (this.channel.getPhase()==Phase.BATTLE){
+                System.out.println(summonedchara_controllers.size());
+                if (summonedchara_controllers.isEmpty()){
+                    // chara_controller.toggleSelected();
+                    publish(new PlayerSelectedEvent(this.player));
+                }
+            }
+        });
     }
 
     private void addPane(int col, int row) {
@@ -313,8 +324,10 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
 
                         Summoned card = player.summonCard((Summonable) dragged_card_controller.getCard());
                         if (card instanceof SummonedCharacter) {
+                            this.channel.addSubscriber((SummonedCharacter) card, this);
                             zone_panes[row][col].getChildren().add(this.addSummonedCharacterBox((SummonedCharacter) card, col));
                         } else { // its a SummonedSkill
+                            this.channel.addSubscriber((SummonedSkill) card, this);
                             zone_panes[row][col].getChildren().add(this.addSummonedSkillBox((SummonedSkill) card, col));
                         }
                     }
@@ -385,8 +398,19 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
 
     @Override
     public void onEvent(Event event) {
-//        if (event instanceof PhaseChangedEvent){
-//            this.channel.() = (Phase)event.getInfo();
-//        }
+       if (event instanceof DestroyCardEvent){
+           Summoned destroyed_card = (Summoned) event.getInfo();
+           if (destroyed_card instanceof SummonedCharacter){
+               for (SummonedCharacterController summonedcard_controller : this.summonedchara_controllers){
+                   if (summonedcard_controller.summoned_character.equals(destroyed_card)) this.summonedchara_controllers.remove(summonedcard_controller);
+                   break;
+               }
+           } else if (destroyed_card instanceof SummonedSkill){
+            for (SummonedSkillController summonedcard_controller : this.summonedskill_controllers){
+                if (summonedcard_controller.summoned_skill.equals(destroyed_card)) this.summonedskill_controllers.remove(summonedcard_controller);
+                break;
+            }
+        }
+       }
     }
 }

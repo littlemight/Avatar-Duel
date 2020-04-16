@@ -266,7 +266,7 @@ public class BoardController implements Initializable, Publisher, Subscriber {
                 // dibawah ini if yang asli
                 // if (selected_card_player==game_engine.getPlayer(this.cur_player) && (!selected_card.summoned_character.getHasAttacked() && !selected_card.summoned_character.getJustSummoned())){
                 // kalo yg dibawah ini buat testing purpose
-                if (selected_card_player==game_engine.getPlayer(this.channel.getPlayerID())){
+                if (selected_card_player==game_engine.getPlayer(this.channel.getPlayerID()) && (!selected_card.summoned_character.getHasAttacked() && !selected_card.summoned_character.getJustSummoned())){
                     selected_card.toggleSelected();
                     this.targeting.add(selected_card);
                 }
@@ -281,13 +281,17 @@ public class BoardController implements Initializable, Publisher, Subscriber {
                 this.targeting.get(0).toggleSelected();
                 this.targeting.get(1).toggleSelected();
                 this.targeting.clear();
-                
             }
-            System.out.println(selected_card.base_card_controller.card_name);
-            System.out.println(this.targeting.size());
-        } else if (event instanceof PlayerChangedEvent){
-//            this.cur_player = (int)event.getInfo();
-//            System.out.println("CURRENT PLAYER:" + this.cur_player);
+        } else if (event instanceof PlayerSelectedEvent){
+            //Setting Target, Penarget haruslah sudah ada yaitu kartu
+            Player selected_player = (Player) event.getInfo();
+            if (!this.targeting.isEmpty()){
+                if (selected_player==game_engine.getPlayer(this.channel.getPlayerID()%2+1)){
+                    game_engine.solveDirectAttack(this.targeting.get(0).summoned_character);
+                }
+                this.targeting.get(0).toggleSelected();
+                this.targeting.clear();
+            }
         }
     }
 

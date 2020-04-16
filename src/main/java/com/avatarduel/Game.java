@@ -78,19 +78,26 @@ public class Game implements Publisher, Subscriber{
 
     public void solveBattle(SummonedCharacter cur_player_card, SummonedCharacter enemy_player_card){
         if (cur_player_card.getPosition()==Position.ATTACK){
-            System.out.print(cur_player_card.getCombatValue());
-            System.out.print(" vs ");
-            System.out.println(enemy_player_card.getCombatValue());
             if (cur_player_card.getCombatValue() > enemy_player_card.getCombatValue()){
                 cur_player_card.setHasAttacked(true);
                 if (enemy_player_card.getPosition()==Position.ATTACK || cur_player_card.checkPowerUp()>0){
-                    System.out.println(this.players[cur_player%2+1].getHealth());
                     this.players[cur_player%2+1].decreaseHealth(cur_player_card.getCombatValue()-enemy_player_card.getCombatValue());
                     if (this.players[cur_player%2+1].getHealth()==0){
                         // TODO: publish player win
                     }
                 }                    
                 enemy_player_card.removeCard();
+                this.players[cur_player%2+1].getCharacterZone().remove(enemy_player_card);
+            }
+        }
+    }
+
+    public void solveDirectAttack(SummonedCharacter cur_player_card){
+        if (cur_player_card.getPosition()==Position.ATTACK){
+            cur_player_card.setHasAttacked(true);
+            this.players[cur_player%2+1].decreaseHealth(cur_player_card.getCombatValue());
+            if (this.players[cur_player%2+1].getHealth()==0){
+                // TODO: publish player win
             }
         }
     }

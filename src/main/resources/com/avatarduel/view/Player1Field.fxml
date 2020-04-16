@@ -152,7 +152,7 @@
       </HBox>
       <VBox layoutX="5.0" layoutY="184.0" minWidth="-Infinity" prefHeight="59.0" prefWidth="1023.0" spacing="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <HBox prefHeight="31.0" prefWidth="1023.0" spacing="15.0">
+            <HBox fx:id="player_home" prefHeight="31.0" prefWidth="1023.0" spacing="15.0">
                <children>
                   <HBox fx:id="player_hand" alignment="CENTER" prefHeight="122.0" prefWidth="776.0" spacing="25.0" style="-fx-border-color: EAB56B; -fx-background-color: #3A1C0B;">
                      <padding>
