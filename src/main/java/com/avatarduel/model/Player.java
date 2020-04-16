@@ -57,7 +57,7 @@ public class Player implements Publisher {
         this.power = new HashMap<Element, IntegerProperty>();
 
         for (Element e : Element.values()) {
-            max_power.put(e, new SimpleIntegerProperty(0));
+            max_power.put(e, new SimpleIntegerProperty(5));
             power.put(e, new SimpleIntegerProperty(100));
             // power.put(e, new SimpleIntegerProperty(0));
         }
