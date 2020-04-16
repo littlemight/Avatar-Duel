@@ -117,6 +117,10 @@ public class Player implements Publisher {
         return character_zone;
     }
 
+    public List<SummonedSkill> getSkillZone() {
+        return skill_zone;
+    }
+
     /**
      * Asumsi: amount <= power(e)
      * 

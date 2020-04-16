@@ -402,15 +402,17 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
        if (event instanceof DestroyCardEvent){
            Summoned destroyed_card = (Summoned) event.getInfo();
            if (destroyed_card instanceof SummonedCharacter){
+               this.player.getCharacterZone().remove(destroyed_card);
                for (SummonedCharacterController summonedcard_controller : this.summonedchara_controllers){
                    if (summonedcard_controller.summoned_character.equals(destroyed_card)) this.summonedchara_controllers.remove(summonedcard_controller);
                    break;
                }
            } else if (destroyed_card instanceof SummonedSkill){
-            for (SummonedSkillController summonedcard_controller : this.summonedskill_controllers){
-                if (summonedcard_controller.summoned_skill.equals(destroyed_card)) this.summonedskill_controllers.remove(summonedcard_controller);
-                break;
-            }
+                this.player.getSkillZone().remove(destroyed_card);
+                for (SummonedSkillController summonedcard_controller : this.summonedskill_controllers){
+                    if (summonedcard_controller.summoned_skill.equals(destroyed_card)) this.summonedskill_controllers.remove(summonedcard_controller);
+                    break;
+                }
         }
        } else if (event instanceof CardDrawnEvent){
            this.draw((Card) event.getInfo());
