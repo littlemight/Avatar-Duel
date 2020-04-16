@@ -160,21 +160,21 @@ public class BoardController implements Initializable, Publisher, Subscriber {
         this.channel.addSubscriber(game_engine, this);
         this.channel.addSubscriber(this, game_engine);
         this.channel.setPlayerID(1);
-        this.drawBoth(); // harusnya lewat game
-        this.player_controllers[2].closeHand();
+        // this.drawBoth(); // harusnya lewat game
         this.game_engine.setup();
+        this.player_controllers[2].closeHand();
     }
 
     /**
      * For testing purposes.
      */
-    public void drawBoth() {
-        for (int i = 0; i < 7; i++) {
-            player_controllers[1].draw();
-            player_controllers[2].draw();
-            this.sleep(5000);
-        }
-    }
+    // public void drawBoth() {
+    //     for (int i = 0; i < 7; i++) {
+    //         player_controllers[1].draw();
+    //         player_controllers[2].draw();
+    //         this.sleep(5000);
+    //     }
+    // }
 
     SummonedSkill placed_skill;
     @Override

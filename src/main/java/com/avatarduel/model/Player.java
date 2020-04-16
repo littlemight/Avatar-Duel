@@ -1,5 +1,9 @@
 package com.avatarduel.model;
 
+import com.avatarduel.event.BoardChannel;
+import com.avatarduel.event.CardDrawnEvent;
+import com.avatarduel.event.Event;
+import com.avatarduel.event.Publisher;
 import com.avatarduel.model.card.*;
 import com.avatarduel.model.card.Character;
 import javafx.beans.property.IntegerProperty;
@@ -10,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Player {
+public class Player implements Publisher {
     public static final int MAX_HEALTH = 80;
     public static final int MAX_HAND = 7;
     public static final int MAX_ZONE = 8;
@@ -24,8 +28,10 @@ public class Player {
 
     private List<SummonedCharacter> character_zone;
     private List<SummonedSkill> skill_zone;
-	public boolean hasUsedLand;
-	public boolean canSummonSkill;
+    public boolean hasUsedLand;
+    public boolean canSummonSkill;
+
+    public BoardChannel channel;
 
     public Player() {
         this.name = "Placeholder";
@@ -33,8 +39,8 @@ public class Player {
         this.max_power = new HashMap<Element, IntegerProperty>();
         this.power = new HashMap<Element, IntegerProperty>();
 
-        for (Element e: Element.values()) {
-            max_power.put(e,  new SimpleIntegerProperty(0));
+        for (Element e : Element.values()) {
+            max_power.put(e, new SimpleIntegerProperty(0));
             power.put(e, new SimpleIntegerProperty(0));
         }
         hand = new ArrayList<Card>();
@@ -44,16 +50,16 @@ public class Player {
         canSummonSkill = false;
     }
 
-    public Player(String name, Deck deck) {
+    public Player(String name, Deck deck, BoardChannel channel) {
         this.name = name;
         this.health = new SimpleIntegerProperty(MAX_HEALTH);
         this.max_power = new HashMap<Element, IntegerProperty>();
         this.power = new HashMap<Element, IntegerProperty>();
 
-        for (Element e: Element.values()) {
-            max_power.put(e,  new SimpleIntegerProperty(0));
+        for (Element e : Element.values()) {
+            max_power.put(e, new SimpleIntegerProperty(0));
             power.put(e, new SimpleIntegerProperty(100));
-//            power.put(e, new SimpleIntegerProperty(0));
+            // power.put(e, new SimpleIntegerProperty(0));
         }
         hand = new ArrayList<Card>();
         this.deck = deck;
@@ -61,11 +67,14 @@ public class Player {
         character_zone = new ArrayList<SummonedCharacter>();
         skill_zone = new ArrayList<SummonedSkill>();
         canSummonSkill = false;
+
+        this.channel = channel;
     }
 
     public IntegerProperty getMaxPowerProperty(Element e) {
         return max_power.get(e);
     }
+
     public int getMaxPower(Element e) {
         return max_power.get(e).getValue();
     }
@@ -73,6 +82,7 @@ public class Player {
     public IntegerProperty getPowerProperty(Element e) {
         return power.get(e);
     }
+
     public int getPower(Element e) {
         return power.get(e).getValue();
     }
@@ -85,9 +95,10 @@ public class Player {
         return this.health.getValue();
     }
 
-    public void decreaseHealth(int modifier){
-        if (modifier>this.getHealth()) modifier = this.getHealth();
-        this.health.setValue(this.getHealth()-modifier);
+    public void decreaseHealth(int modifier) {
+        if (modifier > this.getHealth())
+            modifier = this.getHealth();
+        this.health.setValue(this.getHealth() - modifier);
     }
 
     public String getName() {
@@ -102,11 +113,14 @@ public class Player {
         return hand;
     }
 
-    public List<SummonedCharacter> getCharacterZone() {return character_zone;}
+    public List<SummonedCharacter> getCharacterZone() {
+        return character_zone;
+    }
 
     /**
      * Asumsi: amount <= power(e)
-     * @param e Element yang mana
+     * 
+     * @param e      Element yang mana
      * @param amount Banyaknya power yang digunakan
      */
     public void usePower(Element e, int amount) {
@@ -115,29 +129,31 @@ public class Player {
 
     /**
      * Menambahkan power element e (dipanggil kalo naroh kartu Land)
+     * 
      * @param e element power yang ditambahin
      */
     public void addPower(Element e) {
         max_power.get(e).set(max_power.get(e).getValue() + 1);
+        power.get(e).set(power.get(e).getValue() + 1);
     }
 
     /**
      * Reset power (dipanggil pas awal turn)
      */
     public void resetPower() {
-        for (Element e: Element.values()) {
+        for (Element e : Element.values()) {
             power.get(e).set(max_power.get(e).getValue());
         }
     }
 
-    public Card drawCard() {
+    public void drawCard() {
         Card ret = deck.drawCard();
         hand.add(ret);
-        return ret;
+        publish(new CardDrawnEvent(ret));
     }
 
     public boolean canSummon(Summonable summonable) {
-        Element el = ((Card)summonable).getElement();
+        Element el = ((Card) summonable).getElement();
         boolean enough_power = this.getPower(el) >= summonable.getPower();
         boolean enough_zone = true;
         if (summonable instanceof Character) {
@@ -150,6 +166,7 @@ public class Player {
 
     /**
      * Asumsi: player mananya sudah cukup untuk summon kartu, dan zone gak penuh
+     * 
      * @param summonable
      * @return
      */
@@ -164,5 +181,10 @@ public class Player {
             skill_zone.add((SummonedSkill) summoned_card);
         }
         return summoned_card;
+    }
+
+    @Override
+    public void publish(Event event) {
+        this.channel.sendEvent(this, event);
     }
 }

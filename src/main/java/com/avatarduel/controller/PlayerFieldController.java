@@ -86,6 +86,7 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
 
     public void setPlayer(Player player) {
         this.player = player;
+        this.channel.addSubscriber(this.player, this);
 
         this.player_hp_value.
                 textProperty().
@@ -144,7 +145,7 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
      *
      * Draws from a card and puts it into the hand field
      */
-    public void draw() {
+    public void draw(Card drawn_card) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/Card.fxml"));
         loader.setControllerFactory(c -> new CardController(this.channel));
 
@@ -152,7 +153,7 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
             loader.load();
             CardController controller = loader.getController();
             cardcontrollers_on_hand.add(controller);
-            Card drawn_card = this.player.drawCard();
+            // Card drawn_card = this.player.drawCard();
             // if draw_card instanceof emptycard, then dont do anything, maybe send FailedDrawEvent
 
             channel.addPublisher(controller);
@@ -411,6 +412,8 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
                 break;
             }
         }
+       } else if (event instanceof CardDrawnEvent){
+           this.draw((Card) event.getInfo());
        }
     }
 }

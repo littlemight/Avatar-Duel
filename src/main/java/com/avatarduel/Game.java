@@ -27,9 +27,18 @@ public class Game implements Publisher, Subscriber{
     }
 
     public void setup(){
-        //Draw Both
+        this.drawBoth();
+        this.players[1].resetPower();
+        this.players[2].resetPower();
         publish(new PlayerChangedEvent(this.cur_player));
-        // stageController(phases[phase_id]); masuk phase draw
+        stageController(phases[phase_id]); //masuk phase draw
+    }
+
+    public void drawBoth(){
+        for (int i = 0; i < 7; i++) {
+            this.players[1].drawCard();
+            this.players[2].drawCard();
+        }
     }
 
     public Player getPlayer(int id) {
@@ -63,10 +72,9 @@ public class Game implements Publisher, Subscriber{
      */
     public void draw() {
 
-        // Player player = this.players[cur_player];
-        // Card card = player.drawCard();
-        // // when safe, reset player power
-        // player.resetPower();
+        this.players[this.cur_player].drawCard();
+        // when safe, reset player power
+        this.players[this.cur_player].resetPower();
 
     }
     // main
@@ -116,6 +124,7 @@ public class Game implements Publisher, Subscriber{
                 summoned_chara.setJustSummoned(false);
             }
         }
+        this.players[this.cur_player].hasUsedLand=false;
         this.cur_player = this.cur_player%2+1;
         publish(new PlayerChangedEvent(this.cur_player));
     }

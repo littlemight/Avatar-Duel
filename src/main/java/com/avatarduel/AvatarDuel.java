@@ -36,10 +36,6 @@ public class AvatarDuel extends Application {
 
 //    ArrayList<CardController> cardControllers = new ArrayList<CardController>();
     try {
-      Dealer dealer = new Dealer();
-      Player player1 = new Player("Aang", dealer.getDeck(ThreadLocalRandom.current().nextInt(40, 60 + 1)));
-      Player player2 = new Player("orAang Ganteng", dealer.getDeck(ThreadLocalRandom.current().nextInt(40, 60 + 1)));
-
       BoardChannel channel = new BoardChannel();
       FXMLLoader board_loader = new FXMLLoader(getClass().getResource("view/Board.fxml"));
       board_loader.setControllerFactory(c -> new BoardController(channel));
@@ -47,6 +43,10 @@ public class AvatarDuel extends Application {
 
       BoardController board_controller = board_loader.getController();
       channel.setMain(board_controller);
+
+      Dealer dealer = new Dealer();
+      Player player1 = new Player("Aang", dealer.getDeck(ThreadLocalRandom.current().nextInt(40, 60 + 1)), channel);
+      Player player2 = new Player("orAang Ganteng", dealer.getDeck(ThreadLocalRandom.current().nextInt(40, 60 + 1)), channel);
 
       board_controller.setPlayer(1, player1);
       board_controller.setPlayer(2, player2);
