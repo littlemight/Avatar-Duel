@@ -289,12 +289,12 @@ public class BoardController implements Initializable, Publisher, Subscriber {
         );
 
         phase_id++;
-        if (phase_id == 1) {
-            this.player_controllers[this.channel.getPlayerID()].setHandHinting(true);
-        }
-        if (phase_id == 2) {
-            this.player_controllers[this.channel.getPlayerID()].setHandHinting(false);
-        }
+        // if (phase_id == 1) {
+        //     this.player_controllers[this.channel.getPlayerID()].setHandHinting(true);
+        // }
+        // if (phase_id == 2) {
+        //     this.player_controllers[this.channel.getPlayerID()].setHandHinting(false);
+        // }
         if (phase_id == 3) {
             if (!this.targeting.isEmpty()){
                 this.targeting.get(0).toggleSelected();

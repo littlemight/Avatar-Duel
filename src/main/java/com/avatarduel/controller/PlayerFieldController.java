@@ -179,7 +179,7 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
             VBox card_front = controller.getCardFront();
             card_front.setCursor(Cursor.HAND);
             card_front.setOnDragDetected(e -> {
-                card_front.setEffect(null);
+                // card_front.setEffect(null);
                 if (this.channel.getPhase()==Phase.MAIN) {
                     Dragboard db = card_front.startDragAndDrop(TransferMode.MOVE);
                     db.setDragView(card_front.snapshot(null, null));
@@ -189,9 +189,9 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
                     dragged_card_controller = controller;
                 }
             });
-            card_front.setOnDragDone(e -> {
-                card_front.setEffect(new DropShadow(50f, Color.PALEGREEN));
-            });
+            // card_front.setOnDragDone(e -> {
+            //     card_front.setEffect(new DropShadow(50f, Color.PALEGREEN));
+            // });
         } catch (Exception e) {
             System.out.println("IN DRAW: " + e);
         }

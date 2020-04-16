@@ -305,7 +305,7 @@ public class CardController implements Initializable, Subscriber, Publisher {
 
     public void setHinting(boolean is_hinting){
         if (is_hinting){
-            this.card_front.setEffect(new DropShadow(50f, Color.PALEGREEN));
+            this.card_front.setEffect(new DropShadow(20f, Color.PALEGREEN));
         }else{
             this.card_front.setEffect(null);
         }
