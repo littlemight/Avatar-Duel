@@ -32,6 +32,7 @@ import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.transform.Translate;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -350,10 +351,11 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
                         cir.setMinSize(85,119);
                         cir.setPrefSize(85,119);
                         cir.setStyle("-fx-background-color: BLACK");
+                        StackPane mock = null;
                         try {
                             FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/Card.fxml"));
                             loader.setControllerFactory(c -> new CardController(this.channel));
-                            StackPane mock = loader.load();
+                            mock = loader.load();
                             mock.setMaxSize(85,119);
                             mock.setMinSize(85,119);
                             cir.getChildren().add(mock);
@@ -378,11 +380,11 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
                         transition.setToX(target.getMinX()-640-43-11);
                         transition.setToY(target.getMinY()-360+60-30);
                         transition.setNode(cir);
+
+                        // do this thing below
                         ((Pane)dragged_card_box.getParent().getParent()
                                 .getParent().getParent().getParent()
                                 .getParent().getParent().getParent()).getChildren().add(cir);
-                        // do this thing below
-
                         ((Pane)dragged_card_box.getParent()).getChildren().remove(dragged_card_box);
 
                         Summoned card = player.summonCard((Summonable) dragged_card_controller.getCard());
@@ -401,12 +403,23 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
                         ft.setDuration(Duration.seconds(0.2));
                         ft.setNode(cir);
 
-                        SequentialTransition sq = new SequentialTransition();
-                        sq.getChildren().addAll(transition,ft);
-                        sq.play();
+                        // set to somewhere
+                        TranslateTransition getOut = new TranslateTransition();
+                        getOut.setToX(3000);
+                        getOut.setToY(3000);
+                        getOut.setDuration(Duration.seconds(0.001));
+                        getOut.setNode(cir);
 
-                        ((Pane)dragged_card_box.getParent()).getChildren().remove(cir);
+
+                        SequentialTransition sq = new SequentialTransition();
+                        sq.getChildren().addAll(transition,ft, getOut);
+                        sq.play();
+                        cir.getChildren().remove(mock);
+                        ((Pane)dragged_card_box.getParent().getParent()
+                                .getParent().getParent().getParent()
+                                .getParent().getParent().getParent()).getChildren().remove(cir);
                         sq.stop();
+
                     }
                 }
                 dragged_card = null;
