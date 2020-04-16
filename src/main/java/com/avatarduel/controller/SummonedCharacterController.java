@@ -10,11 +10,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import java.net.URL;
@@ -153,6 +155,14 @@ public class SummonedCharacterController implements Initializable, Publisher, Su
         }else{
             this.base_card_pane.setStyle("-fx-border-color: #e00004; -fx-border-width:  6");
             is_selected=true;
+        }
+    }
+
+    public void setHinting(boolean is_hinting){
+        if (is_hinting){
+            this.base_card_pane.setEffect(new DropShadow(50f, Color.CRIMSON));
+        }else{
+            this.base_card_pane.setEffect(null);
         }
     }
 

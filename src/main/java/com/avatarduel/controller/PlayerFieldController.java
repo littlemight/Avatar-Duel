@@ -11,18 +11,30 @@ import com.avatarduel.event.NewCardDrawnEvent;
 import com.avatarduel.event.Publisher;
 import com.avatarduel.model.Player;
 import com.avatarduel.model.card.Character;
+import javafx.animation.FadeTransition;
+import javafx.animation.SequentialTransition;
+import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.util.Duration;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -169,6 +181,7 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
             card_front.setCursor(Cursor.HAND);
             card_front.setOnDragDetected(e -> {
                 if (this.channel.getPhase()==Phase.MAIN) {
+                    card_front.setEffect(null);
                     Dragboard db = card_front.startDragAndDrop(TransferMode.MOVE);
                     db.setDragView(card_front.snapshot(null, null));
                     ClipboardContent cc = new ClipboardContent();
@@ -176,6 +189,10 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
                     db.setContent(cc);
                     dragged_card_controller = controller;
                 }
+            });
+            card_front.setOnDragDone(e -> {
+                card_front.setEffect(new DropShadow(20f, Color.PALEGREEN));
+                this.setHandHinting(true);
             });
         } catch (Exception e) {
             System.out.println("IN DRAW: " + e);
@@ -319,6 +336,53 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
                 ) {
                     if (player.canSummon((Summonable)dragged_card)) {
                         Node dragged_card_box = dragged_card_controller.getContent();
+                        // Make card
+                        Bounds b = dragged_card_box.localToScene(dragged_card_box.getBoundsInLocal());
+                        // Bounds parent_bound = ((Pane)dragged_card_box.getParent()).localToScene(((Pane)dragged_card_box.getParent()).getBoundsInLocal());
+                        Bounds target = zone_panes[row][col].localToScene(dragged_card_box.getBoundsInLocal());
+                        System.out.println("Min : " + b.getMinX() + "," + b.getMinY());
+                        System.out.println("Max : " + b.getMaxX() + "," + b.getMaxY());
+                        // System.out.println("Min : " + parent_bound.getMinX() + "," + parent_bound.getMinY());
+                        // System.out.println("Max : " + parent_bound.getMaxX() + "," + parent_bound.getMaxY());
+
+                        StackPane cir = new StackPane();
+                        cir.setMaxSize(85,119);
+                        cir.setMinSize(85,119);
+                        cir.setPrefSize(85,119);
+                        cir.setStyle("-fx-background-color: BLACK");
+                        try {
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/Card.fxml"));
+                            loader.setControllerFactory(c -> new CardController(this.channel));
+                            StackPane mock = loader.load();
+                            mock.setMaxSize(85,119);
+                            mock.setMinSize(85,119);
+                            cir.getChildren().add(mock);
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                        /*
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/Card.fxml"));
+                        loader.setControllerFactory(c -> new CardController(this.channel));
+                        try {
+                            loader.load();
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                         */
+
+                        // transition
+                        TranslateTransition transition = new TranslateTransition();
+                        transition.setDuration(Duration.seconds(0.5));
+                        transition.setFromX(b.getMinX()-640-43-11);
+                        transition.setFromY(b.getMinY()-360+60-30);
+                        transition.setToX(target.getMinX()-640-43-11);
+                        transition.setToY(target.getMinY()-360+60-30);
+                        transition.setNode(cir);
+                        ((Pane)dragged_card_box.getParent().getParent()
+                                .getParent().getParent().getParent()
+                                .getParent().getParent().getParent()).getChildren().add(cir);
+                        // do this thing below
+
                         ((Pane)dragged_card_box.getParent()).getChildren().remove(dragged_card_box);
 
                         Summoned card = player.summonCard((Summonable) dragged_card_controller.getCard());
@@ -329,6 +393,20 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
                             this.channel.addSubscriber((SummonedSkill) card, this);
                             zone_panes[row][col].getChildren().add(this.addSummonedSkillBox((SummonedSkill) card, col));
                         }
+
+                        // fade out
+                        FadeTransition ft = new FadeTransition();
+                        ft.setFromValue(1.0);
+                        ft.setToValue(0.0);
+                        ft.setDuration(Duration.seconds(0.2));
+                        ft.setNode(cir);
+
+                        SequentialTransition sq = new SequentialTransition();
+                        sq.getChildren().addAll(transition,ft);
+                        sq.play();
+
+                        ((Pane)dragged_card_box.getParent()).getChildren().remove(cir);
+                        sq.stop();
                     }
                 }
                 dragged_card = null;
@@ -387,6 +465,41 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
         }
     }
 
+    public List<SummonedCharacterController> getSummonedCharaController(){
+        return this.summonedchara_controllers;
+    }
+
+    public void setHinting(boolean is_hinting){
+        if (is_hinting){
+            this.player_home.setEffect(new DropShadow(50f, Color.CRIMSON));
+        }else{
+            this.player_home.setEffect(null);
+        }
+    }
+
+    public void setHandHinting(boolean is_hinting){
+        if (is_hinting){
+            for (CardController controller : this.cardcontrollers_on_hand){
+                if (controller.getCard() instanceof Land){
+                    if (!this.player.hasUsedLand){
+                        controller.setHinting(true);
+                    }else{
+                        controller.setHinting(false);
+                    }
+                }
+                else if (this.player.canSummon((Summonable) controller.getCard()))
+                    controller.setHinting(true);
+                else{
+                    controller.setHinting(false);
+                }
+            }
+        }else{
+            for (CardController controller : this.cardcontrollers_on_hand){
+                controller.setHinting(false);
+            }
+        }
+    }
+
     @Override
     public void publish(Event event) {
         this.channel.sendEvent(this, event);
@@ -397,17 +510,21 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
        if (event instanceof DestroyCardEvent){
            Summoned destroyed_card = (Summoned) event.getInfo();
            if (destroyed_card instanceof SummonedCharacter){
-               this.player.getCharacterZone().remove(destroyed_card);
                for (SummonedCharacterController summonedcard_controller : this.summonedchara_controllers){
-                   if (summonedcard_controller.summoned_character.equals(destroyed_card)) this.summonedchara_controllers.remove(summonedcard_controller);
-                   break;
-               }
-           } else if (destroyed_card instanceof SummonedSkill){
-                this.player.getSkillZone().remove(destroyed_card);
-                for (SummonedSkillController summonedcard_controller : this.summonedskill_controllers){
-                    if (summonedcard_controller.summoned_skill.equals(destroyed_card)) this.summonedskill_controllers.remove(summonedcard_controller);
-                    break;
+                   if (summonedcard_controller.summoned_character.equals(destroyed_card)){
+                       this.summonedchara_controllers.remove(summonedcard_controller);
+                       break;       
+                    } 
                 }
+                this.player.getCharacterZone().remove(destroyed_card);
+           } else if (destroyed_card instanceof SummonedSkill){
+               for (SummonedSkillController summonedcard_controller : this.summonedskill_controllers){
+                   if (summonedcard_controller.summoned_skill.equals(destroyed_card)){
+                       this.summonedskill_controllers.remove(summonedcard_controller);
+                       break;
+                   } 
+                }
+                this.player.getSkillZone().remove(destroyed_card);
         }
        } else if (event instanceof CardDrawnEvent){
            this.draw((Card) event.getInfo());

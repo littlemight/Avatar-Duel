@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -17,6 +18,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 
@@ -299,6 +301,14 @@ public class CardController implements Initializable, Subscriber, Publisher {
 
     public Card getCard() {
         return this.card;
+    }
+
+    public void setHinting(boolean is_hinting){
+        if (is_hinting){
+            this.card_front.setEffect(new DropShadow(20f, Color.PALEGREEN));
+        }else{
+            this.card_front.setEffect(null);
+        }
     }
 
     @Override
