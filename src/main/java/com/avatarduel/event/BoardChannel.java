@@ -1,6 +1,7 @@
 package com.avatarduel.event;
 
 import com.avatarduel.controller.BoardController;
+import com.avatarduel.model.Phase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +11,8 @@ import java.util.Map;
 public class BoardChannel implements EventChannel {
     private Map<Publisher, List<Subscriber>> subscribers;
     private BoardController main;
+    private Phase phase;
+    private int player;
 
     public BoardChannel() {
         subscribers = new HashMap<Publisher, List<Subscriber>>();
@@ -17,6 +20,18 @@ public class BoardChannel implements EventChannel {
 
     public Object getMain() {
         return this.main;
+    }
+
+    public Phase getPhase() {
+        return phase;
+    }
+
+    public void setPhase(Phase phase) {
+        this.phase = phase;
+    }
+
+    public void setPlayer(int id) {
+        this.player = id;
     }
 
     public void setMain(Object main) {

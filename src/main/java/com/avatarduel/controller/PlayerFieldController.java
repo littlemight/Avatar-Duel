@@ -23,7 +23,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 
-import javax.xml.soap.Text;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +61,7 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
     @FXML
     public AnchorPane player_field;
 
-    private Phase phase = Phase.DRAW;
+//    private Phase phase = Phase.DRAW;
 
     private List<CardController> cardcontrollers_on_hand;
     private List<SummonedCharacterController> summonedchara_controllers;
@@ -169,7 +168,7 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
             VBox card_front = controller.getCardFront();
             card_front.setCursor(Cursor.HAND);
             card_front.setOnDragDetected(e -> {
-                if (this.phase==Phase.MAIN) {
+                if (this.channel.getPhase()==Phase.MAIN) {
                     Dragboard db = card_front.startDragAndDrop(TransferMode.MOVE);
                     db.setDragView(card_front.snapshot(null, null));
                     ClipboardContent cc = new ClipboardContent();
@@ -326,7 +325,7 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
         
         // if (row==this.character_row){
         zone_panes[row][col].setOnMouseClicked(e -> {
-            if (this.phase==Phase.BATTLE){
+            if (this.channel.getPhase()==Phase.BATTLE){
                 if (!zone_panes[row][col].getChildren().isEmpty()){
                     for (SummonedCharacterController chara_controller :summonedchara_controllers){
                         if (chara_controller.getPosition()==col) {
@@ -361,6 +360,24 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
         skill_row ^= 1;
     }
 
+    public void closeHand() {
+        for (CardController controller: cardcontrollers_on_hand) {
+            controller.setClosed();
+        }
+    }
+
+    public void openHand() {
+        for (CardController controller: cardcontrollers_on_hand) {
+            controller.setOpened();
+        }
+    }
+
+    public void flipHand() {
+        for (CardController controller: cardcontrollers_on_hand) {
+            controller.flipCard();
+        }
+    }
+
     @Override
     public void publish(Event event) {
         this.channel.sendEvent(this, event);
@@ -368,9 +385,8 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
 
     @Override
     public void onEvent(Event event) {
-        if (event instanceof PhaseChangedEvent){
-            this.phase = (Phase)event.getInfo();
-        }
-
+//        if (event instanceof PhaseChangedEvent){
+//            this.channel.() = (Phase)event.getInfo();
+//        }
     }
 }

@@ -95,6 +95,10 @@ public class Game implements Publisher, Subscriber{
         }
     }
 
+    public int getCurPlayer() {
+        return this.cur_player;
+    }
+
     // endturn
     public void endStage(){
         for (SummonedCharacter summoned_chara : this.players[this.cur_player].getCharacterZone()){

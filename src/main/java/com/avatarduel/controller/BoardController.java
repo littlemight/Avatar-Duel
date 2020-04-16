@@ -160,6 +160,7 @@ public class BoardController implements Initializable, Publisher, Subscriber {
         this.channel.addSubscriber(game_engine, this);
         this.channel.addSubscriber(this, game_engine);
         this.drawBoth(); // harusnya lewat game
+        this.player_controllers[2].closeHand();
         this.game_engine.setup();
     }
 
@@ -307,7 +308,18 @@ public class BoardController implements Initializable, Publisher, Subscriber {
                 "-fx-color: dimgray"
         );
         phase_id++;
+        if (phase_id == 4) {
+            // TODO: swap the player, flip each respective cards, toggle current player behavior, etc
+            this.game_engine.endStage();
+            this.channel.setPlayer(this.game_engine.getCurPlayer());
+            for (int i = 1; i <= 2; i++) {
+                this.player_controllers[i].flipHand();
+            }
+        }
         phase_id %= 4;
+
+        this.channel.setPhase(phases[phase_id]);
+
         phase_bar[phase_id].setStyle(
                 "-fx-background-color: aquamarine;" +
                 "-fx-color: black"
@@ -326,6 +338,5 @@ public class BoardController implements Initializable, Publisher, Subscriber {
     @Override
     public void publish(Event event) {
         this.channel.sendEvent(this, event);
-
     }
 }
