@@ -4,6 +4,7 @@ import com.avatarduel.Game;
 import com.avatarduel.event.*;
 import com.avatarduel.model.Phase;
 import com.avatarduel.model.Player;
+import com.avatarduel.model.Position;
 import com.avatarduel.model.card.*;
 import com.avatarduel.model.card.Character;
 
@@ -263,11 +264,16 @@ public class BoardController implements Initializable, Publisher, Subscriber {
             SummonedCharacterController selected_card = (SummonedCharacterController) selected.get(0);
             Player selected_card_player = (Player) selected.get(1);
             if (this.targeting.isEmpty()){
-                // dibawah ini if yang asli
-                // if (selected_card_player==game_engine.getPlayer(this.cur_player) && (!selected_card.summoned_character.getHasAttacked() && !selected_card.summoned_character.getJustSummoned())){
-                // kalo yg dibawah ini buat testing purpose
-                if (selected_card_player==game_engine.getPlayer(this.channel.getPlayerID()) && (!selected_card.summoned_character.getHasAttacked() && !selected_card.summoned_character.getJustSummoned())){
+                if (game_engine.canTarget(selected_card.summoned_character) && selected_card_player==game_engine.getPlayer(this.channel.getPlayerID())){
                     selected_card.toggleSelected();
+                    for (SummonedCharacterController summonedchara_controller : this.player_controllers[this.channel.getPlayerID()%2+1].getSummonedCharaController()){
+                        if (game_engine.isStronger(selected_card.summoned_character, summonedchara_controller.summoned_character)){
+                            summonedchara_controller.setHinting(true);
+                        }
+                    }
+                    if (game_engine.canDirectAttack()){
+                        this.player_controllers[this.channel.getPlayerID()%2+1].setHinting(true);
+                    }
                     this.targeting.add(selected_card);
                 }
             }
@@ -280,6 +286,10 @@ public class BoardController implements Initializable, Publisher, Subscriber {
                 }
                 this.targeting.get(0).toggleSelected();
                 this.targeting.get(1).toggleSelected();
+                for (SummonedCharacterController summonedchara_controller : this.player_controllers[this.channel.getPlayerID()%2+1].getSummonedCharaController()){
+                    summonedchara_controller.setHinting(false);
+                }
+                this.player_controllers[this.channel.getPlayerID()%2+1].setHinting(false);
                 this.targeting.clear();
             }
         } else if (event instanceof PlayerSelectedEvent){
@@ -290,6 +300,7 @@ public class BoardController implements Initializable, Publisher, Subscriber {
                     game_engine.solveDirectAttack(this.targeting.get(0).summoned_character);
                 }
                 this.targeting.get(0).toggleSelected();
+                this.player_controllers[this.channel.getPlayerID()%2+1].setHinting(false);
                 this.targeting.clear();
             }
         }
@@ -312,7 +323,24 @@ public class BoardController implements Initializable, Publisher, Subscriber {
                 "-fx-background-color: darkgray;" +
                 "-fx-color: dimgray"
         );
+
         phase_id++;
+        if (phase_id == 1) {
+            this.player_controllers[this.channel.getPlayerID()].setHandHinting(true);
+        }
+        if (phase_id == 2) {
+            this.player_controllers[this.channel.getPlayerID()].setHandHinting(false);
+        }
+        if (phase_id == 3) {
+            if (!this.targeting.isEmpty()){
+                this.targeting.get(0).toggleSelected();
+                for (SummonedCharacterController summonedchara_controller : this.player_controllers[this.channel.getPlayerID()%2+1].getSummonedCharaController()){
+                    summonedchara_controller.setHinting(false);
+                }
+                this.player_controllers[this.channel.getPlayerID()%2+1].setHinting(false);
+                this.targeting.clear();
+            }
+        }
         if (phase_id == 4) {
             // TODO: swap the player, flip each respective cards, toggle current player behavior, etc
             for (int i = 1; i <= 2; i++) {

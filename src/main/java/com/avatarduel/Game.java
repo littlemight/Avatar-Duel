@@ -86,7 +86,7 @@ public class Game implements Publisher, Subscriber{
 
     public void solveBattle(SummonedCharacter cur_player_card, SummonedCharacter enemy_player_card){
         if (cur_player_card.getPosition()==Position.ATTACK){
-            if (cur_player_card.getCombatValue() > enemy_player_card.getCombatValue()){
+            if (isStronger(cur_player_card, enemy_player_card)){
                 cur_player_card.setHasAttacked(true);
                 if (enemy_player_card.getPosition()==Position.ATTACK || cur_player_card.checkPowerUp()>0){
                     this.players[cur_player%2+1].decreaseHealth(cur_player_card.getCombatValue()-enemy_player_card.getCombatValue());
@@ -107,6 +107,18 @@ public class Game implements Publisher, Subscriber{
                 // TODO: publish player win
             }
         }
+    }
+
+    public boolean canTarget(SummonedCharacter chara){
+        return !(chara.getPosition()==Position.DEFENSE) && (!chara.getHasAttacked() && !chara.getJustSummoned());
+    }
+
+    public boolean canDirectAttack(){
+        return this.players[cur_player%2+1].getCharacterZone().isEmpty();
+    }
+
+    public boolean isStronger(SummonedCharacter targets, SummonedCharacter targeted){
+        return targets.getCombatValue() > targeted.getCombatValue();
     }
 
     public int getCurPlayer() {

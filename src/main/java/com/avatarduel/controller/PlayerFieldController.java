@@ -19,9 +19,11 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -172,6 +174,7 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
             VBox card_front = controller.getCardFront();
             card_front.setCursor(Cursor.HAND);
             card_front.setOnDragDetected(e -> {
+                card_front.setEffect(null);
                 if (this.channel.getPhase()==Phase.MAIN) {
                     Dragboard db = card_front.startDragAndDrop(TransferMode.MOVE);
                     db.setDragView(card_front.snapshot(null, null));
@@ -180,6 +183,9 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
                     db.setContent(cc);
                     dragged_card_controller = controller;
                 }
+            });
+            card_front.setOnDragDone(e -> {
+                card_front.setEffect(new DropShadow(50f, Color.PALEGREEN));
             });
         } catch (Exception e) {
             System.out.println("IN DRAW: " + e);
@@ -392,6 +398,34 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
         }
     }
 
+    public List<SummonedCharacterController> getSummonedCharaController(){
+        return this.summonedchara_controllers;
+    }
+
+    public void setHinting(boolean is_hinting){
+        if (is_hinting){
+            this.player_home.setEffect(new DropShadow(50f, Color.CRIMSON));
+        }else{
+            this.player_home.setEffect(null);
+        }
+    }
+
+    public void setHandHinting(boolean is_hinting){
+        if (is_hinting){
+            for (CardController controller : this.cardcontrollers_on_hand){
+                if (controller.getCard() instanceof Land){
+                    controller.setHinting(true);
+                }
+                else if (this.player.canSummon((Summonable) controller.getCard()))
+                    controller.setHinting(true);
+            }
+        }else{
+            for (CardController controller : this.cardcontrollers_on_hand){
+                controller.setHinting(false);
+            }
+        }
+    }
+
     @Override
     public void publish(Event event) {
         this.channel.sendEvent(this, event);
@@ -402,17 +436,21 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
        if (event instanceof DestroyCardEvent){
            Summoned destroyed_card = (Summoned) event.getInfo();
            if (destroyed_card instanceof SummonedCharacter){
-               this.player.getCharacterZone().remove(destroyed_card);
                for (SummonedCharacterController summonedcard_controller : this.summonedchara_controllers){
-                   if (summonedcard_controller.summoned_character.equals(destroyed_card)) this.summonedchara_controllers.remove(summonedcard_controller);
-                   break;
-               }
-           } else if (destroyed_card instanceof SummonedSkill){
-                this.player.getSkillZone().remove(destroyed_card);
-                for (SummonedSkillController summonedcard_controller : this.summonedskill_controllers){
-                    if (summonedcard_controller.summoned_skill.equals(destroyed_card)) this.summonedskill_controllers.remove(summonedcard_controller);
-                    break;
+                   if (summonedcard_controller.summoned_character.equals(destroyed_card)){
+                       this.summonedchara_controllers.remove(summonedcard_controller);
+                       break;       
+                    } 
                 }
+                this.player.getCharacterZone().remove(destroyed_card);
+           } else if (destroyed_card instanceof SummonedSkill){
+               for (SummonedSkillController summonedcard_controller : this.summonedskill_controllers){
+                   if (summonedcard_controller.summoned_skill.equals(destroyed_card)){
+                       this.summonedskill_controllers.remove(summonedcard_controller);
+                       break;
+                   } 
+                }
+                this.player.getSkillZone().remove(destroyed_card);
         }
        } else if (event instanceof CardDrawnEvent){
            this.draw((Card) event.getInfo());
