@@ -420,7 +420,7 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
             }
             switch (this.channel.getPhase()) {
                 case MAIN:
-
+                    break;
                 case BATTLE:
                     for (SummonedCharacterController chara_controller :summonedchara_controllers){
                         if (chara_controller.getPosition()==col) {
@@ -433,8 +433,6 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
                 default:
                     break;
 
-            }
-            if (this.channel.getPhase()==Phase.BATTLE){
             }
         });
     }
