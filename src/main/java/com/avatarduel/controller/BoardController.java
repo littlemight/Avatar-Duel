@@ -263,9 +263,9 @@ public class BoardController implements Initializable, Publisher, Subscriber {
             Player selected_card_player = (Player) selected.get(1);
             if (this.targeting.isEmpty()){
                 // dibawah ini if yang asli
-                // if (selected_card_player==game_engine.getPlayer(this.cur_player) && (!selected_card.summoned_character.getHasAttacked() && !selected_card.summoned_character.getJustSummoned())){
+                if (selected_card_player==game_engine.getPlayer(this.cur_player) && (!selected_card.summoned_character.getHasAttacked() && !selected_card.summoned_character.getJustSummoned())){
                 // kalo yg dibawah ini buat testing purpose
-                if (selected_card_player==game_engine.getPlayer(this.cur_player)){
+                // if (selected_card_player==game_engine.getPlayer(this.cur_player)){
                     selected_card.toggleSelected();
                     this.targeting.add(selected_card);
                 }
