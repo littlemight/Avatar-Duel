@@ -96,6 +96,7 @@ public class Game implements Publisher, Subscriber{
                         // TODO: publish player win
                     }
                 }
+                enemy_player_card.removeCard();
             }
         }
     }
