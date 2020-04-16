@@ -192,7 +192,6 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
                 }
             });
             card_front.setOnDragDone(e -> {
-                card_front.setEffect(new DropShadow(20f, Color.PALEGREEN));
                 this.setHandHinting(true);
             });
         } catch (Exception e) {
