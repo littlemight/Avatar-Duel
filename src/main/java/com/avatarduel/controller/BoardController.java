@@ -18,17 +18,20 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
+import javafx.scene.control.SplitPane;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 import javafx.scene.control.Label;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class BoardController implements Initializable, Publisher, Subscriber {
+    @FXML
+    SplitPane board;
+
     @FXML
     Pane hover_card_pane;
 
@@ -51,17 +54,12 @@ public class BoardController implements Initializable, Publisher, Subscriber {
     Label dp_label, mp_label, bp_label, ep_label;
 
     Label[] phase_bar;
-
-//    AnchorPane player1_field, player2_field;
     AnchorPane[] player_fields;
 
     /**
      * The model
      * It should be a class Game which has the deck, 2 players, and other game rules for each phase
      */
-//    Player player1, player2;
-    Player[] players;
-//    PlayerFieldController[] player1_controller, player2_controller;
     PlayerFieldController[] player_controllers;
     Game game_engine;
 
@@ -69,11 +67,9 @@ public class BoardController implements Initializable, Publisher, Subscriber {
     private CardController hover_card_controller;
     private BoardChannel channel;
     private ArrayList<SummonedCharacterController> targeting;
-//    private int cur_player;
 
     public BoardController(BoardChannel channel) {
         this.channel = channel;
-        this.players = new Player[3];
         this.player_controllers = new PlayerFieldController[3];
         this.player_fields = new AnchorPane[3];
     }
@@ -138,43 +134,20 @@ public class BoardController implements Initializable, Publisher, Subscriber {
         }
     }
 
-    /**
-     * id nya 1 atau 2
-     * @param id
-     * @param player
-     */
-    public void setPlayer(int id, Player player) {
-        try {
-            this.players[id] = player;
-            player_controllers[id].setPlayer(this.players[id]);
-            if (id == 2) {
-                player_controllers[id].flipRow();
-            }
-        } catch (Exception e) {
-            System.out.println("In Player Controller: " + e);
-        }
-    }
-
     public void startGame(Game game_engine){
         this.game_engine = game_engine;
         this.channel.addSubscriber(game_engine, this);
         this.channel.addSubscriber(this, game_engine);
         this.channel.setPlayerID(1);
-        // this.drawBoth(); // harusnya lewat game
+        for (int i = 1; i <= 2; i++) {
+            player_controllers[i].setPlayer(i, game_engine.getPlayer(i));
+            if (i == 2) {
+                player_controllers[i].flipRow();
+            }
+        }
         this.game_engine.setup();
         this.player_controllers[2].closeHand();
     }
-
-    /**
-     * For testing purposes.
-     */
-    // public void drawBoth() {
-    //     for (int i = 0; i < 7; i++) {
-    //         player_controllers[1].draw();
-    //         player_controllers[2].draw();
-    //         this.sleep(5000);
-    //     }
-    // }
 
     SummonedSkill placed_skill;
     @Override
@@ -244,18 +217,21 @@ public class BoardController implements Initializable, Publisher, Subscriber {
             this.summoned_description.setText(description);
         } else if (event instanceof NewSkillCardPlaced) {
             System.out.println("New skill card placed");
+            board.setCursor(Cursor.CROSSHAIR);
 
             // TODO: lock player1 + 2 field except SummonedCharacter cards
             placed_skill = (SummonedSkill) event.getInfo();
             // make all the summonedcharacter listen to a clicked event
-            this.setSkillPickBehavior();
+            this.channel.setPhase(Phase.SKILLPICK);
         } else if (event instanceof SkillCharacterPickedEvent) {
+            board.setCursor(Cursor.DEFAULT);
+
             SummonedCharacterController controller = (SummonedCharacterController) event.getInfo();
             placed_skill.setAppliedTo(controller.getSummonedCharacter());
             controller.getSummonedCharacter().addSkill(placed_skill);
 
             // TODO: unlock the board
-            this.undoSkillPickBehavior();
+            this.channel.setPhase(Phase.MAIN);
             placed_skill = null;
         } else if (event instanceof CharacterSelectedEvent){
             //Setting Penarget
@@ -292,18 +268,6 @@ public class BoardController implements Initializable, Publisher, Subscriber {
                 this.targeting.get(0).toggleSelected();
                 this.targeting.clear();
             }
-        }
-    }
-
-    public void setSkillPickBehavior() {
-        for (int i = 1; i <= 2; i++) {
-            player_controllers[i].setSkillPickBehavior();
-        }
-    }
-
-    public void undoSkillPickBehavior() {
-        for (int i = 1; i <= 2; i++) {
-            player_controllers[i].undoSkillPickBehavior();
         }
     }
 

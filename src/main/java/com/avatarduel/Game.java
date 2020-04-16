@@ -97,7 +97,6 @@ public class Game implements Publisher, Subscriber{
                     }
                 }                    
                 enemy_player_card.removeCard();
-                this.players[cur_player%2+1].getCharacterZone().remove(enemy_player_card);
             }
         }
     }
