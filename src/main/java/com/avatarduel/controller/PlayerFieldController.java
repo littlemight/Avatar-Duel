@@ -179,8 +179,8 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
             VBox card_front = controller.getCardFront();
             card_front.setCursor(Cursor.HAND);
             card_front.setOnDragDetected(e -> {
-                // card_front.setEffect(null);
                 if (this.channel.getPhase()==Phase.MAIN) {
+                    card_front.setEffect(null);
                     Dragboard db = card_front.startDragAndDrop(TransferMode.MOVE);
                     db.setDragView(card_front.snapshot(null, null));
                     ClipboardContent cc = new ClipboardContent();
@@ -189,9 +189,10 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
                     dragged_card_controller = controller;
                 }
             });
-            // card_front.setOnDragDone(e -> {
-            //     card_front.setEffect(new DropShadow(50f, Color.PALEGREEN));
-            // });
+            card_front.setOnDragDone(e -> {
+                card_front.setEffect(new DropShadow(20f, Color.PALEGREEN));
+                this.setHandHinting(true);
+            });
         } catch (Exception e) {
             System.out.println("IN DRAW: " + e);
         }
@@ -451,10 +452,17 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
         if (is_hinting){
             for (CardController controller : this.cardcontrollers_on_hand){
                 if (controller.getCard() instanceof Land){
-                    controller.setHinting(true);
+                    if (!this.player.hasUsedLand){
+                        controller.setHinting(true);
+                    }else{
+                        controller.setHinting(false);
+                    }
                 }
                 else if (this.player.canSummon((Summonable) controller.getCard()))
                     controller.setHinting(true);
+                else{
+                    controller.setHinting(false);
+                }
             }
         }else{
             for (CardController controller : this.cardcontrollers_on_hand){

@@ -95,8 +95,7 @@ public class Game implements Publisher, Subscriber{
                     if (this.players[cur_player%2+1].getHealth()==0){
                         // TODO: publish player win
                     }
-                }                    
-                enemy_player_card.removeCard();
+                }
             }
         }
     }

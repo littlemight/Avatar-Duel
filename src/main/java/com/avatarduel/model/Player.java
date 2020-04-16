@@ -58,7 +58,7 @@ public class Player implements Publisher {
 
         for (Element e : Element.values()) {
 //            max_power.put(e, new SimpleIntegerProperty(0));
-            max_power.put(e, new SimpleIntegerProperty(100)); // buat testing
+            max_power.put(e, new SimpleIntegerProperty(2)); // buat testing
             power.put(e, new SimpleIntegerProperty(0));
         }
         hand = new ArrayList<Card>();
@@ -161,9 +161,9 @@ public class Player implements Publisher {
         boolean enough_power = this.getPower(el) >= summonable.getPower();
         boolean enough_zone = true;
         if (summonable instanceof Character) {
-            enough_zone = character_zone.size() < 8;
+            enough_zone = character_zone.size() < 6;
         } else { // its a skill
-            enough_zone = skill_zone.size() < 8;
+            enough_zone = skill_zone.size() < 6 && !character_zone.isEmpty();
         }
         return enough_power && enough_zone;
     }
