@@ -34,6 +34,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -344,19 +345,38 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
                         // System.out.println("Min : " + parent_bound.getMinX() + "," + parent_bound.getMinY());
                         // System.out.println("Max : " + parent_bound.getMaxX() + "," + parent_bound.getMaxY());
 
-                        Circle cir = new Circle();
-                        cir.setFill(Color.BROWN);
-                        cir.setRadius(50);
-                        cir.setLayoutY(50);
-                        cir.setLayoutX(50);
+                        StackPane cir = new StackPane();
+                        cir.setMaxSize(85,119);
+                        cir.setMinSize(85,119);
+                        cir.setPrefSize(85,119);
+                        cir.setStyle("-fx-background-color: BLACK");
+                        try {
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/Card.fxml"));
+                            loader.setControllerFactory(c -> new CardController(this.channel));
+                            StackPane mock = loader.load();
+                            mock.setMaxSize(85,119);
+                            mock.setMinSize(85,119);
+                            cir.getChildren().add(mock);
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                        /*
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/Card.fxml"));
+                        loader.setControllerFactory(c -> new CardController(this.channel));
+                        try {
+                            loader.load();
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                         */
 
                         // transition
                         TranslateTransition transition = new TranslateTransition();
-                        transition.setDuration(Duration.seconds(1));
-                        transition.setFromX(b.getMinX()-640);
-                        transition.setFromY(b.getMinY()-360);
-                        transition.setToX(target.getMinX()-640);
-                        transition.setToY(target.getMinY()-360);
+                        transition.setDuration(Duration.seconds(0.5));
+                        transition.setFromX(b.getMinX()-640-43-11);
+                        transition.setFromY(b.getMinY()-360+60-30);
+                        transition.setToX(target.getMinX()-640-43-11);
+                        transition.setToY(target.getMinY()-360+60-30);
                         transition.setNode(cir);
                         ((Pane)dragged_card_box.getParent().getParent()
                                 .getParent().getParent().getParent()
