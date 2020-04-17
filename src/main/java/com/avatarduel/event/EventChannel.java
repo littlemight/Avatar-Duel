@@ -5,5 +5,7 @@ public interface EventChannel {
 
     public void addPublisher(Publisher publisher);
 
+    public void removeComponent(Object o);
+
     public void addSubscriber(Publisher publisher, Subscriber subscriber);
 }

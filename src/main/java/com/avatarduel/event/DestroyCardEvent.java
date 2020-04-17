@@ -1,16 +1,16 @@
 package com.avatarduel.event;
 
-import com.avatarduel.model.card.Summoned;
+import com.avatarduel.model.card.Card;
 
 public class DestroyCardEvent implements Event {
-    private Summoned summoned;
+    private Card card;
 
-    public DestroyCardEvent(Summoned summoned) {
-        this.summoned = summoned;
+    public DestroyCardEvent(Card card) {
+        this.card = card;
     }
 
     @Override
     public Object getInfo() {
-        return this.summoned;
+        return this.card;
     }
 }

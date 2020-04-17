@@ -1,6 +1,7 @@
 package com.avatarduel.controller;
 
 import com.avatarduel.event.*;
+import com.avatarduel.model.ConfirmBox;
 import com.avatarduel.model.Element;
 import com.avatarduel.model.card.*;
 import com.avatarduel.model.card.Character;
@@ -57,11 +58,11 @@ public class CardController implements Initializable, Subscriber, Publisher {
 
     HBox card_attribute_box;
 
-    private EventChannel channel;
+    private BoardChannel channel;
     private Card card;
 
 
-    public CardController(EventChannel channel) {
+    public CardController(BoardChannel channel) {
         this.channel = channel;
         this.card = EmptyCard.getInstance();
     }
@@ -136,6 +137,25 @@ public class CardController implements Initializable, Subscriber, Publisher {
         back_logo.layoutYProperty().bind(card_box.heightProperty().multiply(0.5));
 
         setClosed();
+
+        this.card_front.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 2) {
+                switch (this.channel.getPhase()) {
+                    case DISCARD:
+                        if (ConfirmBox.display(e.getScreenX(), e.getScreenY(),
+                                "Discard " + this.card.getName(),
+                                "Discarding [" + this.card.getName() + "]")
+                        ) {
+                            this.destroy();
+                            publish(new DestroyCardEvent(this.card));
+                        }
+                        break;
+                    default:
+                        break;
+
+                }
+            }
+        });
     }
 
     /**
@@ -318,9 +338,15 @@ public class CardController implements Initializable, Subscriber, Publisher {
         }
     }
 
+    public void destroy() {
+        ((Pane)card_box.getParent()).getChildren().remove(card_box);
+    }
+
     @Override
     public void onEvent(Event event) {
-        setCard((Card)event.getInfo());
+        if (event instanceof HoverCardEvent) {
+            setCard((Card)event.getInfo());
+        }
     }
 
     @Override

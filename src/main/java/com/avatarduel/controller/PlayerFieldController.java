@@ -6,22 +6,17 @@ import com.avatarduel.model.Phase;
 import com.avatarduel.model.card.*;
 import com.avatarduel.event.CharacterSelectedEvent;
 import com.avatarduel.event.Event;
-import com.avatarduel.event.EventChannel;
 import com.avatarduel.event.NewCardDrawnEvent;
 import com.avatarduel.event.Publisher;
 import com.avatarduel.model.Player;
 import com.avatarduel.model.card.Character;
 import javafx.animation.FadeTransition;
 import javafx.animation.SequentialTransition;
-import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -31,8 +26,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.transform.Translate;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -162,6 +155,7 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
             loader.load();
             CardController controller = loader.getController();
             cardcontrollers_on_hand.add(controller);
+            channel.addSubscriber(controller, (Subscriber) channel.getMain());
             // Card drawn_card = this.player.drawCard();
             // if draw_card instanceof emptycard, then dont do anything, maybe send FailedDrawEvent
 
@@ -516,8 +510,9 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
 
     @Override
     public void onEvent(Event event) {
-       if (event instanceof DestroyCardEvent){
+       if (event instanceof DestroySummonedCardEvent){
            Summoned destroyed_card = (Summoned) event.getInfo();
+           this.channel.removeComponent(destroyed_card);
            if (destroyed_card instanceof SummonedCharacter){
                for (SummonedCharacterController summonedcard_controller : this.summonedchara_controllers){
                    if (summonedcard_controller.summoned_character.equals(destroyed_card)){

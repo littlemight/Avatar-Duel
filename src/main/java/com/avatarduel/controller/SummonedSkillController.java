@@ -135,6 +135,9 @@ public class SummonedSkillController implements Initializable, Publisher, Subscr
 
     @Override
     public void onEvent(Event event) {
-        this.destroy();
+        if (event instanceof DestroySummonedCardEvent){
+            this.destroy();
+            this.channel.removeComponent(this);
+        }
     }
 }

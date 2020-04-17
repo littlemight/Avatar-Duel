@@ -2,6 +2,7 @@ package com.avatarduel.controller;
 
 import com.avatarduel.Game;
 import com.avatarduel.event.*;
+import com.avatarduel.model.AlertBox;
 import com.avatarduel.model.Phase;
 import com.avatarduel.model.Player;
 import com.avatarduel.model.Position;
@@ -291,41 +292,57 @@ public class BoardController implements Initializable, Publisher, Subscriber {
             }
         } else if (event instanceof WinEvent) {
             this.changeWinScene((Player) event.getInfo());
+        } else if (event instanceof DestroyCardEvent) {
+            Card card = (Card) event.getInfo();
+            channel.removeComponent(card);
+            int prev_player = game_engine.getCurPlayer() % 2 + 1;
+            this.game_engine.getPlayer(prev_player).getHand().remove(card);
+            this.channel.setPhase(Phase.END);
         }
-        this.game_engine.getPlayer(1).anyCharOnField = this.game_engine
-                .getPlayer(2).anyCharOnField = this.game_engine.getPlayer(1).getCharacterZone().size() > 0
-                        || this.game_engine.getPlayer(2).getCharacterZone().size() > 0;
+        this.game_engine.getPlayer(1).anyCharOnField = this.game_engine.getPlayer(2).anyCharOnField =
+                this.game_engine.getPlayer(1).getCharacterZone().size() > 0 || this.game_engine.getPlayer(2).getCharacterZone().size() > 0;
     }
 
     public void proceedPhase(ActionEvent actionEvent) {
         phase_bar[phase_id].setStyle("-fx-background-color: darkgray;" + "-fx-color: dimgray");
-
         phase_id++;
-        if (phase_id == 1) {
-            this.player_controllers[this.channel.getPlayerID()].setHandHinting(true);
-        }
-        if (phase_id == 2) {
-            this.player_controllers[this.channel.getPlayerID()].setHandHinting(false);
-        }
-        if (phase_id == 3) {
-            if (!this.targeting.isEmpty()) {
-                this.targeting.get(0).toggleSelected();
-                for (SummonedCharacterController summonedchara_controller : this.player_controllers[this.channel
-                        .getPlayerID() % 2 + 1].getSummonedCharaController()) {
-                    summonedchara_controller.setHinting(false);
+
+        switch (phase_id) {
+            case 1:
+                this.player_controllers[this.channel.getPlayerID()].setHandHinting(true);
+                break;
+            case 2:
+                this.player_controllers[this.channel.getPlayerID()].setHandHinting(false);
+                break;
+            case 3:
+                if (!this.targeting.isEmpty()) {
+                    this.targeting.get(0).toggleSelected();
+                    for (SummonedCharacterController summonedchara_controller : this.player_controllers[this.channel
+                            .getPlayerID() % 2 + 1].getSummonedCharaController()) {
+                        summonedchara_controller.setHinting(false);
+                    }
+                    this.player_controllers[this.channel.getPlayerID() % 2 + 1].setHinting(false);
+                    this.targeting.clear();
                 }
-                this.player_controllers[this.channel.getPlayerID() % 2 + 1].setHinting(false);
-                this.targeting.clear();
-            }
+                break;
+            case 4:
+                int prev_player = game_engine.getCurPlayer() % 2 + 1;
+                if (this.game_engine.getPlayer(prev_player).getHand().size() > Player.MAX_HAND) {
+                    phase_id--;
+                    phase_bar[phase_id].setStyle("-fx-background-color: aquamarine;" + "-fx-color: black");
+                    this.channel.setPhase(Phase.DISCARD);
+                    AlertBox.display(1280 / 1.5, 720 / 1.5, "Hand card limit exceeded", "Discard one card to continue.");
+                    return;
+                }
+
+                for (int i = 1; i <= 2; i++) {
+                    this.player_controllers[i].flipHand();
+                }
+                break;
+            default:
+                break;
         }
-        if (phase_id == 4) {
-            // TODO: swap the player, flip each respective cards, toggle current player
-            // behavior, etc
-            for (int i = 1; i <= 2; i++) {
-                this.player_controllers[i].flipHand();
-            }
-            System.out.println("CURRENT PLAYER: " + this.game_engine.getCurPlayer());
-        }
+
         phase_id %= 4;
         this.game_engine.stageController(phases[phase_id]);
         if (phase_id == 0) {

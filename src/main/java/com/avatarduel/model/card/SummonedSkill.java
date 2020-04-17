@@ -1,7 +1,7 @@
 package com.avatarduel.model.card;
 
 import com.avatarduel.event.BoardChannel;
-import com.avatarduel.event.DestroyCardEvent;
+import com.avatarduel.event.DestroySummonedCardEvent;
 import com.avatarduel.event.Event;
 import com.avatarduel.event.Publisher;
 
@@ -33,7 +33,7 @@ public class SummonedSkill implements Summoned, Publisher {
 
     public void removeCard() {
         this.applied_to.removeSkill(this);
-        publish(new DestroyCardEvent(this));
+        publish(new DestroySummonedCardEvent(this));
     }
 
     @Override

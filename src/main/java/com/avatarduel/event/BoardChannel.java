@@ -63,6 +63,19 @@ public class BoardChannel implements EventChannel {
     }
 
     @Override
+    public void removeComponent(Object o) {
+        if (subscribers.get(o) == null) {
+            return;
+        }
+        subscribers.remove(o);
+        for (Map.Entry<Publisher, List<Subscriber>> entry: subscribers.entrySet()) {
+            if (entry.getValue().contains(o)) {
+                entry.getValue().remove(o);
+            }
+        }
+    }
+
+    @Override
     public void addSubscriber(Publisher publisher, Subscriber subscriber) {
         addPublisher(publisher);
         subscribers.get(publisher).add(subscriber);

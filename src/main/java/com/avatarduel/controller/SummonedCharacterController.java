@@ -1,8 +1,6 @@
 package com.avatarduel.controller;
 
 import com.avatarduel.event.*;
-import com.avatarduel.model.Phase;
-import com.avatarduel.model.card.Card;
 import com.avatarduel.model.card.EmptyCard;
 import com.avatarduel.model.card.SummonedCharacter;
 import javafx.fxml.FXML;
@@ -182,8 +180,9 @@ public class SummonedCharacterController implements Initializable, Publisher, Su
 
     @Override
     public void onEvent(Event event) {
-        if (event instanceof DestroyCardEvent){
+        if (event instanceof DestroySummonedCardEvent){
             this.destroy();
+            this.channel.removeComponent(this);
         } else if (event instanceof PhaseChangedEvent){
 //            this.phase = (Phase) event.getInfo();
         }

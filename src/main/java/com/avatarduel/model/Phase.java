@@ -5,5 +5,6 @@ public enum Phase {
     MAIN,
     SKILLPICK,
     BATTLE,
-    END
+    END,
+    DISCARD
 }
