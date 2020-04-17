@@ -60,7 +60,7 @@ public class Player implements Publisher {
 
         for (Element e : Element.values()) {
 //            max_power.put(e, new SimpleIntegerProperty(0));
-            max_power.put(e, new SimpleIntegerProperty(100)); // buat testing
+            max_power.put(e, new SimpleIntegerProperty(0)); // buat testing
             power.put(e, new SimpleIntegerProperty(0));
         }
         hand = new ArrayList<Card>();
@@ -189,6 +189,7 @@ public class Player implements Publisher {
             summoned_card = new SummonedSkill((Skill) summonable);
             skill_zone.add((SummonedSkill) summoned_card);
         }
+        this.hand.remove((Card)summonable);
         return summoned_card;
     }
 

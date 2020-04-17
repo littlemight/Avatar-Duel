@@ -2,19 +2,19 @@ package com.avatarduel.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import com.avatarduel.model.card.*;
 
 import com.avatarduel.model.card.Character;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.scene.paint.Paint;
-import javafx.util.Pair;
 
 public class Deck {
     private List<Card> deck;
     private IntegerProperty neff;
     private int size;
+    private int turn=0; // increase the chance of getting land for the first 10 turns
 
     public Deck(){
         this.deck = new ArrayList<Card>();
@@ -94,7 +94,9 @@ public class Deck {
                 count[2]++;
             }
         }
+        count[1]+=(ThreadLocalRandom.current().nextInt((turn%3), 5)*(turn%3));
         int pickedCard = Math.max((Math.max(count[0], count[1])), count[2]*2);
+        if (turn < 12) turn++;
         this.neff.setValue(this.neff.getValue()-1);
         if (pickedCard==count[1]){
             this.deck.remove(pickedLand);

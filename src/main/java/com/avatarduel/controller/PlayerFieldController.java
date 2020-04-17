@@ -281,6 +281,7 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
 
                     this.player.addPower(dragged_card.getElement());
                     player.hasUsedLand = true;
+                    player.getHand().remove(dragged_card);
                 }
                 dragged_card = null;
             }
