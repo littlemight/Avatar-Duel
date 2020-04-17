@@ -5,9 +5,9 @@ public enum Element {
   FIRE("card/image/element/fire.png"),
   AIR("card/image/element/air.png"),
   EARTH("card/image/element/earth.png"),
-  ENERGY("card/image/element/water.png");
+  ENERGY("card/image/element/energy.png");
 
-  String path; // or maybe asset file path, buat logo
+  String path;
   private Element(String path) {
     this.path = path;
   }

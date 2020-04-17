@@ -19,14 +19,14 @@
                   <Pane fx:id="hover_card_pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="343.0" prefWidth="245.0" VBox.vgrow="ALWAYS" />
                   <VBox fx:id="summoned_box" minHeight="250.0" minWidth="200.0" prefHeight="370.0" prefWidth="246.0" spacing="10.0">
                      <children>
-                        <Label fx:id="summoned_name" prefHeight="50.0" prefWidth="236.0" text="Hovered Summoned Card" textFill="#f19b73">
+                        <Label fx:id="summoned_name" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: #5E503F;" text="Hovered Summoned Card" textFill="#f19b73">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
                            <padding>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding></Label>
-                        <Label fx:id="summoned_description" alignment="TOP_LEFT" prefHeight="317.0" prefWidth="236.0" text="Hovered Summoned Description" textFill="#fed0ab" wrapText="true">
+                        <Label fx:id="summoned_description" alignment="TOP_LEFT" prefHeight="284.0" prefWidth="236.0" style="-fx-background-color: #5E503F;" text="Hovered Summoned Description" textFill="#fed0ab" wrapText="true">
                            <font>
                               <Font size="16.0" />
                            </font>
@@ -49,7 +49,7 @@
          <children>
             <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Pane fx:id="player2_pane" maxHeight="-Infinity" prefHeight="350.0" prefWidth="1024.0" style="-fx-background-color: DEDACC;" />
+                  <Pane fx:id="player2_pane" maxHeight="-Infinity" prefHeight="340.0" prefWidth="1024.0" style="-fx-background-color: DEDACC;" />
                   <AnchorPane VBox.vgrow="ALWAYS">
                      <VBox.margin>
                         <Insets />
@@ -85,7 +85,7 @@
                         </HBox>
                      </children>
                   </AnchorPane>
-                  <Pane fx:id="player1_pane" maxHeight="-Infinity" prefHeight="350.0" prefWidth="1024.0" style="-fx-background-color: DEDACC;" />
+                  <Pane fx:id="player1_pane" maxHeight="-Infinity" prefHeight="340.0" prefWidth="1024.0" style="-fx-background-color: DEDACC;" />
                </children>
             </VBox>
          </children>

@@ -15,113 +15,24 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="player_field" style="-fx-background-color: #3A1C0B;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.avatarduel.controller.PlayerFieldController">
+<AnchorPane fx:id="player_field" prefHeight="340.0" prefWidth="1024.0" style="-fx-background-color: #3A1C0B;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.avatarduel.controller.PlayerFieldController">
    <children>
-      <VBox layoutX="5.0" layoutY="5.0" prefHeight="59.0" prefWidth="1023.0" spacing="10.0">
-         <children>
-            <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0">
-               <children>
-                  <Label text="P2" textFill="#aedbf6">
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="player_name" contentDisplay="RIGHT" prefHeight="20.0" prefWidth="240.0" text="A very very very very long username" textFill="#aedbf6">
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <ProgressBar fx:id="player_hp_bar" prefHeight="18.0" prefWidth="687.0" progress="1.0" />
-                  <Label fx:id="player_hp_value" text="80" textFill="#e8d9a2">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <Label prefHeight="20.0" prefWidth="23.0" text="HP" textFill="#ff9008">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
-            <HBox fx:id="player_home" prefHeight="31.0" prefWidth="1023.0" spacing="15.0">
-               <children>
-                  <ImageView fx:id="player_photo" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true">
-                     <image>
-                        <Image url="@../card/image/placeholder_2.png" />
-                     </image>
-                     <HBox.margin>
-                        <Insets bottom="10.0" top="10.0" />
-                     </HBox.margin>
-                  </ImageView>
-                  <StackPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="122.0" prefWidth="87.0" style="-fx-border-color: black;">
-                     <children>
-                        <Circle fill="#a6b5c3" radius="26.0" stroke="TRANSPARENT" strokeType="INSIDE" />
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: #EBF1ED;">
-                           <children>
-                              <Label fx:id="deck_neff" alignment="CENTER" prefHeight="42.0" text="12">
-                                 <font>
-                                    <Font size="16.0" />
-                                 </font>
-                              </Label>
-                              <Label alignment="CENTER" prefHeight="42.0" text="/">
-                                 <font>
-                                    <Font size="16.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="deck_size" alignment="CENTER" prefHeight="42.0" text="64">
-                                 <font>
-                                    <Font size="16.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </HBox>
-                     </children>
-                     <HBox.margin>
-                        <Insets right="15.0" />
-                     </HBox.margin>
-                  </StackPane>
-                  <HBox fx:id="player_hand" alignment="CENTER" prefHeight="122.0" prefWidth="776.0" spacing="25.0" style="-fx-border-color: EAB56B; -fx-background-color: #3A1C0B;">
-                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                  </HBox>
-               </children>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-            </HBox>
-         </children>
-      </VBox>
-      <HBox layoutX="5.0" layoutY="177.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="169.0" prefWidth="1014.0" spacing="5.0">
+      <HBox layoutX="5.0" layoutY="164.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="169.0" prefWidth="1014.0" spacing="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
          <children>
             <GridPane fx:id="power_pane" alignment="CENTER" prefHeight="186.0" prefWidth="100.0" style="-fx-background-color: #704125;">
                <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="55.0" minWidth="10.0" prefWidth="39.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="73.0" minWidth="10.0" prefWidth="59.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="35.0" percentWidth="35.0" prefWidth="39.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="65.0" prefWidth="59.0" />
                </columnConstraints>
                <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" percentHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" percentHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" percentHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" percentHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" percentHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Label text="Earth" textFill="#65c751" />
-                  <Label text="Fire" textFill="#f3a720" GridPane.rowIndex="1" />
-                  <Label text="Water" textFill="#7fe5ff" GridPane.rowIndex="2" />
-                  <Label text="Air" textFill="#f9f4e3" GridPane.rowIndex="3" />
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="59.0" GridPane.columnIndex="1">
                      <children>
                         <Label fx:id="earth_power" prefHeight="42.0" text="5" textFill="#65c751">
                            <font>
@@ -161,17 +72,17 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <children>
-                        <Label fx:id="water_power" prefHeight="42.0" text="5" textFill="#7fe5ff">
+                        <Label fx:id="water_power" prefHeight="42.0" text="5" textFill="#85dde1">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <Label prefHeight="42.0" text="/" textFill="#7fe5ff">
+                        <Label prefHeight="42.0" text="/" textFill="#85dde1">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <Label fx:id="water_max" prefHeight="42.0" text="5" textFill="#7fe5ff">
+                        <Label fx:id="water_max" prefHeight="42.0" text="5" textFill="#85dde1">
                            <font>
                               <Font size="16.0" />
                            </font>
@@ -190,43 +101,67 @@
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <Label fx:id="air_max" prefHeight="42.0" prefWidth="9.0" text="5" textFill="#f9f4e3">
+                        <Label fx:id="air_max" prefHeight="42.0" text="5" textFill="#f9f4e3">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Label>
                      </children>
                   </HBox>
-                  <Label text="Energy" textFill="#f8c414" GridPane.rowIndex="4" />
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                      <children>
-                        <Label fx:id="energy_power" prefHeight="42.0" text="5" textFill="#f8c414">
+                        <Label fx:id="energy_power" prefHeight="42.0" text="5" textFill="#d796ea">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <Label prefHeight="42.0" prefWidth="10.0" text="/" textFill="#f8c414">
+                        <Label prefHeight="42.0" prefWidth="10.0" text="/" textFill="#d796ea">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <Label fx:id="energy_max" prefHeight="42.0" prefWidth="9.0" text="5" textFill="#f8c414">
+                        <Label fx:id="energy_max" prefHeight="42.0" text="5" textFill="#d796ea">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Label>
                      </children>
                   </HBox>
+                  <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@../card/image/element/earth.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" GridPane.rowIndex="1">
+                     <image>
+                        <Image url="@../card/image/element/fire.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" GridPane.rowIndex="2">
+                     <image>
+                        <Image url="@../card/image/element/water.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" GridPane.rowIndex="3">
+                     <image>
+                        <Image url="@../card/image/element/air.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="4">
+                     <image>
+                        <Image url="@../card/image/element/energy.png" />
+                     </image>
+                  </ImageView>
                </children>
             </GridPane>
-            <GridPane fx:id="player_zone" alignment="CENTER" gridLinesVisible="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="169.0" prefWidth="907.0" style="-fx-background-color: DEDACC;">
+            <GridPane fx:id="player_zone" gridLinesVisible="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="169.0" prefWidth="907.0" style="-fx-border-color: black; -fx-background-color: DEDACC;">
                <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" percentWidth="16.67" prefWidth="114.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" percentWidth="16.67" prefWidth="114.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" percentWidth="16.67" prefWidth="114.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" percentWidth="16.67" prefWidth="114.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" percentWidth="16.67" prefWidth="114.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" percentWidth="16.67" prefWidth="114.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="16.67" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="16.67" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="16.67" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="16.67" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="16.67" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="16.67" />
                </columnConstraints>
                <rowConstraints>
                   <RowConstraints minHeight="10.0" percentHeight="50.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -235,5 +170,82 @@
             </GridPane>
          </children>
       </HBox>
+      <VBox layoutX="5.0" layoutY="5.0" minWidth="-Infinity" prefHeight="127.0" prefWidth="966.0" spacing="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+               <children>
+                  <Label text="P2" textFill="#0098f0">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="player_name" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="20.0" prefWidth="80.0" text="Zuko" textFill="#0098f0">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <ProgressBar fx:id="player_hp_bar" prefHeight="18.0" prefWidth="843.0" progress="0.43" />
+                  <Label fx:id="player_hp_value" minWidth="-Infinity" prefWidth="25.0" text="80" textFill="#e8d9a2">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label minWidth="-Infinity" prefHeight="20.0" prefWidth="23.0" text="HP" textFill="#ff9008">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox fx:id="player_home" minHeight="-Infinity" minWidth="-Infinity" prefHeight="130.0" prefWidth="1023.0" spacing="15.0">
+               <children>
+                  <StackPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="122.0" prefWidth="87.0" style="-fx-border-color: black;">
+                     <children>
+                        <Circle fill="#a6b5c3" radius="26.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+                        <HBox alignment="CENTER" prefHeight="120.0" prefWidth="85.0" style="-fx-border-color: DEDACC;">
+                           <children>
+                              <Label fx:id="deck_neff" alignment="CENTER" prefHeight="42.0" text="12">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                              <Label alignment="CENTER" prefHeight="42.0" text="/">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="deck_size" alignment="CENTER" prefHeight="42.0" text="64">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </StackPane>
+                  <HBox fx:id="player_hand" alignment="CENTER" prefHeight="120.0" prefWidth="904.0" spacing="25.0" style="-fx-border-color: EAB56B; -fx-background-color: #D69F7E;">
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </HBox>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>

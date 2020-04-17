@@ -150,10 +150,12 @@ public class SummonedCharacterController implements Initializable, Publisher, Su
 
     public void toggleSelected(){
         if (is_selected){
-            this.base_card_pane.setStyle("");
+//            this.base_card_pane.setStyle("");
+            this.base_card_pane.setEffect(null);
             is_selected=false;
         }else{
-            this.base_card_pane.setStyle("-fx-border-color: #e00004; -fx-border-width:  6");
+//            this.base_card_pane.setStyle("-fx-border-color: #e00004; -fx-border-width:  6");
+            this.base_card_pane.setEffect(new DropShadow(50f, Color.DODGERBLUE));
             is_selected=true;
         }
     }
