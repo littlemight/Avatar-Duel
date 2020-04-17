@@ -95,7 +95,7 @@ public class Deck {
             }
         }
         count[1]+=(ThreadLocalRandom.current().nextInt((turn%3), 5)*(turn%3));
-        int pickedCard = Math.max((Math.max(count[0], count[1])), count[2]*2);
+        int pickedCard = Math.max((Math.max(count[0], count[1])), count[2]*(2*((turn+1)%2)));
         if (turn < 12) turn++;
         this.neff.setValue(this.neff.getValue()-1);
         if (pickedCard==count[1]){
