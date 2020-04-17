@@ -93,7 +93,7 @@ public class Game implements Publisher, Subscriber{
                 if (enemy_player_card.getPosition()==Position.ATTACK || cur_player_card.checkPowerUp()>0){
                     this.players[cur_player%2+1].decreaseHealth(cur_player_card.getCombatValue()-enemy_player_card.getCombatValue());
                     if (this.players[cur_player%2+1].getHealth()==0){
-                        // TODO: publish player win
+                        publish(new WinEvent(this.players[cur_player]));
                     }
                 }
                 enemy_player_card.removeCard();
@@ -106,7 +106,7 @@ public class Game implements Publisher, Subscriber{
             cur_player_card.setHasAttacked(true);
             this.players[cur_player%2+1].decreaseHealth(cur_player_card.getCombatValue());
             if (this.players[cur_player%2+1].getHealth()==0){
-                // TODO: publish player win
+                publish(new WinEvent(this.players[cur_player]));
             }
         }
     }

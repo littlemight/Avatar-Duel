@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.media.MediaView?>
+<?import javafx.scene.text.Font?>
+
+<SplitPane fx:id="board" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #3A1C0B;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.avatarduel.controller.WinController">
+   <items>
+      <VBox alignment="TOP_CENTER">
+         <children>
+            <Label fx:id="winner" alignment="TOP_CENTER" contentDisplay="CENTER" onMouseClicked="#exitGame" text="Label" textAlignment="CENTER" textFill="#fff0d9">
+               <font>
+                  <Font name="Consolas" size="80.0" />
+               </font>
+            </Label>
+            <MediaView fx:id="video_port" fitHeight="480.0" fitWidth="858.0" />
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <padding>
+            <Insets top="100.0" />
+         </padding>
+      </VBox>
+   </items>
+</SplitPane>
