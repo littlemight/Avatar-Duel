@@ -26,8 +26,9 @@ public class AvatarDuel extends Application {
       channel.setMain(board_controller);
 
       Dealer dealer = new Dealer();
-      Player player1 = new Player("Aang", dealer.getDeck(ThreadLocalRandom.current().nextInt(40, 60 + 1)), channel);
-      Player player2 = new Player("The Aang", dealer.getDeck(ThreadLocalRandom.current().nextInt(40, 60 + 1)), channel);
+      int deckSize = ThreadLocalRandom.current().nextInt(40, 60 + 1);
+      Player player1 = new Player("Aang", dealer.getDeck(deckSize), channel);
+      Player player2 = new Player("The Aang", dealer.getDeck(deckSize), channel);
       Game game_engine = new Game(player1, player2, channel);
 
       Scene scene = new Scene(root, 1280, 720);

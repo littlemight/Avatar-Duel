@@ -303,6 +303,7 @@ public class BoardController implements Initializable, Publisher, Subscriber {
                 this.targeting.clear();
             }
         } else if (event instanceof WinEvent) {
+            this.music.stop();
             this.changeWinScene((Player) event.getInfo());
         } else if (event instanceof DestroyCardEvent) {
             Card card = (Card) event.getInfo();

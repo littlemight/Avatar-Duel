@@ -71,10 +71,13 @@ public class Game implements Publisher, Subscriber{
      * @param player : The player which going to draw phase
      */
     public void draw() {
-
-        this.players[this.cur_player].drawCard();
-        // when safe, reset player power
-        this.players[this.cur_player].resetPower();
+        if (this.players[cur_player].getDeck().getNeff().getValue()==0){
+            publish(new WinEvent(this.players[cur_player%2+1]));
+        }else{
+            this.players[this.cur_player].drawCard();
+            // when safe, reset player power
+            this.players[this.cur_player].resetPower();
+        }
 
     }
     // main

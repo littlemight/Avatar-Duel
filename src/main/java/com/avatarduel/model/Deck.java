@@ -14,7 +14,7 @@ public class Deck {
     private List<Card> deck;
     private IntegerProperty neff;
     private int size;
-    private int turn=0; // increase the chance of getting land for the first 10 turns
+    private int turn=0; // increase the chance of getting land for the first 12 draws
 
     public Deck(){
         this.deck = new ArrayList<Card>();
