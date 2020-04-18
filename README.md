@@ -4,15 +4,15 @@ Proyek ini merupakan tugas besar 2 mata kuliah IF2210-Pemrograman Berorientasi O
 
 ## Gameplay
 Berikut adalah beberapa aturan bermain
-* 1. Permainan dimainkan oleh dua orang secara bergantian yang terdiri atas Draw phase, Main Phase, Battle Phase, dan End Phase.
-* 2. Setiap pemain akan diberikan deck kartu dan memiliki 80 HP.
-* 3. Kartu yang diberikan dapat terdiri atas kartu karakter, kartu land, dan kartu skill. Tiap kartu bisa merupakan satu dari 5 elemen yang ada yaitu earth, air,water, fire, energy.
-* 3. Pada awal game, tiap pemain mengambil 7 kartu dari deck ketangan.
-* 4. Pada Draw phase , Pemain akan mendapatkan satu kartu dari deck milik pemain tersebut ke tangan
-* 5. Saat Main Phase, pemain dapat meletakan beberapa kartu karakterdalam posisi bertarung atau bertahan, mengubah posisi kartu di field, meletakan maksimal 1 kartu land, meletakkan kartu skill serta karakter yang dikenai skill tersebut, dan membuang kartu skill
-* 6. Battle Phase berlangsung dapat menggunakan karakter untuk menyerang lawan,tidak bisa menyerang HP lawan secara langsung.Setiap karakter hanya dapat menyerang maksimal satu kali.
-* 7. End Phase Pemain mengakhiri giliran pada phase ini. Lawan akan memulai giliran-nya, dimulai dari draw phase, dan seterusnya.
-* 8. Perlu diingat ketika endphase bisa jadi kartu ditangan penuh. Double click untuk discard sebuah kartu
+* Permainan dimainkan oleh dua orang secara bergantian yang terdiri atas Draw phase, Main Phase, Battle Phase, dan End Phase.
+* Setiap pemain akan diberikan deck kartu dan memiliki 80 HP.
+* Kartu yang diberikan dapat terdiri atas kartu karakter, kartu land, dan kartu skill. Tiap kartu bisa merupakan satu dari 5 elemen yang ada yaitu earth, air,water, fire, energy.
+* Pada awal game, tiap pemain mengambil 7 kartu dari deck ketangan.
+* Pada Draw phase , Pemain akan mendapatkan satu kartu dari deck milik pemain tersebut ke tangan
+* Saat Main Phase, pemain dapat meletakan beberapa kartu karakterdalam posisi bertarung atau bertahan, mengubah posisi kartu di field, meletakan maksimal 1 kartu land, meletakkan kartu skill serta karakter yang dikenai skill tersebut, dan membuang kartu skill
+* Battle Phase berlangsung dapat menggunakan karakter untuk menyerang lawan,tidak bisa menyerang HP lawan secara langsung.Setiap karakter hanya dapat menyerang maksimal satu kali.
+* End Phase Pemain mengakhiri giliran pada phase ini. Lawan akan memulai giliran-nya, dimulai dari draw phase, dan seterusnya.
+* Perlu diingat ketika endphase bisa jadi kartu ditangan penuh. Double click untuk discard sebuah kartu
 
 ![screen_1](some screenshot)
 
