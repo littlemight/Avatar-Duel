@@ -8,7 +8,7 @@ public enum Element {
   ENERGY("card/image/element/energy.png");
 
   String path;
-  private Element(String path) {
+  Element(String path) {
     this.path = path;
   }
 

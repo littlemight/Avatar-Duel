@@ -8,9 +8,22 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * ConfirmBox class used to make a new window and get confirmation of an action
+ */
 public class ConfirmBox {
+    /**
+     * The answer confirmed by the user
+     */
     static boolean answer;
 
+    /**
+     * Static function to display the window
+     * @param x coordinate for the window
+     * @param y coordinate for the window
+     * @param title title of the window
+     * @param message the message displayed
+     */
     public static boolean display(double x, double y, String title, String message) {
         Stage window = new Stage();
         window.setResizable(false);
