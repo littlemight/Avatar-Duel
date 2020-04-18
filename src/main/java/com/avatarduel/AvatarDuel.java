@@ -1,6 +1,5 @@
 package com.avatarduel;
 
-import java.io.File;
 import java.util.concurrent.ThreadLocalRandom;
 
 import com.avatarduel.controller.BoardController;
@@ -12,10 +11,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 public class AvatarDuel extends Application {
   @Override
@@ -33,14 +29,6 @@ public class AvatarDuel extends Application {
       Player player1 = new Player("Aang", dealer.getDeck(ThreadLocalRandom.current().nextInt(40, 60 + 1)), channel);
       Player player2 = new Player("The Aang", dealer.getDeck(ThreadLocalRandom.current().nextInt(40, 60 + 1)), channel);
       Game game_engine = new Game(player1, player2, channel);
-      
-      Media media = new Media(getClass().getResource("sfx/music.mp3").toURI().toString());
-      MediaPlayer music = new MediaPlayer(media);
-      music.setStartTime(Duration.seconds(0));
-      music.setStopTime(Duration.seconds(59));
-      music.setAutoPlay(true);
-      music.setCycleCount(MediaPlayer.INDEFINITE);
-      music.play();
 
       Scene scene = new Scene(root, 1280, 720);
       stage.setTitle("Avatar Duel");
