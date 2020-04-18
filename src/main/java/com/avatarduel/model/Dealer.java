@@ -10,7 +10,10 @@ import java.net.URISyntaxException;
 import com.avatarduel.model.card.*;
 import com.avatarduel.model.card.Character;
 import com.avatarduel.util.CSVReader;
-
+/**
+ * Dealer class is used to load the list of the card 
+ * and deck with good proportion
+ */
 public class Dealer {
     private List<Card> cards;
     private static final String LAND_CSV_FILE_PATH = "../card/data/land.csv";
@@ -19,6 +22,9 @@ public class Dealer {
     private static final String SKILL_POWER_UP_CSV_FILE_PATH = "../card/data/skill_power_up.csv";
     private static final String SKILL_DESTROY_CSV_FILE_PATH = "../card/data/skill_destroy.csv";
 
+    /**
+     * Default constructor for dealer
+     */
     public Dealer(){
       try{
         this.loadCards();
@@ -27,7 +33,11 @@ public class Dealer {
         System.out.println("Failed to load cards: " + e);
       }
     }
-    
+    /**
+     * Load the card from databases
+     * @throws IOException
+     * @throws URISyntaxException
+     */
     private void loadCards() throws IOException, URISyntaxException {
         File landCSVFile = new File(getClass().getResource(LAND_CSV_FILE_PATH).toURI());
         File characterCSVFile = new File(getClass().getResource(CHARACTER_CSV_FILE_PATH).toURI());
@@ -92,9 +102,14 @@ public class Dealer {
         }
       }
   
+    /**
+     * Getter for the deck
+     * with card proportion land : karakter : skill is 2 : 2 : 1
+     * @param n number of the card in the deck we want
+     * @return deck
+     */
     public Deck getDeck(int n){
 
-        // Proporsi yang disarankan perbandingan land : karakter : skill adalah 2 : 2 : 1
         Deck deck = new Deck(n);
         Collections.shuffle(cards);
 
