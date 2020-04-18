@@ -11,6 +11,7 @@ import com.avatarduel.model.card.Character;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
+import javafx.animation.TranslateTransition;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -98,6 +99,7 @@ public class BoardController implements Initializable, Publisher, Subscriber {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
+            board.setOpacity(0);
             /**
              * Initialize the hover card pane
              */
@@ -176,8 +178,17 @@ public class BoardController implements Initializable, Publisher, Subscriber {
                 player_controllers[i].flipRow();
             }
         }
+        FadeTransition fadeIn = new FadeTransition();
+        fadeIn.setDuration(Duration.seconds(1));
+        fadeIn.setNode(this.board);
+        fadeIn.setFromValue(0);
+        fadeIn.setToValue(1);
+        fadeIn.setOnFinished(e->{
         this.game_engine.setup();
         this.player_controllers[2].closeHand();
+            sleep(500,true);
+        });
+        fadeIn.play();
     }
 
     SummonedSkill placed_skill;
@@ -365,10 +376,18 @@ public class BoardController implements Initializable, Publisher, Subscriber {
 
         phase_bar[phase_id].setStyle("-fx-background-color: aquamarine;" + "-fx-color: black");
         System.out.println("CURRENT PHASE: " + phases[phase_id]);
+        if (phase_id==0) {sleep(500, true);}
     }
 
-    public void sleep(double ms) {
-        PauseTransition pause = new PauseTransition(Duration.millis(ms));
+    public void sleep(double ms, boolean is_skip) {
+        next_phase_btn.setDisable(true);
+        TranslateTransition pause = new TranslateTransition();
+        pause.setNode(board);
+        pause.setDelay(Duration.millis(ms));
+        pause.setOnFinished(e->{
+            next_phase_btn.setDisable(false);
+            if (is_skip){next_phase_btn.fire();}
+        });
         pause.play();
     }
 
