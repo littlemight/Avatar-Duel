@@ -10,74 +10,76 @@ import com.avatarduel.model.card.Character;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
+/**
+ * Deck class is a set of players card
+ */
 public class Deck {
     private List<Card> deck;
     private IntegerProperty neff;
     private int size;
     private int turn=0; // increase the chance of getting land for the first 12 draws
 
+    /**
+     * Default constructor of the deck
+     */
     public Deck(){
         this.deck = new ArrayList<Card>();
         this.neff = new SimpleIntegerProperty(0);
         this.size = 0;
     }
-
+    /**
+     * Deck constructor with the number of the deck's size
+     * @param n size of the deck
+     */
     public Deck(int n){
         this.deck = new ArrayList<Card>();
         this.neff = new SimpleIntegerProperty(0);
         this.size = n;
     }
-
+    /**
+     * Deck constructor with the list of card as parameter
+     * @param deck list of the card
+     */
     public Deck(List<Card> deck){
         this.deck = deck;
         this.size = deck.size();
         this.neff = new SimpleIntegerProperty(this.size);
     }
-    
+    /**
+     * Get Neff of the deck
+     * and return in integerproperty. So we can track changes 
+     * with the listener and automatically updates to the GUI
+     * @return neff of the deck
+     */
     public IntegerProperty getNeff(){
         return this.neff;
     }
 
+    /**
+     * Get Neff value
+     * @return neff in int
+     */
     public int getNeffValue(){
         return this.neff.getValue();
     }
 
+    /**
+     * Get Size of the deck
+     * @return Size of the deck
+     */
     public int getSize(){
         return this.size;
     }
 
     int charcnt = 0;
     int destcnt = 0;
+
+    /**
+     * Get card from the Balanced Card Draw
+     * @return Selected card
+     */
     public Card drawCard(){
-        // // startof custom draw
-        // // buat test, only draw 1 karakter + 1 destroy
-        // if (charcnt == 0) {
-        //     charcnt = 1;
-        //     for (Card card: this.deck) {
-        //         if (card instanceof Character) {
-        //             return card;
-        //         }
-        //     }
-        // }
-        // if (destcnt == 0) {
-        //     destcnt = 1;
-        //     for (Card card: this.deck) {
-        //         if (card instanceof Destroy) {
-        //             return card;
-        //         }
-        //     }
-        // }
 
-        // // dan cuman draw kartu skill
-        // while (this.deck.get(this.neff.getValue() - 1) instanceof Land ||
-        //         this.deck.get(this.neff.getValue() - 1) instanceof Character ||
-        //         this.deck.get(this.neff.getValue() - 1) instanceof Destroy
-        // ) {
-        //     this.neff.setValue(this.neff.getValue()-1);
-        // }
-        // // endof custom draw
-
-        // Make Balanced Card Draw
         int[] count = {0,0,0};
         Card pickedCharacter = null;
         Card pickedLand = null;
@@ -110,6 +112,10 @@ public class Deck {
         }
     }
 
+    /**
+     * Void to add the card to the deck
+     * @param card card want to be added
+     */
     public void addCard(Card card){
         this.deck.add(card);
         this.neff.setValue(this.neff.getValue()+1);
