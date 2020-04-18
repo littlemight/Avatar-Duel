@@ -27,6 +27,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.*;
+import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
@@ -68,6 +69,7 @@ public class BoardController implements Initializable, Publisher, Subscriber {
 
     Label[] phase_bar;
     AnchorPane[] player_fields;
+    MediaPlayer music;
 
     /**
      * The model It should be a class Game which has the deck, 2 players, and other
@@ -151,12 +153,12 @@ public class BoardController implements Initializable, Publisher, Subscriber {
             this.targeting = new ArrayList<SummonedCharacterController>(2);
 
             Media media = new Media(getClass().getResource("../sfx/music.mp3").toURI().toString());
-            MediaPlayer music = new MediaPlayer(media);
-            music.setStartTime(Duration.seconds(0));
-            music.setStopTime(Duration.seconds(59));
-            music.setAutoPlay(true);
-            music.setCycleCount(MediaPlayer.INDEFINITE);
-            music.play();
+            this.music = new MediaPlayer(media);
+            this.music.setStartTime(Duration.seconds(0));
+            this.music.setStopTime(Duration.seconds(59));
+            this.music.setAutoPlay(true);
+            this.music.setCycleCount(MediaPlayer.INDEFINITE);
+            this.music.play();
         } catch (Exception e) {
             // e.printStackTrace();
             System.out.println(e);
