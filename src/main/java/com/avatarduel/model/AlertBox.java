@@ -8,7 +8,17 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * AlertBox class that is used to make a new window and display an alert message to the user
+ */
 public class AlertBox {
+    /**
+     * Static function to display the window
+     * @param x coordinate for the window
+     * @param y coordinate for the window
+     * @param title title of the window
+     * @param message the message displayed
+     */
     public static void display(double x, double y, String title, String message) {
         Stage window = new Stage();
         window.setResizable(false);

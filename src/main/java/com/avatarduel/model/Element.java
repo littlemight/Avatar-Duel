@@ -1,5 +1,9 @@
 package com.avatarduel.model;
 
+/**
+ * Element enum for the card element.
+ * The string stores the asset path for each element
+ */
 public enum Element {
   WATER("card/image/element/water.png"),
   FIRE("card/image/element/fire.png"),
@@ -8,7 +12,7 @@ public enum Element {
   ENERGY("card/image/element/energy.png");
 
   String path;
-  private Element(String path) {
+  Element(String path) {
     this.path = path;
   }
 
