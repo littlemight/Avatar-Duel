@@ -82,7 +82,6 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
 
     public PlayerFieldController(BoardChannel channel) {
         this.channel = channel;
-        this.player = new Player();
 
     }
 
