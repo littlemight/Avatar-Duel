@@ -20,6 +20,9 @@ import javafx.scene.text.Font;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Controller class for {@link SummonedCharacter} cards attribute information
+ */
 public class SummonedCharacterController implements Initializable, Publisher, Subscriber {
     @FXML
     StackPane summoned_character_box;
@@ -43,10 +46,30 @@ public class SummonedCharacterController implements Initializable, Publisher, Su
     private int owner;
     BoardChannel channel;
 
+    /**
+     * Constructor for SummonedCharacterController
+     * @param channel channel for publishing/subscribing events
+     * @see PlayerFieldController
+     */
     public SummonedCharacterController(BoardChannel channel) {
         this.channel = channel;
     }
 
+    /**
+     * JavaFX FMXL initialize method.
+     * It is automatically called after loading the controller and its
+     * parameters is automatically injected by JavaFX<br>
+     * Binds FXML properties with the controller and board.
+     * Sets {@code onMouseClicked} and {@code onMouseEntered} events
+     * for {@link SkillCharacterPickedEvent} event.
+     * @param location
+     * The location used to resolve relative paths for the root object, or
+     * <tt>null</tt> if the location is not known.
+     * @param resources
+     * The resources used to localize the root object, or <tt>null</tt> if
+     * the root object was not localized.
+     * @see Initializable
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         summoned_character_box.prefHeightProperty().addListener(e -> {
@@ -89,18 +112,28 @@ public class SummonedCharacterController implements Initializable, Publisher, Su
         is_selected=false;
     }
 
+    /**
+     * Getter for {@code summoned_character}
+     * @return controller's {@code summoned_character} 
+     */
     public SummonedCharacter getSummonedCharacter() {
         return this.summoned_character;
     }
 
     /**
-     * Rotates the character card
+     * Rotates the summoned character card's graphic
      */
     private void rotateCharacter() {
         this.summoned_character.rotate();
         this.base_card_controller.rotate();
     }
 
+    /**
+     * Sets the summoned character card in control.
+     * Loads information from the card and sets corresponding
+     * resources of the card.
+     * @param summoned_character card to be controlled.
+     */
     public void setSummonedCharacter(SummonedCharacter summoned_character) {
         summoned_character.setChannel(channel);
         channel.addSubscriber(summoned_character, this);
@@ -128,36 +161,56 @@ public class SummonedCharacterController implements Initializable, Publisher, Su
         }
     }
 
+    /**
+     * Sets the owner of the card.
+     * @param owner owner of the card (player id)
+     */
     public void setOwner(int owner) {
         this.owner = owner;
     }
 
+    /**
+     * Event handler for {@link HoverSummonedCardEvent} to the card in hand.
+     * @param mouseEvent mouse events captured
+     */
     public void onMouseEnter(MouseEvent mouseEvent) {
         base_card_controller.publish(new HoverCardEvent(this.summoned_character.getBaseCard()));
         publish(new HoverSummonedCardEvent(this.summoned_character));
     }
 
+    /**
+     * Event handler for {@link HoverSummonedCardEvent} to the card in hand.
+     * @param mouseEvent mouse events captured
+     */
     public void onMouseExit(MouseEvent mouseEvent) {
         base_card_controller.publish(new HoverCardEvent(EmptyCard.getInstance()));
         publish(new HoverSummonedCardEvent(null));
     }
 
+    /**
+     * Destroys summoned card's graphic.
+     */
     public void destroy() {
         ((Pane)summoned_character_box.getParent()).getChildren().remove(summoned_character_box);
     }
 
+    /**
+     * Toggle card selected effect
+     */
     public void toggleSelected(){
         if (is_selected){
-//            this.base_card_pane.setStyle("");
             this.base_card_pane.setEffect(null);
             is_selected=false;
         }else{
-//            this.base_card_pane.setStyle("-fx-border-color: #e00004; -fx-border-width:  6");
             this.base_card_pane.setEffect(new DropShadow(50f, Color.DODGERBLUE));
             is_selected=true;
         }
     }
 
+    /**
+     * Sets hinting effect to the summoned card
+     * @param is_hinting true to activate effect
+     */
     public void setHinting(boolean is_hinting){
         if (is_hinting){
             this.base_card_pane.setEffect(new DropShadow(50f, Color.CRIMSON));
@@ -166,25 +219,41 @@ public class SummonedCharacterController implements Initializable, Publisher, Su
         }
     }
 
+    /**
+     * Sets character position in field/zone
+     * @param position column position of the card
+     */
     public void setPosition(int position){
         this.position = position;
     }
+
+    /**
+     * Getter for {@code position} in field/zone
+     * @return controller's {@code position}
+     */
     public int getPosition(){
         return this.position;
     }
 
+    /**
+     * Implemented from {@link Publisher} to publish to {@link BoardChannel}.
+     * @param event event sent to {@link BoardChannel}
+     */
     @Override
     public void publish(Event event) {
         this.channel.sendEvent(this, event);
     }
 
+    /**
+     * Implemented from {@link Subscriber} to listen from {@link BoardChannel}.
+     * @param event event sent from {@link BoardChannel}
+     * @see DestroySummonedCardEvent
+     */
     @Override
     public void onEvent(Event event) {
         if (event instanceof DestroySummonedCardEvent){
             this.destroy();
             this.channel.removeComponent(this);
-        } else if (event instanceof PhaseChangedEvent){
-//            this.phase = (Phase) event.getInfo();
         }
     }
 }

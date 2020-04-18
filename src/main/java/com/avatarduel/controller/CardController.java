@@ -22,7 +22,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
@@ -31,6 +30,9 @@ import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Controller class for Card class
+ */
 public class CardController implements Initializable, Subscriber, Publisher {
     @FXML
     Label card_name, card_type, card_description;
@@ -64,12 +66,33 @@ public class CardController implements Initializable, Subscriber, Publisher {
     private BoardChannel channel;
     private Card card;
 
-
+    /**
+     * Constructor for CardController
+     * @param channel channel for publishing/subscribing events
+     * @see PlayerFieldController
+     * @see SummonedCharacterController
+     * @see SummonedSkillController
+     * @see BoardController
+     */
     public CardController(BoardChannel channel) {
         this.channel = channel;
         this.card = EmptyCard.getInstance();
     }
 
+    /**
+     * JavaFX FMXL initialize method.
+     * It is automatically called after loading the controller and its
+     * parameters is automatically injected by JavaFX<br>
+     * Binds FXML properties with the card in control.
+     * Sets onMouseClicked event on {@code card_front} for discard event.
+     * @param location
+     * The location used to resolve relative paths for the root object, or
+     * <tt>null</tt> if the location is not known.
+     * @param resources
+     * The resources used to localize the root object, or <tt>null</tt> if
+     * the root object was not localized.
+     * @see Initializable
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Maintains aspect ratio
@@ -162,31 +185,49 @@ public class CardController implements Initializable, Subscriber, Publisher {
     }
 
     /**
+     * Sets {@code card_box} to become transparent to mouse events.
      * Useful when coupled with SummonedCharacter.fxml/SummonedSkill.fxml
-     * @param value True or false
+     * @param value true or false
      */
     public void setMouseTransparent(boolean value) {
         this.card_box.setMouseTransparent(value);
     }
 
+    /**
+     * Checks if the card is opened.
+     * @return true if visible
+     */
     public boolean isOpened() {
         return card_front.isVisible();
     }
 
+    /**
+     * Checks if the card is closed.
+     * @return true if closed
+     */
     public boolean isClosed() {
         return card_back.isVisible();
     }
 
+    /**
+     * Sets the card to be closed.
+     */
     public void setClosed() {
         card_front.setVisible(false);
         card_back.setVisible(true);
     }
 
+    /**
+     * Sets the card to be opened.
+     */
     public void setOpened() {
         card_front.setVisible(true);
         card_back.setVisible(false);
     }
 
+    /**
+     * Flips the card (front and back).
+     */
     public void flipCard() {
         if (card_front.isVisible()) {
             setClosed();
@@ -195,6 +236,12 @@ public class CardController implements Initializable, Subscriber, Publisher {
         }
     }
 
+    /**
+     * Sets the card in control.
+     * Loads information from the card and sets corresponding
+     * resources of the card.
+     * @param card card to be controlled.
+     */
     public void setCard(Card card) {
         if (card instanceof EmptyCard) {
             setClosed();
@@ -305,6 +352,10 @@ public class CardController implements Initializable, Subscriber, Publisher {
         this.card_element.setImage(image);
     }
 
+    /**
+     * Event handler for {@link HoverCardEvent} to the card in hand.
+     * @param mouseEvent mouse events captured
+     */
     public void onMouseEnter(MouseEvent mouseEvent) {
         if (isOpened()) {
             System.out.println("HOVERED: " + this.card.getName());
@@ -316,6 +367,10 @@ public class CardController implements Initializable, Subscriber, Publisher {
         }
     }
 
+    /**
+     * Event handler for {@link HoverCardEvent} to the card in hand.
+     * @param mouseEvent mouse events captured
+     */
     public void onMouseExit(MouseEvent mouseEvent) {
         if (isOpened()) {
             zoomOutTransition();
@@ -323,6 +378,9 @@ public class CardController implements Initializable, Subscriber, Publisher {
         }
     }
 
+    /**
+     * Animate card to zoom in when mouse hovering the card.
+     */
     public void zoomInTransition(){
         ScaleTransition zoom_card = new ScaleTransition(Duration.millis(250), this.card_box);
         zoom_card.setFromX(1);
@@ -332,6 +390,9 @@ public class CardController implements Initializable, Subscriber, Publisher {
         zoom_card.play();
     }
     
+    /**
+     * Animate card to zoom out when mouse finished hovering the card.
+     */
     public void zoomOutTransition(){
         ScaleTransition zoom_card = new ScaleTransition(Duration.millis(250), this.card_box);
         zoom_card.setFromX(1.2);
@@ -341,18 +402,34 @@ public class CardController implements Initializable, Subscriber, Publisher {
         zoom_card.play();
     }
 
+    /**
+     * Getter for {@code card_front}
+     * @return controller's {@code card_front} 
+     */
     public VBox getCardFront() {
         return this.card_front;
     }
 
+    /**
+     * Getter for {@code card_box}
+     * @return controller's {@code card_box} 
+     */
     public StackPane getContent() {
         return this.card_box;
     }
 
+    /**
+     * Getter for {@code card}
+     * @return controller's {@code card} 
+     */
     public Card getCard() {
         return this.card;
     }
 
+    /**
+     * Sets hinting effect to the card
+     * @param is_hinting true to activate effect
+     */
     public void setHinting(boolean is_hinting){
         if (is_hinting){
             this.card_front.setEffect(new DropShadow(20f, Color.PALEGREEN));
@@ -361,10 +438,18 @@ public class CardController implements Initializable, Subscriber, Publisher {
         }
     }
 
+    /**
+     * Destroys card's graphic.
+     */
     public void destroy() {
         ((Pane)card_box.getParent()).getChildren().remove(card_box);
     }
 
+    /**
+     * Implemented from {@link Subscriber} to listen from {@link BoardChannel}.
+     * @param event event sent from {@link BoardChannel}
+     * @see HoverCardEvent
+     */
     @Override
     public void onEvent(Event event) {
         if (event instanceof HoverCardEvent) {
@@ -372,11 +457,18 @@ public class CardController implements Initializable, Subscriber, Publisher {
         }
     }
 
+    /**
+     * Implemented from {@link Publisher} to publish to {@link BoardChannel}.
+     * @param event event sent to {@link BoardChannel}
+     */
     @Override
     public void publish(Event event) {
         this.channel.sendEvent(this, event);
     }
 
+    /**
+     * Rotates card's graphic by 90 degrees.
+     */
     public void rotate() {
         if (card_box.getRotate() == 0) {
             card_box.setRotate(90);

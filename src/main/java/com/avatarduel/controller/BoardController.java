@@ -5,20 +5,12 @@ import com.avatarduel.event.*;
 import com.avatarduel.model.AlertBox;
 import com.avatarduel.model.Phase;
 import com.avatarduel.model.Player;
-import com.avatarduel.model.Position;
 import com.avatarduel.model.card.*;
 import com.avatarduel.model.card.Character;
 
 import javafx.animation.FadeTransition;
-import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -28,7 +20,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.*;
-import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
@@ -83,19 +74,34 @@ public class BoardController implements Initializable, Publisher, Subscriber {
     private CardController hover_card_controller;
     private BoardChannel channel;
     private ArrayList<SummonedCharacterController> targeting;
+    SummonedSkill placed_skill;
 
+    /**
+     * Constructor for BoardController
+     * @param channel channel for publishing/subscribing events
+     */
     public BoardController(BoardChannel channel) {
         this.channel = channel;
         this.player_controllers = new PlayerFieldController[3];
         this.player_fields = new AnchorPane[3];
     }
 
-    /**
-     * For testing purposes
-     */
     Phase[] phases = new Phase[] { Phase.DRAW, Phase.MAIN, Phase.BATTLE, Phase.END };
     int phase_id = 0;
 
+    /**
+     * JavaFX FMXL initialize method.
+     * It is automatically called after loading the controller and its
+     * parameters is automatically injected by JavaFX<br>
+     * Binds FXML properties with the elements on board.
+     * @param location
+     * The location used to resolve relative paths for the root object, or
+     * <tt>null</tt> if the location is not known.
+     * @param resources
+     * The resources used to localize the root object, or <tt>null</tt> if
+     * the root object was not localized.
+     * @see Initializable
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
@@ -162,11 +168,14 @@ public class BoardController implements Initializable, Publisher, Subscriber {
             this.music.setCycleCount(MediaPlayer.INDEFINITE);
             this.music.play();
         } catch (Exception e) {
-            // e.printStackTrace();
             System.out.println(e);
         }
     }
 
+    /**
+     * Starts the game engine and subscribe to it.
+     * @param game_engine the game engine
+     */
     public void startGame(Game game_engine) {
         this.game_engine = game_engine;
         this.channel.addSubscriber(game_engine, this);
@@ -191,8 +200,19 @@ public class BoardController implements Initializable, Publisher, Subscriber {
         fadeIn.play();
     }
 
-    SummonedSkill placed_skill;
-
+    /**
+     * Implemented from {@link Subscriber} to listen from {@link BoardChannel}.
+     * @param event event sent from {@link BoardChannel}
+     * @see NewCardDrawnEvent
+     * @see NewSummonedCardEvent
+     * @see NewSkillCardPlaced
+     * @see SkillCharacterPickedEvent
+     * @see CharacterSelectedEvent
+     * @see PlayerSelectedEvent
+     * @see WinEvent
+     * @see DestroyCardEvent
+     * @see HoverCardEvent
+     */
     @Override
     public void onEvent(Event event) {
         if (event instanceof NewCardDrawnEvent || event instanceof NewSummonedCardEvent) {
@@ -248,23 +268,16 @@ public class BoardController implements Initializable, Publisher, Subscriber {
         } else if (event instanceof NewSkillCardPlaced) {
             System.out.println("New skill card placed");
             board.setCursor(Cursor.CROSSHAIR);
-
-            // TODO: lock player1 + 2 field except SummonedCharacter cards
             placed_skill = (SummonedSkill) event.getInfo();
-            // make all the summonedcharacter listen to a clicked event
             this.channel.setPhase(Phase.SKILLPICK);
         } else if (event instanceof SkillCharacterPickedEvent) {
             board.setCursor(Cursor.DEFAULT);
-
             SummonedCharacterController controller = (SummonedCharacterController) event.getInfo();
             placed_skill.setAppliedTo(controller.getSummonedCharacter());
             controller.getSummonedCharacter().addSkill(placed_skill);
-
-            // TODO: unlock the board
             this.channel.setPhase(Phase.MAIN);
             placed_skill = null;
         } else if (event instanceof CharacterSelectedEvent) {
-            // Setting Penarget
             ArrayList selected = (ArrayList) event.getInfo();
             SummonedCharacterController selected_card = (SummonedCharacterController) selected.get(0);
             Player selected_card_player = (Player) selected.get(1);
@@ -285,7 +298,6 @@ public class BoardController implements Initializable, Publisher, Subscriber {
                     this.targeting.add(selected_card);
                 }
             }
-            // Setting target
             else {
                 selected_card.toggleSelected();
                 this.targeting.add(selected_card);
@@ -303,7 +315,6 @@ public class BoardController implements Initializable, Publisher, Subscriber {
                 this.targeting.clear();
             }
         } else if (event instanceof PlayerSelectedEvent) {
-            // Setting Target, Penarget haruslah sudah ada yaitu kartu
             Player selected_player = (Player) event.getInfo();
             if (!this.targeting.isEmpty()) {
                 if (selected_player == game_engine.getPlayer(this.channel.getPlayerID() % 2 + 1)) {
@@ -327,6 +338,11 @@ public class BoardController implements Initializable, Publisher, Subscriber {
                 this.game_engine.getPlayer(1).getCharacterZone().size() > 0 || this.game_engine.getPlayer(2).getCharacterZone().size() > 0;
     }
 
+    /**
+     * Event handler for NP button ({@code next_phase_btn}) clicked.
+     * Circulates effects and phase-specific events.
+     * @param actionEvent event captured.
+     */
     public void proceedPhase(ActionEvent actionEvent) {
         phase_bar[phase_id].setStyle("-fx-background-color: darkgray;" + "-fx-color: dimgray");
         phase_id++;
@@ -379,6 +395,13 @@ public class BoardController implements Initializable, Publisher, Subscriber {
         if (phase_id==0) {sleep(500, true);}
     }
 
+    /**
+     * Make delay transition and activate NP Button click if 
+     * {@code is_skip} is active. Also disables NP Button for awhile
+     * and after transition it will be enabled again.
+     * @param ms delay time
+     * @param is_skip triggers next_phase_btn
+     */
     public void sleep(double ms, boolean is_skip) {
         next_phase_btn.setDisable(true);
         TranslateTransition pause = new TranslateTransition();
@@ -391,6 +414,10 @@ public class BoardController implements Initializable, Publisher, Subscriber {
         pause.play();
     }
 
+    /**
+     * Triggers transition before changing into win scene.
+     * @param winner the winner of the game
+     */
     public void changeWinScene(Player winner) {
         FadeTransition fadeOut = new FadeTransition();
         fadeOut.setDuration(Duration.seconds(2));
@@ -403,6 +430,10 @@ public class BoardController implements Initializable, Publisher, Subscriber {
         fadeOut.play();
     }
 
+    /**
+     * Load win scene for the specified winner.
+     * @param winner the winner of the game
+     */
     public void loadWinScene(Player winner){
         try {
             FXMLLoader win_loader = new FXMLLoader(getClass().getResource("../view/Win.fxml"));
@@ -417,6 +448,10 @@ public class BoardController implements Initializable, Publisher, Subscriber {
         }
     }
 
+    /**
+     * Implemented from {@link Publisher} to publish to {@link BoardChannel}.
+     * @param event event sent to {@link BoardChannel}
+     */
     @Override
     public void publish(Event event) {
         this.channel.sendEvent(this, event);

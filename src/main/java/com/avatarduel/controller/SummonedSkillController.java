@@ -17,6 +17,9 @@ import javafx.scene.text.Font;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Controller class for {@link SummonedSkill} cards attribute information
+ */
 public class SummonedSkillController implements Initializable, Publisher, Subscriber {
     @FXML
     StackPane summoned_skill_box;
@@ -37,10 +40,28 @@ public class SummonedSkillController implements Initializable, Publisher, Subscr
 
     BoardChannel channel;
 
+    /**
+     * Constructor for SummonedSkillController
+     * @param channel channel for publishing/subscribing events
+     * @see PlayerFieldController
+     */
     public SummonedSkillController(BoardChannel channel) {
         this.channel = channel;
     }
 
+    /**
+     * JavaFX FMXL initialize method.
+     * It is automatically called after loading the controller and its
+     * parameters is automatically injected by JavaFX<br>
+     * Binds FXML properties with the controller and board.
+     * @param location
+     * The location used to resolve relative paths for the root object, or
+     * <tt>null</tt> if the location is not known.
+     * @param resources
+     * The resources used to localize the root object, or <tt>null</tt> if
+     * the root object was not localized.
+     * @see Initializable
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         summoned_skill_box.prefHeightProperty().addListener(e -> {
@@ -51,6 +72,13 @@ public class SummonedSkillController implements Initializable, Publisher, Subscr
         description_box.prefHeightProperty().bind(summoned_skill_box.prefHeightProperty().multiply((double)(176) / 500));
     }
 
+    /**
+     * Sets the summoned skill card in control.
+     * Loads information from the card and sets corresponding resources of the card.
+     * Publish {@link NewSummonedCardEvent} and {@link NewSkillCardPlaced}.
+     * Sets {@code onMouseClicked} events to remove card.
+     * @param summoned_skill card to be controlled.
+     */
     public void setSummonedCharacter(SummonedSkill summoned_skill) {
         summoned_skill.setChannel(channel);
         channel.addSubscriber(summoned_skill, this);
@@ -64,7 +92,7 @@ public class SummonedSkillController implements Initializable, Publisher, Subscr
             description += "+DEF: " + ((Aura) base_card).getDeltaDef() + "\n";
         } else if (base_card instanceof PowerUp) {
             description += "PWR UP";
-        } else { // its a destroy card
+        } else {
             description += "DESTROY";
         }
         this.description_text.setText(description);
@@ -106,33 +134,61 @@ public class SummonedSkillController implements Initializable, Publisher, Subscr
         }
     }
 
+    /**
+     * Sets the owner of the card.
+     * @param owner owner of the card (player id)
+     */
     public void setOwner(int owner) {
         this.owner = owner;
     }
 
+    /**
+     * Event handler for {@link HoverSummonedCardEvent} to the card in field/zone.
+     * @param mouseEvent mouse events captured
+     */
     public void onMouseEnter(MouseEvent mouseEvent) {
         base_card_controller.publish(new HoverCardEvent(this.summoned_skill.getBaseCard()));
         publish(new HoverSummonedCardEvent(this.summoned_skill));
     }
 
+    /**
+     * Event handler for {@link HoverSummonedCardEvent} to the card in field/zone.
+     * @param mouseEvent mouse events captured
+     */
     public void onMouseExit(MouseEvent mouseEvent) {
         base_card_controller.publish(new HoverCardEvent(EmptyCard.getInstance()));
         publish(new HoverSummonedCardEvent(null));
     }
 
+    /**
+     * Destroys summoned card's graphic.
+     */
     public void destroy() {
         ((Pane)summoned_skill_box.getParent()).getChildren().remove(summoned_skill_box);
     }
     
+    /**
+     * Sets character position in field/zone
+     * @param position column position of the card
+     */
     public void setPosition(int position){
         this.position = position;
     }
 
+    /**
+     * Implemented from {@link Publisher} to publish to {@link BoardChannel}.
+     * @param event event sent to {@link BoardChannel}
+     */
     @Override
     public void publish(Event event) {
         this.channel.sendEvent(this, event);
     }
 
+    /**
+     * Implemented from {@link Subscriber} to listen from {@link BoardChannel}.
+     * @param event event sent from {@link BoardChannel}
+     * @see DestroySummonedCardEvent
+     */
     @Override
     public void onEvent(Event event) {
         if (event instanceof DestroySummonedCardEvent){

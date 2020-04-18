@@ -23,6 +23,7 @@ public class ConfirmBox {
      * @param y coordinate for the window
      * @param title title of the window
      * @param message the message displayed
+     * @return answer chosen
      */
     public static boolean display(double x, double y, String title, String message) {
         Stage window = new Stage();

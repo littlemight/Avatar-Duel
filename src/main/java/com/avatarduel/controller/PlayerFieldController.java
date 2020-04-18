@@ -74,17 +74,29 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
     private List<CardController> cardcontrollers_on_hand;
     private List<SummonedCharacterController> summonedchara_controllers;
     private List<SummonedSkillController> summonedskill_controllers;
-    private CardController dragged_card_controller; // dragging card from hand to field / element (buat land)
+    private CardController dragged_card_controller;
     private BoardChannel channel;
     private Player player;
-    private int player_id; // buat ngasih tau ini controller player 1 atau 2
+    private int player_id;
     private int character_row, skill_row;
 
+    /**
+     * Constructor for PlayerFieldController
+     * @param channel channel for publishing/subscribing events
+     * @see BoardController
+     */
     public PlayerFieldController(BoardChannel channel) {
         this.channel = channel;
 
     }
 
+    /**
+     * Sets the player in control.
+     * Loads information from the player and sets corresponding resources of the player.
+     * Sets the {@code card_front} to be draggable
+     * @param player_id player's id
+     * @param player player to be controlled
+     */
     public void setPlayer(int player_id, Player player) {
         this.player_id = player_id;
         this.player = player;
@@ -148,8 +160,6 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
             CardController controller = loader.getController();
             cardcontrollers_on_hand.add(controller);
             channel.addSubscriber(controller, (Subscriber) channel.getMain());
-            // Card drawn_card = this.player.drawCard();
-            // if draw_card instanceof emptycard, then dont do anything, maybe send FailedDrawEvent
 
             channel.addPublisher(controller);
             this.publish(new NewCardDrawnEvent(controller));
@@ -157,14 +167,10 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
             controller.setCard(drawn_card);
             StackPane card_box = controller.getContent();
 
-            card_box.prefHeightProperty().bind(this.player_hand.prefHeightProperty().subtract(10)); // kurang 10 gara2 padding
+            card_box.prefHeightProperty().bind(this.player_hand.prefHeightProperty().subtract(10));
             this.player_hand.getChildren().add(card_box);
             drawTransition(card_box);
 
-
-            /**
-             * Sets the card front to be draggable (jadi kalo di flip, card_backnya ga bisa di drag)
-             */
             VBox card_front = controller.getCardFront();
             card_front.setCursor(Cursor.HAND);
             card_front.setOnDragDetected(e -> {
@@ -186,6 +192,10 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
         }
     }
 
+    /**
+     * Animate card to move when mouse the player draws card.
+     * @param card_box the card box to be animated
+     */
     public void drawTransition(StackPane card_box){
         TranslateTransition move_card = new TranslateTransition(Duration.millis(700), card_box);
         move_card.setFromX(200);
@@ -193,6 +203,14 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
         move_card.play();
     }
 
+    /**
+     * Put summoned character into a controller.
+     * Adds its subscriber, owner, and position, then return the
+     * summoned character's box.
+     * @param summoned_character summoned character to be put into.
+     * @param position the summoned character's position in field/zone
+     * @return summoned character in box
+     */
     public StackPane addSummonedCharacterBox(SummonedCharacter summoned_character, int position) {
         StackPane summoned_character_box = null;
         try {
@@ -216,6 +234,14 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
         return summoned_character_box;
     }
 
+    /**
+     * Put summoned skill into a controller.
+     * Adds its subscriber, owner, and position, then return the
+     * summoned skill's box.
+     * @param summoned_skill summoned skill to be put into.
+     * @param position the summoned skill's position in field/zone
+     * @return summoned skill in box
+     */
     public StackPane addSummonedSkillBox(SummonedSkill summoned_skill, int position) {
         StackPane summoned_skill_box = null;
         try {
@@ -238,6 +264,21 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
         return summoned_skill_box;
     }
 
+    /**
+     * JavaFX FMXL initialize method.
+     * It is automatically called after loading the controller and its
+     * parameters is automatically injected by JavaFX<br>
+     * Binds FXML properties with the player in control.
+     * Sets {@code setOnDragOver} and {@code setOnDragDropped} event handler for consuming {@link Land}.
+     * Sets {@code setOnMouseClicked} event handler for Battle Phase interactions.
+     * @param location
+     * The location used to resolve relative paths for the root object, or
+     * <tt>null</tt> if the location is not known.
+     * @param resources
+     * The resources used to localize the root object, or <tt>null</tt> if
+     * the root object was not localized.
+     * @see Initializable
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         character_row = 0;
@@ -272,9 +313,6 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
             ) {
                 Card dragged_card = dragged_card_controller.getCard();
 
-                /**
-                 * Only receive summonable card
-                 */
                 if (dragged_card instanceof Land) {
                     Node dragged_card_box = dragged_card_controller.getContent();
                     ((Pane)dragged_card_box.getParent()).getChildren().remove(dragged_card_box);
@@ -291,7 +329,6 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
             if (this.channel.getPhase()==Phase.BATTLE){
                 System.out.println(summonedchara_controllers.size());
                 if (summonedchara_controllers.isEmpty()){
-                    // chara_controller.toggleSelected();
                     publish(new PlayerSelectedEvent(this.player));
                 }
             }
@@ -321,23 +358,15 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
                     return;
                 }
 
-
-                /**
-                 * Only receive summonable card
-                 */
                 if ((dragged_card instanceof Character && row == character_row) ||
                     (dragged_card instanceof Skill && row == skill_row)
                 ) {
                     if (player.canSummon((Summonable)dragged_card)) {
                         Node dragged_card_box = dragged_card_controller.getContent();
-                        // Make card
                         Bounds b = dragged_card_box.localToScene(dragged_card_box.getBoundsInLocal());
-                        // Bounds parent_bound = ((Pane)dragged_card_box.getParent()).localToScene(((Pane)dragged_card_box.getParent()).getBoundsInLocal());
                         Bounds target = zone_panes[row][col].localToScene(dragged_card_box.getBoundsInLocal());
                         System.out.println("Min : " + b.getMinX() + "," + b.getMinY());
                         System.out.println("Max : " + b.getMaxX() + "," + b.getMaxY());
-                        // System.out.println("Min : " + parent_bound.getMinX() + "," + parent_bound.getMinY());
-                        // System.out.println("Max : " + parent_bound.getMaxX() + "," + parent_bound.getMaxY());
 
                         StackPane cir = new StackPane();
                         cir.setMaxSize(85,119);
@@ -355,15 +384,6 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
                         } catch (IOException ex) {
                             ex.printStackTrace();
                         }
-                        /*
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/Card.fxml"));
-                        loader.setControllerFactory(c -> new CardController(this.channel));
-                        try {
-                            loader.load();
-                        } catch (IOException ex) {
-                            ex.printStackTrace();
-                        }
-                         */
 
                         // transition
                         TranslateTransition transition = new TranslateTransition();
@@ -384,7 +404,7 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
                         if (card instanceof SummonedCharacter) {
                             this.channel.addSubscriber((SummonedCharacter) card, this);
                             zone_panes[row][col].getChildren().add(this.addSummonedCharacterBox((SummonedCharacter) card, col));
-                        } else { // its a SummonedSkill
+                        } else {
                             this.channel.addSubscriber((SummonedSkill) card, this);
                             zone_panes[row][col].getChildren().add(this.addSummonedSkillBox((SummonedSkill) card, col));
                         }
@@ -396,7 +416,7 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
                         ft.setDuration(Duration.seconds(0.2));
                         ft.setNode(cir);
 
-                        // set to somewhere
+                        // move
                         TranslateTransition getOut = new TranslateTransition();
                         getOut.setToX(3000);
                         getOut.setToY(3000);
@@ -419,7 +439,6 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
             }
         });
         
-        // if (row==this.character_row){
         zone_panes[row][col].setOnMouseClicked(e -> {
             if (zone_panes[row][col].getChildren().isEmpty()) {
                 return;
@@ -428,9 +447,8 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
                 case MAIN:
                     break;
                 case BATTLE:
-                    for (SummonedCharacterController chara_controller :summonedchara_controllers){
+                    for (SummonedCharacterController chara_controller : summonedchara_controllers){
                         if (chara_controller.getPosition()==col) {
-                            // chara_controller.toggleSelected();
                             publish(new CharacterSelectedEvent(chara_controller, this.player));
                             break;
                         }
@@ -438,7 +456,6 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
                     break;
                 default:
                     break;
-
             }
         });
     }
@@ -451,28 +468,45 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
         skill_row ^= 1;
     }
 
+    /**
+     * Sets all controllers in hand to be closed.
+     */
     public void closeHand() {
         for (CardController controller: cardcontrollers_on_hand) {
             controller.setClosed();
         }
     }
 
+    /**
+     * Sets all controllers in hand to be opened.
+     */
     public void openHand() {
         for (CardController controller: cardcontrollers_on_hand) {
             controller.setOpened();
         }
     }
 
+    /**
+     * Sets all controllers in hand to be flipped.
+     */
     public void flipHand() {
         for (CardController controller: cardcontrollers_on_hand) {
             controller.flipCard();
         }
     }
 
+    /**
+     * Getter for summoned character controllers
+     * @return controller's {@code summonedchara_controllers} 
+     */
     public List<SummonedCharacterController> getSummonedCharaController(){
         return this.summonedchara_controllers;
     }
 
+    /**
+     * Sets hinting effect to player's homebase.
+     * @param is_hinting true to activate effect
+     */
     public void setHinting(boolean is_hinting){
         if (is_hinting){
             this.player_home.setEffect(new DropShadow(50f, Color.CRIMSON));
@@ -481,6 +515,11 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
         }
     }
 
+    /**
+     * Sets hinting effect to all cards in player's hand.
+     * Can also be used to resets hand hinting effect.
+     * @param is_hinting true to activate effect
+     */
     public void setHandHinting(boolean is_hinting){
         if (is_hinting){
             for (CardController controller : this.cardcontrollers_on_hand){
@@ -504,11 +543,21 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
         }
     }
 
+    /**
+     * Implemented from {@link Publisher} to publish to {@link BoardChannel}.
+     * @param event event sent to {@link BoardChannel}
+     */
     @Override
     public void publish(Event event) {
         this.channel.sendEvent(this, event);
     }
 
+    /**
+     * Implemented from {@link Subscriber} to listen from {@link BoardChannel}.
+     * @param event event sent from {@link BoardChannel}
+     * @see DestroySummonedCardEvent
+     * @see CardDrawnEvent
+     */
     @Override
     public void onEvent(Event event) {
        if (event instanceof DestroySummonedCardEvent){

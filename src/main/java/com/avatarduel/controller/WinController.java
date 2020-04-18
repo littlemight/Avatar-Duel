@@ -17,6 +17,9 @@ import java.util.ResourceBundle;
 
 import com.avatarduel.model.Player;
 
+/**
+ * Controller class for Win Scene
+ */
 public class WinController implements Initializable {
     @FXML
     SplitPane board;
@@ -29,10 +32,28 @@ public class WinController implements Initializable {
 
     Player player_winner;
 
+    /**
+     * Constructor for WinController
+     * @param winner player that wins the game
+     * @see BoardController
+     */
     public WinController(Player winner) {
         this.player_winner = winner;
     }
 
+    /**
+     * JavaFX FMXL initialize method.
+     * It is automatically called after loading the controller and its
+     * parameters is automatically injected by JavaFX<br>
+     * Loads transition, player name, and win celebration video resource.
+     * @param location
+     * The location used to resolve relative paths for the root object, or
+     * <tt>null</tt> if the location is not known.
+     * @param resources
+     * The resources used to localize the root object, or <tt>null</tt> if
+     * the root object was not localized.
+     * @see Initializable
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         board.setOpacity(0);
@@ -40,6 +61,9 @@ public class WinController implements Initializable {
         fadeInTransition();
     }
 
+    /**
+     * Make fade in transition to the scene for 2 seconds when it loads
+     */
     public void fadeInTransition() {
         FadeTransition fadeIn = new FadeTransition();
         fadeIn.setDuration(Duration.seconds(2));
@@ -49,6 +73,9 @@ public class WinController implements Initializable {
         fadeIn.play();
     }
 
+    /**
+     * Loads player name and win celebration video resource.
+     */
     public void loadCelebration() {
         winner.setText("Congrats! " + this.player_winner.getName() + " wins!");
         try {
@@ -65,6 +92,9 @@ public class WinController implements Initializable {
         }
     }
 
+    /**
+     * exits the Game when window is clicked
+     */
     public void exitGame(){
         Platform.exit();
         System.exit(0);

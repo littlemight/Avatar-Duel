@@ -1,6 +1,5 @@
 package com.avatarduel.event;
 
-import com.avatarduel.controller.CardController;
 import com.avatarduel.model.card.Summoned;
 
 /**

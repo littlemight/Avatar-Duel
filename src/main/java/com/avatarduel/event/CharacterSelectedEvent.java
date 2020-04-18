@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 import com.avatarduel.controller.SummonedCharacterController;
 import com.avatarduel.model.Player;
-import com.avatarduel.model.card.Card;
-import com.avatarduel.model.card.SummonedCharacter;
 
 /**
  * Event class for character card being selected action
