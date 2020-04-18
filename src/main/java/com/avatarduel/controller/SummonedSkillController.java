@@ -117,11 +117,13 @@ public class SummonedSkillController implements Initializable, Publisher, Subscr
                 switch (this.channel.getPhase()) {
                     case MAIN:
                         if (e.getClickCount() == 2) {
-                            if (ConfirmBox.display(e.getScreenX(), e.getScreenY(),
-                            "Discard " + this.summoned_skill.getBaseCard().getName(),
-                        "Attached to [" + this.summoned_skill.getAppliedTo().getBaseCard().getName() + "]")
-                            ) {
-                                this.summoned_skill.removeCard();
+                            if (this.owner == this.channel.getPlayerID()){
+                                if (ConfirmBox.display(e.getScreenX(), e.getScreenY(),
+                                "Discard " + this.summoned_skill.getBaseCard().getName(),
+                            "Attached to [" + this.summoned_skill.getAppliedTo().getBaseCard().getName() + "]")
+                                ) {
+                                    this.summoned_skill.removeCard();
+                                }
                             }
                         }
                         break;
