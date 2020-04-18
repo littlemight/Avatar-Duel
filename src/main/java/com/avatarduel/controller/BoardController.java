@@ -371,7 +371,7 @@ public class BoardController implements Initializable, Publisher, Subscriber {
                     phase_id--;
                     phase_bar[phase_id].setStyle("-fx-background-color: aquamarine;" + "-fx-color: black");
                     this.channel.setPhase(Phase.DISCARD);
-                    AlertBox.display(1280 / 1.5, 720 / 1.5, "Hand card limit exceeded", "Discard one card to continue.");
+                    AlertBox.display(1280 / 1.5, 720 / 1.5, "Hand card limit exceeded", "Discard one card to continue.\nDouble Click to Discard.");
                     return;
                 }
 
