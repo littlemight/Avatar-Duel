@@ -2,9 +2,15 @@ package com.avatarduel.model.card;
 
 import com.avatarduel.model.Element;
 
+/**
+ * Abstract Class Skill that extends Card, this serves as a boilerplate for all type of Skill cards
+ */
 public abstract class Skill extends Card implements Summonable {
     private int power;
 
+    /**
+     * Default constructor
+     */
     public Skill() {
         super();
         this.power = 0;
@@ -15,10 +21,18 @@ public abstract class Skill extends Card implements Summonable {
         this.power = power;
     }
 
+    /**
+     * Getter for card power
+     * @return card power value
+     */
     public int getPower() {
         return this.power;
     }
 
+    /**
+     * Getter for card element
+     * @return card element
+     */
     public Element getElement() {
         return super.getElement();
     }

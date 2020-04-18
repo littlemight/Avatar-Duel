@@ -124,8 +124,6 @@ public class Player implements Publisher {
     }
 
     /**
-     * Asumsi: amount <= power(e)
-     * 
      * @param e      Element yang mana
      * @param amount Banyaknya power yang digunakan
      */
@@ -176,8 +174,8 @@ public class Player implements Publisher {
     /**
      * Asumsi: player mananya sudah cukup untuk summon kartu, dan zone gak penuh
      * 
-     * @param summonable
-     * @return
+     * @param summonable The summonable card which will be summoned into a Summoned card
+     * @return The summoned Card
      */
     public Summoned summonCard(Summonable summonable) {
         usePower(summonable.getElement(), summonable.getPower());

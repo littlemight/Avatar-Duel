@@ -137,17 +137,9 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
                 bind(this.player.getMaxPowerProperty(Element.ENERGY).asString());
     }
 
-    /**
-     * Ini supaya vbox nya bisa di drag and drop :')
-     */
     private static final DataFormat vbox_format = new DataFormat("javafx.scene.layout.VBox");
 
-    /**
-     * The draw function should be called a method of player/a MainController, this controller should only update the player field UI
-     * In the meantime, this function is for testing purposes only
-     *
-     * Draws from a card and puts it into the hand field
-     */
+
     public void draw(Card drawn_card) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/Card.fxml"));
         loader.setControllerFactory(c -> new CardController(this.channel));

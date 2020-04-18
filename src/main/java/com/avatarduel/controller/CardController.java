@@ -163,7 +163,7 @@ public class CardController implements Initializable, Subscriber, Publisher {
 
     /**
      * Useful when coupled with SummonedCharacter.fxml/SummonedSkill.fxml
-     * @param value
+     * @param value True or false
      */
     public void setMouseTransparent(boolean value) {
         this.card_box.setMouseTransparent(value);

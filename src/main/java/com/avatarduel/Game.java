@@ -68,7 +68,6 @@ public class Game implements Publisher, Subscriber{
      * "ngebuka kartu current player"
      * ensure balance (gak aura semua, gak land semua, dll). Constraints dsb dsb
      * Draw one card.
-     * @param player : The player which going to draw phase
      */
     public void draw() {
         if (this.players[cur_player].getDeck().getNeff().getValue()==0){
