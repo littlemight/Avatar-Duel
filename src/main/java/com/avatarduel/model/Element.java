@@ -1,5 +1,9 @@
 package com.avatarduel.model;
 
+/**
+ * Element enum for the card element.
+ * The string stores the asset path for each element
+ */
 public enum Element {
   WATER("card/image/element/water.png"),
   FIRE("card/image/element/fire.png"),
