@@ -63,6 +63,7 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
 
     @FXML
     public Label deck_neff, deck_size;
+    public HBox player_deck;
 
     @FXML
     ImageView player_photo;
@@ -167,6 +168,7 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
 
             card_box.prefHeightProperty().bind(this.player_hand.prefHeightProperty().subtract(10)); // kurang 10 gara2 padding
             this.player_hand.getChildren().add(card_box);
+            drawTransition(card_box);
 
 
             /**
@@ -191,6 +193,13 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
         } catch (Exception e) {
             System.out.println("IN DRAW: " + e);
         }
+    }
+
+    public void drawTransition(StackPane card_box){
+        TranslateTransition move_card = new TranslateTransition(Duration.millis(700), card_box);
+        move_card.setFromX(200);
+        move_card.setToX(0);
+        move_card.play();
     }
 
     public StackPane addSummonedCharacterBox(SummonedCharacter summoned_character, int position) {

@@ -5,6 +5,8 @@ import com.avatarduel.model.ConfirmBox;
 import com.avatarduel.model.Element;
 import com.avatarduel.model.card.*;
 import com.avatarduel.model.card.Character;
+
+import javafx.animation.ScaleTransition;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,6 +25,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
+import javafx.util.Duration;
 
 import java.io.File;
 import java.net.URL;
@@ -305,6 +308,7 @@ public class CardController implements Initializable, Subscriber, Publisher {
     public void onMouseEnter(MouseEvent mouseEvent) {
         if (isOpened()) {
             System.out.println("HOVERED: " + this.card.getName());
+            zoomInTransition();
             publish(new HoverCardEvent(this.card));
         } else {
             // do nothing lmao
@@ -314,8 +318,27 @@ public class CardController implements Initializable, Subscriber, Publisher {
 
     public void onMouseExit(MouseEvent mouseEvent) {
         if (isOpened()) {
+            zoomOutTransition();
             publish(new HoverCardEvent(EmptyCard.getInstance()));
         }
+    }
+
+    public void zoomInTransition(){
+        ScaleTransition zoom_card = new ScaleTransition(Duration.millis(250), this.card_box);
+        zoom_card.setFromX(1);
+        zoom_card.setFromY(1);
+        zoom_card.setToX(1.2);
+        zoom_card.setToY(1.2);
+        zoom_card.play();
+    }
+    
+    public void zoomOutTransition(){
+        ScaleTransition zoom_card = new ScaleTransition(Duration.millis(250), this.card_box);
+        zoom_card.setFromX(1.2);
+        zoom_card.setFromY(1.2);
+        zoom_card.setToX(1);
+        zoom_card.setToY(1);
+        zoom_card.play();
     }
 
     public VBox getCardFront() {
