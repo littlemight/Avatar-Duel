@@ -162,7 +162,7 @@ public class Dealer {
             if (card.getElement()!=e) continue;
             if ((card instanceof Character) && nk<=Math.round(portion)){
                 Character characterCard = (Character) card;
-                if (characterCard.getPower()>3 && p_count<=3) continue;
+                if (characterCard.getPower()>3 && p_count<=5) continue;
                 if (characterCard.getPower()<=3) p_count++;
                 deck.add(card);
                 nk++;
@@ -183,8 +183,10 @@ public class Dealer {
         while(nk+nl+ns<n){
             if (!it.hasNext()) it = cards.listIterator();
             Card card = it.next();
-            if (card.getElement()==e) continue;
             if ((card instanceof Character) && nk<=Math.round(portion*2)){
+                Character characterCard = (Character) card;
+                if (characterCard.getPower()>=3 && characterCard.getElement()!=e) continue;
+                if (characterCard.getPower()<3 && characterCard.getElement()==e) continue;
                 deck.add(card);
                 nk++;
             }
@@ -193,6 +195,8 @@ public class Dealer {
                 nl++;
             }
             else if ((card instanceof Skill) && (ns<=Math.round(portion) || (ns>=Math.round(portion) && nk+nl>=Math.round(portion*2)*2))){
+                Skill skillCard = (Skill) card;
+                if (skillCard.getPower()>=3 && skillCard.getElement()!=e) continue;
                 deck.add(card);
                 ns++;
             }
