@@ -363,13 +363,17 @@ public class BoardController implements Initializable, Publisher, Subscriber {
                     this.player_controllers[this.channel.getPlayerID() % 2 + 1].setHinting(false);
                     this.targeting.clear();
                 }
+
+                int cur_player = game_engine.getCurPlayer();
+                if (this.game_engine.getPlayer(cur_player).getHand().size() > Player.MAX_HAND) {
+                    this.channel.setPhase(Phase.DISCARD);
+                }
                 break;
             case 4:
                 int prev_player = game_engine.getCurPlayer() % 2 + 1;
                 if (this.game_engine.getPlayer(prev_player).getHand().size() > Player.MAX_HAND) {
                     phase_id--;
                     phase_bar[phase_id].setStyle("-fx-background-color: aquamarine;" + "-fx-color: black");
-                    this.channel.setPhase(Phase.DISCARD);
                     AlertBox.display(1280 / 1.5, 720 / 1.5, "Hand card limit exceeded", "Discard one card to continue.\nDouble Click to Discard.");
                     return;
                 }
@@ -387,7 +391,9 @@ public class BoardController implements Initializable, Publisher, Subscriber {
         if (phase_id == 0) {
             this.channel.setPlayerID(this.game_engine.getCurPlayer());
         }
-        this.channel.setPhase(phases[phase_id]);
+        if (this.channel.getPhase() != Phase.DISCARD) {
+            this.channel.setPhase(phases[phase_id]);
+        }
 
         phase_bar[phase_id].setStyle("-fx-background-color: aquamarine;" + "-fx-color: black");
         if (phase_id==0) {sleep(500, true);}
