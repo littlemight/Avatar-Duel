@@ -217,7 +217,6 @@ public class Game implements Publisher, Subscriber{
     @Override
     public void publish(Event event) {
         this.channel.sendEvent(this, event);
-
     }
 
     /**
@@ -231,6 +230,5 @@ public class Game implements Publisher, Subscriber{
         if (event instanceof PhaseChangedEvent){
             stageController((Phase)event.getInfo());
         }
-
     }
 }

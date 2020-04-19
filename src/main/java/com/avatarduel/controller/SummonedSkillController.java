@@ -79,8 +79,7 @@ public class SummonedSkillController implements Initializable, Publisher, Subscr
      * Sets {@code onMouseClicked} events to remove card.
      * @param summoned_skill card to be controlled.
      */
-    public void setSummonedCharacter(SummonedSkill summoned_skill) {
-        summoned_skill.setChannel(channel);
+    public void setSummonedSkill(SummonedSkill summoned_skill) {
         channel.addSubscriber(summoned_skill, this);
 
         this.summoned_skill = summoned_skill;

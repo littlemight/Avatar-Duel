@@ -135,7 +135,6 @@ public class SummonedCharacterController implements Initializable, Publisher, Su
      * @param summoned_character card to be controlled.
      */
     public void setSummonedCharacter(SummonedCharacter summoned_character) {
-        summoned_character.setChannel(channel);
         channel.addSubscriber(summoned_character, this);
         this.summoned_character = summoned_character;
 

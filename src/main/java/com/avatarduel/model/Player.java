@@ -269,6 +269,7 @@ public class Player implements Publisher {
             summoned_card = new SummonedSkill((Skill) summonable);
             skill_zone.add((SummonedSkill) summoned_card);
         }
+        summoned_card.setChannel(this.channel);
         this.hand.remove((Card)summonable);
         return summoned_card;
     }

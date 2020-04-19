@@ -250,7 +250,7 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
             summoned_skill_box = loader.load();
 
             SummonedSkillController controller = loader.getController();
-            controller.setSummonedCharacter(summoned_skill);
+            controller.setSummonedSkill(summoned_skill);
             controller.setOwner(this.player_id);
             controller.setPosition(position);
 
