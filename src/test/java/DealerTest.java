@@ -30,7 +30,7 @@ public class DealerTest {
     @Test
     public void test_dealerGetDeckIsProportional() {
         int num = ThreadLocalRandom.current().nextInt(40,60);
-        int tolerance = 3;
+        int tolerance = 4;
         Deck deck = dealer.getDeck(num);
         int c_count=0;
         int l_count=0;
@@ -46,8 +46,8 @@ public class DealerTest {
             }
         }
         System.out.println("num=" + num + " c_count=" + c_count + " l_count=" + l_count + " s_count=" + s_count + " tolerance=" + tolerance);
-        assertEquals(num*2/5, c_count, tolerance);
-        assertEquals(num*2/5, l_count, tolerance);
-        assertEquals(num/5, s_count, tolerance);
+        assertEquals(Math.round(num*2/5), c_count, tolerance);
+        assertEquals(Math.round(num*2/5), l_count, tolerance);
+        assertEquals(Math.round(num/5), s_count, tolerance);
     }
 }
