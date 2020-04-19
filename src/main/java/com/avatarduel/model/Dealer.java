@@ -1,5 +1,6 @@
 package com.avatarduel.model;
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.ArrayList;
@@ -154,6 +155,7 @@ public class Dealer {
         //Gets the main elemental cards
         ListIterator<Card> it = cards.listIterator();
         List<Card> deck = new ArrayList<Card>();
+        List<Card> domiland = new ArrayList<Card>();
         while(nk+nl+ns<Math.round(n/2)){
             if (!it.hasNext()) it = cards.listIterator();
             Card card = it.next();
@@ -166,7 +168,7 @@ public class Dealer {
                 nk++;
             }
             else if ((card instanceof Land) && nl<=Math.round(portion)){
-                deck.add(card);
+                domiland.add(card);
                 nl++;
             }
             else if ((card instanceof Skill) && (ns<=Math.round(portion/2) || (ns>=Math.round(portion/2) && nk+nl>=Math.round(portion)*2))){
@@ -196,6 +198,40 @@ public class Dealer {
             }
         }
         Collections.shuffle(deck);
-        return new Deck(deck);
+
+        float early_portion = n / 4;
+        int cnt = Math.round(early_portion + 3);
+        List<Card> early = new ArrayList<Card>();
+        List<Card> rest = new ArrayList<Card>();
+        for (int i = 0; i < cnt; i++) {
+            if (deck.get(i) instanceof Land && domiland.size() > 0) {
+                Card c = domiland.get(domiland.size() - 1);
+                early.add(c);
+                domiland.remove(domiland.size() - 1);
+
+                // save the other element land for later
+                rest.add(deck.get(i));
+            } else {
+                early.add(deck.get(i));
+            }
+        }
+
+        for (Card c: domiland) {
+            rest.add(c);
+        }
+        for (int i = cnt; i < deck.size(); i++) {
+            rest.add(deck.get(i));
+        }
+
+        Collections.shuffle(rest);
+
+        List<Card> finaldeck = new ArrayList<Card>();
+        for (Card c: early) {
+            finaldeck.add(c);
+        }
+        for (Card c: rest) {
+            finaldeck.add(c);
+        }
+        return new Deck(finaldeck);
     }
 }
