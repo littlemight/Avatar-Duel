@@ -6,9 +6,7 @@ import com.avatarduel.event.Event;
 import com.avatarduel.event.Publisher;
 import com.avatarduel.model.card.*;
 import com.avatarduel.model.card.Character;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 import java.util.ArrayList;
@@ -76,7 +74,6 @@ public class Player implements Publisher {
         this.power = new HashMap<Element, IntegerProperty>();
 
         for (Element e : Element.values()) {
-//            max_power.put(e, new SimpleIntegerProperty(0));
             max_power.put(e, new SimpleIntegerProperty(0)); // buat testing
             power.put(e, new SimpleIntegerProperty(0));
         }
@@ -235,9 +232,6 @@ public class Player implements Publisher {
      */
     public void drawCard() {
         Card ret = deck.drawCard();
-//        if (hand.size() >= MAX_HAND) {
-//            // do something
-//        }
         hand.add(ret);
         publish(new CardDrawnEvent(ret));
     }

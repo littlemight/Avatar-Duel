@@ -71,9 +71,6 @@ public class Deck {
         return this.size;
     }
 
-    int charcnt = 0;
-    int destcnt = 0;
-
     /**
      * Get card from the Balanced Card Draw
      * @return Selected card
