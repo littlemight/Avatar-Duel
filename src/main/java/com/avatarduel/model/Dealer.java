@@ -135,4 +135,66 @@ public class Dealer {
         }
         return deck;
     }
+
+    /**
+     * Getter for the deck
+     * with card proportion land : karakter : skill is 2 : 2 : 1
+     * with 1/2 of the deck focuses on 1 element ranging 1-5 powers
+     * and the other half random ranging 1-2 powers
+     * @param n number of the card in the deck we want
+     * @return deck
+     */
+    public Deck getFocusedDeck(int n, Element e){
+        Deck deck = new Deck(n);
+        Collections.shuffle(cards);
+
+        float portion = n/5;
+        int nk=0;int nl=0;int ns=0;
+        int p_count=0;
+
+        //Gets the main elemental cards
+        ListIterator<Card> it = cards.listIterator();
+        while(nk+nl+ns<Math.round(n/2)){
+            if (!it.hasNext()) it = cards.listIterator();
+            Card card = it.next();
+            if (card.getElement()!=e) continue;
+            if ((card instanceof Character) && nk<=Math.round(portion)){
+                Character characterCard = (Character) card;
+                if (characterCard.getPower()>3 && p_count<=3) continue;
+                if (characterCard.getPower()<=3) p_count++;
+                deck.addCard(card);
+                nk++;
+            }
+            else if ((card instanceof Land) && nl<=Math.round(portion)){
+                deck.addCard(card);
+                nl++;
+            }
+            else if ((card instanceof Skill) && (ns<=Math.round(portion/2) || (ns>=Math.round(portion/2) && nk+nl>=Math.round(portion)*2))){
+                deck.addCard(card);
+                ns++;
+            }
+        }
+
+        //Gets the rest random cards
+        Collections.shuffle(cards);
+        it = cards.listIterator();
+        while(nk+nl+ns<n){
+            if (!it.hasNext()) it = cards.listIterator();
+            Card card = it.next();
+            if (card.getElement()==e) continue;
+            if ((card instanceof Character) && nk<=Math.round(portion*2)){
+                deck.addCard(card);
+                nk++;
+            }
+            else if ((card instanceof Land) && nl<=Math.round(portion*2)){
+                deck.addCard(card);
+                nl++;
+            }
+            else if ((card instanceof Skill) && (ns<=Math.round(portion) || (ns>=Math.round(portion) && nk+nl>=Math.round(portion*2)*2))){
+                deck.addCard(card);
+                ns++;
+            }
+        }
+        return deck;
+    }
 }

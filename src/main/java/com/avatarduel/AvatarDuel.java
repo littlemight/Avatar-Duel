@@ -5,6 +5,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import com.avatarduel.controller.BoardController;
 import com.avatarduel.event.BoardChannel;
 import com.avatarduel.model.Dealer;
+import com.avatarduel.model.Element;
 import com.avatarduel.model.Player;
 
 import javafx.application.Application;
@@ -27,8 +28,8 @@ public class AvatarDuel extends Application {
 
       Dealer dealer = new Dealer();
       int deckSize = ThreadLocalRandom.current().nextInt(50, 60 + 1);
-      Player player1 = new Player("Player 1", dealer.getDeck(deckSize), channel);
-      Player player2 = new Player("Player 2", dealer.getDeck(deckSize), channel);
+      Player player1 = new Player("Player 1", dealer.getFocusedDeck(deckSize, Element.FIRE), channel);
+      Player player2 = new Player("Player 2", dealer.getFocusedDeck(deckSize, Element.WATER), channel);
       Game game_engine = new Game(player1, player2, channel);
 
       Scene scene = new Scene(root, 1280, 720);
