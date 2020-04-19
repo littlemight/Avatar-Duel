@@ -266,7 +266,6 @@ public class BoardController implements Initializable, Publisher, Subscriber {
             }
             this.summoned_description.setText(description);
         } else if (event instanceof NewSkillCardPlaced) {
-            System.out.println("New skill card placed");
             board.setCursor(Cursor.CROSSHAIR);
             placed_skill = (SummonedSkill) event.getInfo();
             this.channel.setPhase(Phase.SKILLPICK);
@@ -391,7 +390,6 @@ public class BoardController implements Initializable, Publisher, Subscriber {
         this.channel.setPhase(phases[phase_id]);
 
         phase_bar[phase_id].setStyle("-fx-background-color: aquamarine;" + "-fx-color: black");
-        System.out.println("CURRENT PHASE: " + phases[phase_id]);
         if (phase_id==0) {sleep(500, true);}
     }
 

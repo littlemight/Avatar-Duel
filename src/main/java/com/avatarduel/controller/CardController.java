@@ -358,12 +358,8 @@ public class CardController implements Initializable, Subscriber, Publisher {
      */
     public void onMouseEnter(MouseEvent mouseEvent) {
         if (isOpened()) {
-            System.out.println("HOVERED: " + this.card.getName());
             zoomInTransition();
             publish(new HoverCardEvent(this.card));
-        } else {
-            // do nothing lmao
-            System.out.println("HOVERED: EMPTY");
         }
     }
 

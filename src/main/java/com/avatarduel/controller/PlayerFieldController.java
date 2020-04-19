@@ -327,7 +327,6 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
 
         player_home.setOnMouseClicked(e -> {
             if (this.channel.getPhase()==Phase.BATTLE){
-                System.out.println(summonedchara_controllers.size());
                 if (summonedchara_controllers.isEmpty()){
                     publish(new PlayerSelectedEvent(this.player));
                 }
@@ -353,8 +352,6 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
             if (db.hasContent(vbox_format) && zone_panes[row][col].getChildren().isEmpty()) {
                 Card dragged_card = dragged_card_controller.getCard();
                 if (dragged_card instanceof Skill && !this.player.anyCharOnField) {
-                    System.out.println(this.player.getCharacterZone().size());
-                    System.out.println("No character in both player fields.");
                     return;
                 }
 
@@ -365,8 +362,6 @@ public class PlayerFieldController implements Initializable, Publisher, Subscrib
                         Node dragged_card_box = dragged_card_controller.getContent();
                         Bounds b = dragged_card_box.localToScene(dragged_card_box.getBoundsInLocal());
                         Bounds target = zone_panes[row][col].localToScene(dragged_card_box.getBoundsInLocal());
-                        System.out.println("Min : " + b.getMinX() + "," + b.getMinY());
-                        System.out.println("Max : " + b.getMaxX() + "," + b.getMaxY());
 
                         StackPane cir = new StackPane();
                         cir.setMaxSize(85,119);

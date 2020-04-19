@@ -29,25 +29,28 @@ public class DealerTest {
 
     @Test
     public void test_dealerGetDeckIsProportional() {
-        int num = ThreadLocalRandom.current().nextInt(40,60);
-        int tolerance = 4;
-        Deck deck = dealer.getDeck(num);
-        int c_count=0;
-        int l_count=0;
-        int s_count=0;
-        while (deck.getNeffValue()>0){
-            Card card = deck.drawCard();
-            if (card instanceof Character) {
-                c_count++;
-            } else if (card instanceof Land) {
-                l_count++;
-            } else if (card instanceof Skill) {
-                s_count++;
+        for (int i=0; i<100;i++){
+            System.out.println("iteration=" + i);
+            int num = ThreadLocalRandom.current().nextInt(40,60+1);
+            int tolerance = 4;
+            Deck deck = dealer.getDeck(num);
+            int c_count=0;
+            int l_count=0;
+            int s_count=0;
+            while (deck.getNeffValue()>0){
+                Card card = deck.drawCard();
+                if (card instanceof Character) {
+                    c_count++;
+                } else if (card instanceof Land) {
+                    l_count++;
+                } else if (card instanceof Skill) {
+                    s_count++;
+                }
             }
+            System.out.println("num=" + num + " c_count=" + c_count + " l_count=" + l_count + " s_count=" + s_count + " tolerance=" + tolerance);
+            assertEquals(Math.round(num*2/5), c_count, tolerance);
+            assertEquals(Math.round(num*2/5), l_count, tolerance);
+            assertEquals(Math.round(num/5), s_count, tolerance);
         }
-        System.out.println("num=" + num + " c_count=" + c_count + " l_count=" + l_count + " s_count=" + s_count + " tolerance=" + tolerance);
-        assertEquals(Math.round(num*2/5), c_count, tolerance);
-        assertEquals(Math.round(num*2/5), l_count, tolerance);
-        assertEquals(Math.round(num/5), s_count, tolerance);
     }
 }

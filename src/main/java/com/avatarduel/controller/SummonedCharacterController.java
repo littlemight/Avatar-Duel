@@ -95,7 +95,6 @@ public class SummonedCharacterController implements Initializable, Publisher, Su
                     }
                     break;
                 default:
-                    // do nothing
                     break;
             }
         });

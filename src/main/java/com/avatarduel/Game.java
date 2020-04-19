@@ -4,8 +4,6 @@ import com.avatarduel.event.*;
 import com.avatarduel.model.*;
 import com.avatarduel.model.card.*;
 
-import javafx.geometry.Pos;
-
 /**
  * Main game controller class.
  * Contains method to calculate the result of each action in each phases.
@@ -77,17 +75,10 @@ public class Game implements Publisher, Subscriber{
      * @see Phase
      */
     public void stageController(Phase phase){
-        System.out.println("Masuk stage!");
         if (phase == Phase.DRAW){
             this.draw();
-        } else if (phase == Phase.MAIN){
-            
-        } else if (phase == Phase.BATTLE){
-            this.battleStage();
         } else if (phase == Phase.END){
             this.endStage();
-        } else {
-            System.out.println("IN STAGE CONTROLLER" + phase);
         }
     }
 
@@ -101,18 +92,9 @@ public class Game implements Publisher, Subscriber{
             publish(new WinEvent(this.players[cur_player%2+1]));
         }else{
             this.players[this.cur_player].drawCard();
-            // when safe, reset player power
             this.players[this.cur_player].resetPower();
         }
 
-    }
-
-    public void main(Player player) {
-        // 
-    }
-
-    public void battleStage(){
-        // TODO: publish ke board_controller udah masuk ke phase battle
     }
 
     /**
