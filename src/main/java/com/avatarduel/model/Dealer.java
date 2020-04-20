@@ -143,6 +143,7 @@ public class Dealer {
      * with 1/2 of the deck focuses on 1 element ranging 1-5 powers
      * and the other half random ranging 1-2 powers
      * @param n number of the card in the deck we want
+     * @param e the focused element
      * @return deck
      */
     public Deck getFocusedDeck(int n, Element e){
